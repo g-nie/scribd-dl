@@ -1,6 +1,6 @@
 Scribd-dl
 ===========
-Download document from Scribd in pdf format
+Download documents from Scribd in pdf format
 
 Installation
 ------------
