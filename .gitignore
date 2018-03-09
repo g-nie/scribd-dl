@@ -1,7 +1,10 @@
 test*
+*.txt
 general.log
 chromedriver.log
 chromedriver.exe
+*.png
+*.pdf
 
 
 # pylint file
