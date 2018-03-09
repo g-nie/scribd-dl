@@ -1,8 +1,7 @@
 Scribd-dl
 ===========
-| Download documents from Scribd in pdf format
-| Scribd-dl uses selenium to take high resolutions screenshots of the document pages,
-and eventually merges them into a pdf file.
+| *Download documents from Scribd in pdf format*
+| Scribd-dl uses selenium to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
 
 Installation
 ------------
