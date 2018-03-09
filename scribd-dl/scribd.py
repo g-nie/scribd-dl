@@ -21,6 +21,13 @@ if not os.path.exists(logfolder):
     os.makedirs(logfolder)
 
 
+# # def read_images(rawdata, colorspace, first_frame_only=False):
+# def read_images(*args, **kwargs):
+#     logging.getLogger().setLevel(logging.INFO)
+#     read_images(*args, **kwargs)
+
+
+
 def valid_url(u):
     check = re.match(r'https://www.scribd.com/(?:doc|document)/\d+/.*', u)
     if check:
@@ -53,13 +60,13 @@ args = parser.parse_args()
 url = args.url
 log_level = logging.DEBUG if args.verbose else logging.INFO
 
-# WORS BUT WITH ROOT DEBUG OUTPUT IN .LOG + DEVTOOLS...
+# TODO : WORS BUT WITH img2pdf DEBUG OUTPUT IN .LOG + DEVTOOLS...
 
 # Initialize and set up the logging system
 url_id = re.search(r'(?P<id>\d+)', url).group('id')
 logging.basicConfig(level=logging.DEBUG,
                     # format='%(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
-                    format='%(name)s %(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
+                    format='%(module)s - %(name)s %(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
                     datefmt='%d-%m-%Y %H:%M:%S',
                     filename='{}scribd.log'.format(logfolder),
                     filemode='w')
@@ -67,13 +74,19 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(log_level)
 # console_formatter = logging.Formatter('%(levelname)s - %(message)s')
 # console_handler.setFormatter(console_formatter)
-logging.getLogger('').addHandler(console_handler)
+logging.getLogger().addHandler(console_handler)
 logger = logging.getLogger('scribd')
 
 # Silence unnecessary third party debug messages
 logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
 logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
 logging.getLogger('PIL.Image').setLevel(logging.INFO)
+logging.getLogger('img2pdf').setLevel(logging.INFO)  # --------
+
+# logging.getLogger('remote_connection').setLevel(logging.INFO)
+# logging.getLogger('Image').setLevel(logging.INFO)
+# logging.getLogger('img2pdf').setLevel(logging.INFO)
+# logging.getLogger('PngImagePlugin').setLevel(logging.INFO)
 
 
 # user_agent = "Mozilla/5.0 (Linux; Android 4.4.2; ASUS_T00J Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Safari/537.36"
