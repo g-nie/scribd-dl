@@ -14,7 +14,7 @@ import img2pdf
 
 logging_file_level = logging.DEBUG
 LOAD_TIME = 20  # Stop loading page after 20 page
-logfolder = './logs/'
+logfolder = '../logs/'
 if not os.path.exists(logfolder):
     os.makedirs(logfolder)
 
