@@ -61,7 +61,7 @@ url = args.url
 log_level = logging.DEBUG if args.verbose else logging.INFO
 
 # Initialize and configure the logging system
-url_id = re.search(r'(?P<id>\d+)', url).group('id')
+url_id = re.search(r'(?P<id>\d+)', url).group('id')  # Use the document id in log file
 logging.basicConfig(level=logging.DEBUG,
                     # format='%(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
                     format='(%(module)s) %(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
@@ -191,7 +191,7 @@ logger.info('Successfully downloaded : %s', path)
 for pdf in Temporary:  # Delete remained pdfs
     os.remove(pdf)
 
-logger.debug('Execution time : {} seconds'.format((datetime.now() - start).seconds))
+logger.debug('Execution time : %s seconds', (datetime.now() - start).seconds)
 
 # ---------- USE FOR DEBUGGING UNCAUGHT EXCEPTIONS
 # def excepthook(*exc_info):
