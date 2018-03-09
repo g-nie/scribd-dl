@@ -3,6 +3,7 @@
 *.pdf
 test*
 chromedriver.*
+scribd.log
 
 
 # pylint file
