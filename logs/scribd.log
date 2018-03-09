@@ -1,36 +1,44 @@
-INFO [09-03-2018 14:58:12] [18587980]  Visiting requested url
-INFO [09-03-2018 14:58:20] [18587980]  Document tile : ARXAIA G Gymnasioy
-INFO [09-03-2018 14:58:20] [18587980]  Processing pages : 1-4...
-DEBUG [09-03-2018 14:58:20] [18587980]  Processing page : 1 of 4
-DEBUG [09-03-2018 14:58:21] [18587980]  Processing page : 2 of 4
-DEBUG [09-03-2018 14:58:22] [18587980]  Processing page : 3 of 4
-DEBUG [09-03-2018 14:58:23] [18587980]  Processing page : 4 of 4
-DEBUG [09-03-2018 14:58:24] [18587980]  imgformat = other
-DEBUG [09-03-2018 14:58:24] [18587980]  Converting frame: 0
-DEBUG [09-03-2018 14:58:24] [18587980]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:58:24] [18587980]  input colorspace = RGBA
-DEBUG [09-03-2018 14:58:24] [18587980]  width x height = 1300px x 1837px
-DEBUG [09-03-2018 14:58:24] [18587980]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
-DEBUG [09-03-2018 14:58:25] [18587980]  imgformat = other
-DEBUG [09-03-2018 14:58:25] [18587980]  Converting frame: 0
-DEBUG [09-03-2018 14:58:25] [18587980]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:58:25] [18587980]  input colorspace = RGBA
-DEBUG [09-03-2018 14:58:25] [18587980]  width x height = 1300px x 1837px
-DEBUG [09-03-2018 14:58:25] [18587980]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
-DEBUG [09-03-2018 14:58:25] [18587980]  imgformat = other
-DEBUG [09-03-2018 14:58:25] [18587980]  Converting frame: 0
-DEBUG [09-03-2018 14:58:25] [18587980]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:58:25] [18587980]  input colorspace = RGBA
-DEBUG [09-03-2018 14:58:25] [18587980]  width x height = 1300px x 1837px
-DEBUG [09-03-2018 14:58:25] [18587980]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
-DEBUG [09-03-2018 14:58:25] [18587980]  imgformat = other
-DEBUG [09-03-2018 14:58:25] [18587980]  Converting frame: 0
-DEBUG [09-03-2018 14:58:25] [18587980]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:58:25] [18587980]  input colorspace = RGBA
-DEBUG [09-03-2018 14:58:25] [18587980]  width x height = 1300px x 1837px
-DEBUG [09-03-2018 14:58:25] [18587980]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
-INFO [09-03-2018 14:58:28] [18587980]  Successfully downloaded : ARXAIA G Gymnasioy.pdf
+(scribd) INFO [09-03-2018 17:45:48] [352366744]  Visiting requested url
+(scribd) INFO [09-03-2018 17:46:08] [352366744]  Processing pages : 20-24...
+(scribd) DEBUG [09-03-2018 17:46:10] [352366744]  Processing page : 20 of 24
+(scribd) DEBUG [09-03-2018 17:46:11] [352366744]  Processing page : 21 of 24
+(scribd) DEBUG [09-03-2018 17:46:13] [352366744]  Processing page : 22 of 24
+(scribd) DEBUG [09-03-2018 17:46:14] [352366744]  Processing page : 23 of 24
+(scribd) DEBUG [09-03-2018 17:46:16] [352366744]  Processing page : 24 of 24
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  imgformat = other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting frame: 0
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input dpi = 96 x 96
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input colorspace = RGBA
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  width x height = 1300px x 1682px
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting colorspace Colorspace.RGBA to RGB
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  ImageFormat.other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  imgformat = other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting frame: 0
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input dpi = 96 x 96
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input colorspace = RGBA
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  width x height = 1300px x 1682px
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting colorspace Colorspace.RGBA to RGB
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  ImageFormat.other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  imgformat = other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting frame: 0
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input dpi = 96 x 96
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input colorspace = RGBA
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  width x height = 1300px x 1682px
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting colorspace Colorspace.RGBA to RGB
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  ImageFormat.other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  imgformat = other
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting frame: 0
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input dpi = 96 x 96
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  input colorspace = RGBA
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  width x height = 1300px x 1682px
+(img2pdf) DEBUG [09-03-2018 17:46:18] [352366744]  Converting colorspace Colorspace.RGBA to RGB
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  ImageFormat.other
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  imgformat = other
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  Converting frame: 0
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  input dpi = 96 x 96
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  input colorspace = RGBA
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  width x height = 1300px x 1682px
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  Converting colorspace Colorspace.RGBA to RGB
+(img2pdf) DEBUG [09-03-2018 17:46:19] [352366744]  ImageFormat.other
+(scribd) INFO [09-03-2018 17:46:22] [352366744]  Successfully downloaded : Big Data_ A Twenty-First Century Arms Race _ Big Data _ Information Privacy.pdf
+(scribd) DEBUG [09-03-2018 17:46:22] [352366744]  Execution time : 38 seconds

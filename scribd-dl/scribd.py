@@ -3,6 +3,7 @@ import sys
 import os
 import argparse
 import logging
+from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
 from selenium import webdriver
@@ -13,16 +14,18 @@ import img2pdf
 
 
 # Replace with path to your chromedriver executable
-# Leave it as it is only if chromedriver is in PATH
-DRIVER_PATH = None
+DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
 LOAD_TIME = 20  # Stop loading page after 20 seconds
 LOG_FOLDER = '../logs/'
 if not os.path.exists(LOG_FOLDER):
     os.makedirs(LOG_FOLDER)
 LOG_FILE = 'scribd.log'
 
+start = datetime.now()
 
 # Make sure input url is of valid format
+
+
 def valid_url(u):
     check = re.match(r'https://www.scribd.com/(?:doc|document)/\d+/.*', u)
     if check:
@@ -60,8 +63,8 @@ log_level = logging.DEBUG if args.verbose else logging.INFO
 # Initialize and configure the logging system
 url_id = re.search(r'(?P<id>\d+)', url).group('id')
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
-                    # format='%(module)s - %(name)s %(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
+                    # format='%(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
+                    format='(%(module)s) %(levelname)s [%(asctime)s] [{}]  %(message)s'.format(url_id),
                     datefmt='%d-%m-%Y %H:%M:%S',
                     filename=LOG_FOLDER + LOG_FILE,
                     filemode='w')
@@ -87,9 +90,9 @@ options.add_argument('--disable-gpu')
 options.add_argument('--disable-infobars')
 options.add_argument("--window-size=1600,2020")
 if DRIVER_PATH:
-    driver = webdriver.Chrome(DRIVER_PATH, options=options)
+    driver = webdriver.Chrome(DRIVER_PATH, chrome_options=options)
 else:
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(chrome_options=options)
 
 logger.info('Visiting requested url')
 # Visit the requested url without waiting more than LOAD_TIME seconds
@@ -187,6 +190,8 @@ merger.close()
 logger.info('Successfully downloaded : %s', path)
 for pdf in Temporary:  # Delete remained pdfs
     os.remove(pdf)
+
+logger.debug('Execution time : {} seconds'.format((datetime.now() - start).seconds))
 
 # ---------- USE FOR DEBUGGING UNCAUGHT EXCEPTIONS
 # def excepthook(*exc_info):
