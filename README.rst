@@ -14,7 +14,6 @@ Clone it ::
 
 Requirements
 -------------
-| scribd-dl requires chromedriver to work as expected.
-| See all available chromedriver downloads `here`_.
+Scribd-dl requires chromedriver to work as expected. See all available chromedriver downloads `here`_.
 
 .. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads

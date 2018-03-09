@@ -1,28 +1,36 @@
-INFO [09-03-2018 14:29:30] [90403141]  Visiting requested url
-INFO [09-03-2018 14:29:43] [90403141]  Document tile : Social Media Strategy | Digital & Social Media | Social Media
-INFO [09-03-2018 14:29:43] [90403141]  Processing pages : 1-3...
-DEBUG [09-03-2018 14:29:43] [90403141]  Processing page : 1 of 3
-DEBUG [09-03-2018 14:29:45] [90403141]  Processing page : 2 of 3
-DEBUG [09-03-2018 14:29:47] [90403141]  Processing page : 3 of 3
-DEBUG [09-03-2018 14:29:48] [90403141]  imgformat = other
-DEBUG [09-03-2018 14:29:48] [90403141]  Converting frame: 0
-DEBUG [09-03-2018 14:29:48] [90403141]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:29:48] [90403141]  input colorspace = RGBA
-DEBUG [09-03-2018 14:29:48] [90403141]  width x height = 1300px x 1954px
-DEBUG [09-03-2018 14:29:48] [90403141]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:29:48] [90403141]  ImageFormat.other
-DEBUG [09-03-2018 14:29:48] [90403141]  imgformat = other
-DEBUG [09-03-2018 14:29:48] [90403141]  Converting frame: 0
-DEBUG [09-03-2018 14:29:48] [90403141]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:29:48] [90403141]  input colorspace = RGBA
-DEBUG [09-03-2018 14:29:48] [90403141]  width x height = 1300px x 1950px
-DEBUG [09-03-2018 14:29:48] [90403141]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:29:49] [90403141]  ImageFormat.other
-DEBUG [09-03-2018 14:29:49] [90403141]  imgformat = other
-DEBUG [09-03-2018 14:29:49] [90403141]  Converting frame: 0
-DEBUG [09-03-2018 14:29:49] [90403141]  input dpi = 96 x 96
-DEBUG [09-03-2018 14:29:49] [90403141]  input colorspace = RGBA
-DEBUG [09-03-2018 14:29:49] [90403141]  width x height = 1300px x 1968px
-DEBUG [09-03-2018 14:29:49] [90403141]  Converting colorspace Colorspace.RGBA to RGB
-DEBUG [09-03-2018 14:29:49] [90403141]  ImageFormat.other
-DEBUG [09-03-2018 14:29:52] [90403141]  Sucessfully downloaded : Social Media Strategy _ Digital _ Social Media _ Social Media.pdf
+INFO [09-03-2018 14:58:12] [18587980]  Visiting requested url
+INFO [09-03-2018 14:58:20] [18587980]  Document tile : ARXAIA G Gymnasioy
+INFO [09-03-2018 14:58:20] [18587980]  Processing pages : 1-4...
+DEBUG [09-03-2018 14:58:20] [18587980]  Processing page : 1 of 4
+DEBUG [09-03-2018 14:58:21] [18587980]  Processing page : 2 of 4
+DEBUG [09-03-2018 14:58:22] [18587980]  Processing page : 3 of 4
+DEBUG [09-03-2018 14:58:23] [18587980]  Processing page : 4 of 4
+DEBUG [09-03-2018 14:58:24] [18587980]  imgformat = other
+DEBUG [09-03-2018 14:58:24] [18587980]  Converting frame: 0
+DEBUG [09-03-2018 14:58:24] [18587980]  input dpi = 96 x 96
+DEBUG [09-03-2018 14:58:24] [18587980]  input colorspace = RGBA
+DEBUG [09-03-2018 14:58:24] [18587980]  width x height = 1300px x 1837px
+DEBUG [09-03-2018 14:58:24] [18587980]  Converting colorspace Colorspace.RGBA to RGB
+DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
+DEBUG [09-03-2018 14:58:25] [18587980]  imgformat = other
+DEBUG [09-03-2018 14:58:25] [18587980]  Converting frame: 0
+DEBUG [09-03-2018 14:58:25] [18587980]  input dpi = 96 x 96
+DEBUG [09-03-2018 14:58:25] [18587980]  input colorspace = RGBA
+DEBUG [09-03-2018 14:58:25] [18587980]  width x height = 1300px x 1837px
+DEBUG [09-03-2018 14:58:25] [18587980]  Converting colorspace Colorspace.RGBA to RGB
+DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
+DEBUG [09-03-2018 14:58:25] [18587980]  imgformat = other
+DEBUG [09-03-2018 14:58:25] [18587980]  Converting frame: 0
+DEBUG [09-03-2018 14:58:25] [18587980]  input dpi = 96 x 96
+DEBUG [09-03-2018 14:58:25] [18587980]  input colorspace = RGBA
+DEBUG [09-03-2018 14:58:25] [18587980]  width x height = 1300px x 1837px
+DEBUG [09-03-2018 14:58:25] [18587980]  Converting colorspace Colorspace.RGBA to RGB
+DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
+DEBUG [09-03-2018 14:58:25] [18587980]  imgformat = other
+DEBUG [09-03-2018 14:58:25] [18587980]  Converting frame: 0
+DEBUG [09-03-2018 14:58:25] [18587980]  input dpi = 96 x 96
+DEBUG [09-03-2018 14:58:25] [18587980]  input colorspace = RGBA
+DEBUG [09-03-2018 14:58:25] [18587980]  width x height = 1300px x 1837px
+DEBUG [09-03-2018 14:58:25] [18587980]  Converting colorspace Colorspace.RGBA to RGB
+DEBUG [09-03-2018 14:58:25] [18587980]  ImageFormat.other
+INFO [09-03-2018 14:58:28] [18587980]  Successfully downloaded : ARXAIA G Gymnasioy.pdf
