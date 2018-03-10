@@ -28,6 +28,6 @@ Clone it ::
 Requirements
 -------------
 | Scribd-dl requires chromedriver to work as expected. It is tested to work with chromedriver v2.35 and Chrome v65.0.
-| See all available chromedriver downloads **`here`_.**
+| See all available chromedriver downloads `here`_.
 
 .. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads
