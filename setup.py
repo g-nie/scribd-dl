@@ -7,8 +7,6 @@ from setuptools import setup, find_packages
 
 with open('README.rst', encoding='utf-8') as readme_file:
     long_description = '\n' + readme_file.read()
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
 
 requirements = [
     'selenium>=3.9.0',
@@ -17,9 +15,9 @@ requirements = [
     'PyPDF2>=1.26.0'
 ]
 
-setup_requirements = [ ]
+setup_requirements = []
 
-test_requirements = [ ]
+test_requirements = []
 
 setup(
     author="Giannis Terzopoulos",
