@@ -14,24 +14,24 @@ scribd-dl
         :alt: Documentation Status
 
 
+Scribd-dl
+===========
+| **Download documents from Scribd in pdf format**
+| Scribd-dl uses selenium and headless Chrome to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
+
+Installation
+------------
+
+Clone it ::
+
+   >> git clone https://github.com/giannisterzopoulos/scribd-dl.git
+   >> cd scribd-dl
+   >> pip install .
 
 
-Command-line program to download Scribd documents in pdf format
+Requirements
+-------------
+| Scribd-dl requires chromedriver to work as expected. It is tested to work with chromedriver v2.35 and Chrome v65.0.
+| See all available chromedriver downloads `here`_.
 
-
-* Free software: MIT license
-* Documentation: https://scribd-dl.readthedocs.io.
-
-
-Features
---------
-
-* TODO
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads
