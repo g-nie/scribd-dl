@@ -1,9 +1,9 @@
-*.txt
 *.png
 *.pdf
 test*.py
 chromedriver.*
 scribd.log
+URLS.txt
 
 
 # Byte-compiled / optimized / DLL files
