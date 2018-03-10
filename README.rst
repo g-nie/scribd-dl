@@ -14,8 +14,9 @@ scribd-dl
         :alt: Documentation Status
 
 
-**Download documents from Scribd in pdf format**
-Scribd-dl uses selenium and headless Chrome to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
+| **Download documents from Scribd in pdf format**
+|
+| Scribd-dl uses selenium and headless Chrome to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
 
 Installation
 ------------
