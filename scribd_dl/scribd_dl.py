@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re
 import sys
 import os
@@ -51,7 +53,7 @@ def valid_range(pages):
 
 
 parser = argparse.ArgumentParser(description='Scribd document downloader')
-parser.add_argument('-u', '--url', help='Url of the document', required=True, type=valid_url)
+parser.add_argument('url', help='Url of the document')  # Required positional argument
 parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_range)
 parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
 
@@ -176,7 +178,9 @@ for counter in range(1, int(total_pages) + 1):
         Pages.clear()  # Release memory used for image storing
         chunk_counter += 1
 
-driver.quit()  # Exit chromedriver
+# Exit chromedriver
+driver.delete_all_cookies()
+driver.quit()
 
 # Merge all the temporary pdfs into one
 merger = PdfFileMerger()
@@ -200,6 +204,6 @@ logger.debug('Execution time : %s seconds', (datetime.now() - start).seconds)
 #     print('An unexpected error occured, please try again')
 # sys.excepthook = excepthook
 
-# TODO : Silence DEVTOOLS
+# TODO : Mute DEVTOOLS Listening
 # TODO : Quit driver if exception occurs
 # TODO : logging.getLogger('img2pdf').setLevel(logging.INFO) not working

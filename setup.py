@@ -1,41 +1,53 @@
-import io
-import os
-from setuptools import find_packages, setup
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+"""The setup script."""
 
-__version__ = '0.0.1'
-__author__ = 'Giannis Terzopoulos'
+from setuptools import setup, find_packages
 
-requires = [
-    'selenium==3.9.0',
+with open('README.rst', encoding='utf-8') as readme_file:
+    long_description = '\n' + readme_file.read()
+with open('HISTORY.rst') as history_file:
+    history = history_file.read()
+
+requirements = [
+    'selenium>=3.9.0',
     'Pillow>=4.3.0',
     'img2pdf>=0.2.4',
     'PyPDF2>=1.26.0'
 ]
 
-here = os.path.abspath(os.path.dirname(__file__))
-with io.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
-    long_description = '\n' + f.read()
+setup_requirements = [ ]
 
+test_requirements = [ ]
 
 setup(
-    name='scridb-dl',
-    version=__version__,
-    description='Scribd document downloader',
-    long_description=long_description,
-    author=__author__,
+    author="Giannis Terzopoulos",
     author_email='terzo.giannis@gmail.com',
-    url='https://github.com/giannisterzopoulos/scribd-dl',
-    packages=find_packages(exclude=("tests", "tests.*")),
-    install_requires=requires,
-    license='MIT',
     classifiers=[
-        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
+        'Natural Language :: English',
+        "Programming Language :: Python :: 2",
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: Implementation :: CPython',
-    ]
+    ],
+    description="Command-line program to download Scribd documents in pdf format",
+    install_requires=requirements,
+    license="MIT license",
+    long_description=long_description,
+    include_package_data=True,
+    keywords='scribd_dl',
+    name='scribd_dl',
+    packages=find_packages(include=['scribd_dl']),
+    setup_requires=setup_requirements,
+    test_suite='tests',
+    tests_require=test_requirements,
+    url='https://github.com/giannisterzopoulos/scribd_dl',
+    version='0.1.0',
+    zip_safe=False,
 )

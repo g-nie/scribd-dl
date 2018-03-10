@@ -1,8 +1,0 @@
-# =============================================
-# This file is meant to be consumed by pip
-#     pip install -r requirements.txt 
-
-selenium==3.9.0
-Pillow==4.3.0
-img2pdf==0.2.4
-PyPDF2==1.26.0
