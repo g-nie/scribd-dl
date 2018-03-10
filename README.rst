@@ -3,15 +3,12 @@ scribd-dl
 =========
 
 
-.. image:: https://img.shields.io/pypi/v/scribd_dl.svg
-        :target: https://pypi.python.org/pypi/scribd_dl
-
 .. image:: https://img.shields.io/travis/giannisterzopoulos/scribd_dl.svg
         :target: https://travis-ci.org/giannisterzopoulos/scribd_dl
 
-.. image:: https://readthedocs.org/projects/scribd-dl/badge/?version=latest
-        :target: https://scribd-dl.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+.. image:: https://img.shields.io/pypi/v/scribd_dl.svg
+        :target: https://pypi.python.org/pypi/scribd_dl
+
 
 |
 | **Download documents from Scribd in pdf format**
