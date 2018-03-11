@@ -32,7 +32,7 @@ class ScribdDL(object):
         self.DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
         self.LOAD_TIME = 20  # Stop loading page after 20 seconds
         self.doc_title = None
-        self.Temporary = None
+        self._Temporary = None
 
     @property
     def logger(self):
@@ -41,6 +41,10 @@ class ScribdDL(object):
     @property
     def driver(self):
         return self._driver
+
+    @property
+    def Temporary(self):
+        return self._Temporary
 
     def get_logger(self, LOG_FOLDER, LOG_FILE, extra):
         # Initialize and configure the logging system
@@ -63,7 +67,6 @@ class ScribdDL(object):
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
         logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
         logging.getLogger('PIL.Image').setLevel(logging.INFO)
-        # logging.getLogger('img2pdf').setLevel(logging.INFO)  # -------
         return logger
 
     def start_browser(self):
@@ -124,7 +127,7 @@ class ScribdDL(object):
         self._driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
         Pages = []  # Holds the actual image bytes of each page
         chunk = 10  # After N pages, save them from memnory to temporary pdfs in the disk
-        self.Temporary = []  # Holds the temporary pdfs. Will be used if selected page range >= chunk
+        self._Temporary = []  # Holds the temporary pdfs. Will be used if selected page range >= chunk
         to_process = last_page - first_page + 1  # Total pages to process
         chunk_counter = 1
         processed = 0
@@ -165,20 +168,20 @@ class ScribdDL(object):
                 filename = 'tmp_{}.pdf'.format(chunk_counter)
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
-                self.Temporary.append(filename)
+                self._Temporary.append(filename)
                 Pages.clear()  # Release memory used for image storing
                 chunk_counter += 1
 
     # Merge all the temporary pdfs into one
     def merge(self):
         merger = PdfFileMerger()
-        for pdf in self.Temporary:
+        for pdf in self._Temporary:
             merger.append(pdf)
         path = '{}.pdf'.format(self.doc_title)
         merger.write(f'{self.doc_title}.pdf')
         merger.close()
         self._logger.info('\nSuccessfully downloaded : %s', path)
-        for pdf in self.Temporary:  # Delete remained pdfs
+        for pdf in self._Temporary:  # Delete remained pdfs
             os.remove(pdf)
 
 
@@ -223,6 +226,8 @@ def main():
 
         def _excepthook(*exc_info):  # Handle uncaught exceptions
             driver.quit()  # Close chromedriver when something unexpected occurs
+            for t in scribd.Temporary:  # Remove temp pdf files
+                os.remove(t)
             traceback.print_exception(*exc_info)
             # logger.error('An unexpected error occured. Exiting')
             sys.exit(1)
@@ -231,13 +236,17 @@ def main():
         scribd.visit_page(url)
         scribd.merge()
         scribd.close_browser()
-
         logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds)
 
     except KeyboardInterrupt:
         logger.warning('Interrupted.')
         try:
             driver.quit()
+        except NameError:
+            pass
+        try:
+            for t in scribd.Temporary:  # Remove temp pdf files
+                os.remove(t)
         except NameError:
             pass
         sys.exit(0)
