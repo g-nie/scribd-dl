@@ -1,8 +1,6 @@
 =========
 scribd_dl
 =========
-
-
 |
 | **Download documents from Scribd in pdf format**
 |
