@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for scribd-dl."""
+from .scribd_dl import ScribdDL
 
 __author__ = """Giannis Terzopoulos"""
 __email__ = 'terzo.giannis@gmail.com'

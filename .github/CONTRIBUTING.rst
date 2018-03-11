@@ -38,8 +38,8 @@ and "help wanted" is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-scribd-dl could always use more documentation, whether as part of the
-official scribd-dl docs, in docstrings, or even on the web in blog posts,
+scribd_dl could always use more documentation, whether as part of the
+official scribd_dl docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback
