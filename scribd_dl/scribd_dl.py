@@ -26,7 +26,6 @@ class ScribdDL(object):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
         self._logger = self.get_logger(LOG_FOLDER, LOG_FILE, extra)
-        # self.logger = ''
 
         self._driver = None
         # Replace with path to your chromedriver executable
