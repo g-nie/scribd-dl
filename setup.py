@@ -35,6 +35,9 @@ setup(
     description="Command-line program to download Scribd documents in pdf format",
     install_requires=requirements,
     license="MIT license",
+    entry_points={
+        'console_scripts': ['scribd_dl = scribd_dl.scribd_dl:run']
+    },
     long_description=long_description,
     include_package_data=True,
     keywords='scribd_dl',
