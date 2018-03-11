@@ -2,7 +2,6 @@
 scribd_dl
 =========
 
-
 |
 | **Download documents from Scribd in pdf format**
 |
@@ -10,7 +9,6 @@ scribd_dl
 
 Installation
 ------------
-
 Clone it ::
 
    >> git clone https://github.com/giannisterzopoulos/scribd_dl.git
