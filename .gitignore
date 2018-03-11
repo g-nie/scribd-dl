@@ -1,8 +1,10 @@
+logs/
 *.png
 *.pdf
-test*.py
+test.py
+test_1.py
+test_2.py
 chromedriver.*
-scribd.log
 URLS.txt
 
 
