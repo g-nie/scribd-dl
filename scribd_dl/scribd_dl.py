@@ -177,7 +177,7 @@ class ScribdDL(object):
         path = '{}.pdf'.format(self.doc_title)
         merger.write(f'{self.doc_title}.pdf')
         merger.close()
-        self._logger.info('Successfully downloaded : %s', path)
+        self._logger.info('\nSuccessfully downloaded : %s', path)
         for pdf in self.Temporary:  # Delete remained pdfs
             os.remove(pdf)
 

@@ -1,5 +1,5 @@
 =========
-scribd_dl
+scribd-dl
 =========
 |
 | **Download documents from Scribd in pdf format**
@@ -11,8 +11,8 @@ Installation
 
 Clone it ::
 
-   >> git clone https://github.com/giannisterzopoulos/scribd_dl.git
-   >> cd scribd_dl
+   >> git clone https://github.com/giannisterzopoulos/scribd-dl.git
+   >> cd scribd-dl
    >> pip install .
 
 
