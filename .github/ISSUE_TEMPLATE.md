@@ -1,4 +1,4 @@
-* scribd-dl version:
+* scribd_dl version:
 * Python version:
 * Operating System:
 

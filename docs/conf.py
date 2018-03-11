@@ -47,7 +47,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'scribd-dl'
+project = u'scribd_dl'
 copyright = u"2018, Giannis Terzopoulos"
 author = u"Giannis Terzopoulos"
 
@@ -129,7 +129,7 @@ latex_elements = {
 # [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'scribd_dl.tex',
-     u'scribd-dl Documentation',
+     u'scribd_dl Documentation',
      u'Giannis Terzopoulos', 'manual'),
 ]
 
@@ -140,7 +140,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'scribd_dl',
-     u'scribd-dl Documentation',
+     u'scribd_dl Documentation',
      [author], 1)
 ]
 
@@ -152,12 +152,9 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'scribd_dl',
-     u'scribd-dl Documentation',
+     u'scribd_dl Documentation',
      author,
      'scribd_dl',
      'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
