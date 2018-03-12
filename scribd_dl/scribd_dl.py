@@ -21,11 +21,12 @@ class ScribdDL(object):
     def __init__(self, args, extra):
         self.START = datetime.now()
         self.args = args
-        LOG_FOLDER = '../logs/'
+        # LOG_FOLDER = '../logs/'
+        LOG_FOLDER = 'C:/Users/Giannis/logs'  # ------
         if not os.path.exists(LOG_FOLDER):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
-        self._logger = self.get_logger(LOG_FOLDER, LOG_FILE, extra)
+        self._logger = self._get_logger(LOG_FOLDER, LOG_FILE, extra)
 
         self._driver = None
         # Replace with path to your chromedriver executable
@@ -46,12 +47,12 @@ class ScribdDL(object):
     def Temporary(self):
         return self._Temporary
 
-    def get_logger(self, LOG_FOLDER, LOG_FILE, extra):
+    def _get_logger(self, LOG_FOLDER, LOG_FILE, extra):
         # Initialize and configure the logging system
         logging.basicConfig(level=logging.DEBUG,
                             format='(%(module)s) %(levelname)s [%(asctime)s] [%(doc_id)s]  %(message)s',
                             datefmt='%d-%m-%Y %H:%M:%S',
-                            filename=LOG_FOLDER + LOG_FILE,
+                            filename=os.path.join(LOG_FOLDER, LOG_FILE),
                             filemode='w')
         console_handler = logging.StreamHandler()
         # Use DEBUG logging level in console, if user selected --verbose
@@ -180,7 +181,8 @@ class ScribdDL(object):
         path = '{}.pdf'.format(self.doc_title)
         merger.write(f'{self.doc_title}.pdf')
         merger.close()
-        self._logger.info('\nSuccessfully downloaded : %s', path)
+        print()
+        self._logger.info('Successfully downloaded : %s', path)
         for pdf in self._Temporary:  # Delete remained pdfs
             os.remove(pdf)
 
@@ -226,10 +228,11 @@ def main():
 
         def _excepthook(*exc_info):  # Handle uncaught exceptions
             driver.quit()  # Close chromedriver when something unexpected occurs
-            for t in scribd.Temporary:  # Remove temp pdf files
-                os.remove(t)
+            if scribd.Temporary:
+                for t in scribd.Temporary:  # Remove temp pdf files
+                    os.remove(t)
             traceback.print_exception(*exc_info)
-            # logger.error('An unexpected error occured. Exiting')
+            # logger.error('An unexpected error occured. Exiting')  # --- Use this***
             sys.exit(1)
         sys.excepthook = _excepthook
 
@@ -247,7 +250,7 @@ def main():
         try:
             for t in scribd.Temporary:  # Remove temp pdf files
                 os.remove(t)
-        except NameError:
+        except (NameError, TypeError):
             pass
         sys.exit(0)
 
