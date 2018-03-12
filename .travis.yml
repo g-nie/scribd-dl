@@ -10,8 +10,8 @@ env:
 install: pip install -U tox-travis
 
 script:
-- tox
 - tox -e $TOX_ENV
+- tox
 
 deploy:
   provider: pypi
