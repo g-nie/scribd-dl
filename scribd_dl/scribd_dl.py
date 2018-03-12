@@ -139,7 +139,7 @@ class ScribdDL(object):
             if counter > last_page:
                 break
             # Generate WebElement of the next page
-            page = self._driver.find_element_by_xpath(f"//div[@id='outer_page_{counter}']")
+            page = self._driver.find_element_by_xpath("//div[@id='outer_page_{}']".format(counter))
             self._driver.execute_script("arguments[0].scrollIntoView();", page)  # Scroll to it
             if counter < first_page:  # Keep scrolling if it hasn't reached the first_page
                 continue
@@ -179,7 +179,7 @@ class ScribdDL(object):
         for pdf in self._Temporary:
             merger.append(pdf)
         path = '{}.pdf'.format(self.doc_title)
-        merger.write(f'{self.doc_title}.pdf')
+        merger.write('{}.pdf', format(self.doc_title))
         merger.close()
         print()
         self._logger.info('Successfully downloaded : %s', path)
