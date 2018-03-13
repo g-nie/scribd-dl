@@ -16,15 +16,13 @@ from scribd_dl import ScribdDL
 
 # Runs once at the beggining (setUp) and once when all tests have ended (tearDown)
 @pytest.fixture(scope='module', autouse=True)
-def scribd():  # Add request as argument to access options
+def scribd():  # Add request argument to access options
 
     # setUp
-    print('setUp')
     args = argparse.Namespace(url='0000', pages='', verbose=False)  # PAGES ??
     sc = ScribdDL(args)
     sc.start_browser()
     yield sc
 
     # tearDown
-    print('tearDown')
     sc.close_browser()

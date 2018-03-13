@@ -5,29 +5,49 @@
 
 import sys
 import os
-import pytest
+import time
+from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scribd_dl import ScribdDL
+# from scribd_dl import ScribdDL
+# import pytest
+
+
+# Assertions about expected exceptions
+# with pytest.raises(ValueError, match=r'.* 123 .*'):
+#         myfunc()
+
+def _get_modified_time_diff(f):
+    mod = time.ctime(os.path.getmtime(f))
+    mod_time = datetime.strptime(mod, '%a %b %d %H:%M:%S %Y')
+    return (datetime.now() - mod_time).total_seconds()
 
 
 def test_22p_whole_document(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
-    PAGES = '1-3'
 
     scribd.args.url = URL
-    scribd.args.pages = PAGES
-
     scribd.visit_page(URL)
+    scribd.merge()
 
-    assert True
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and _get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
 
-def test_XXp_whole_document(scribd):
+
+def test_22p_one_page_range(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
-    PAGES = '1-3'
+    PAGES = '12-12'
 
     scribd.args.url = URL
     scribd.args.pages = PAGES
 
     scribd.visit_page(URL)
+    scribd.merge()
 
-    assert True
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and _get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False

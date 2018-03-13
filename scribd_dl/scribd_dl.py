@@ -35,8 +35,9 @@ class ScribdDL(object):
         # Replace with path to your chromedriver executable
         self.DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
         self.LOAD_TIME = 20  # Stop loading page after 20 seconds
-        self.doc_title = None
+        self._doc_title = None
         self._Temporary = None
+        self._chunk = 10  # After N pages, transfer from menory to temporary pdfs in the disk
 
     @property
     def logger(self):
@@ -54,9 +55,25 @@ class ScribdDL(object):
     def args(self):
         return self._args
 
+    @property
+    def chunk(self):
+        return self._chunk
+
+    @property
+    def doc_title(self):
+        return self._doc_title
+
     @args.setter
     def args(self, args):
         self._args = args
+
+    @chunk.setter
+    def chunk(self, chunk):
+        self._chunk = chunk
+
+    # @doc_title.setter
+    # def doc_title(self, doc_title):
+    #     self._doc_title = doc_title
 
     def _get_logger(self, LOG_FOLDER, LOG_FILE, extra):
         # Initialize and configure the logging system
@@ -118,9 +135,9 @@ class ScribdDL(object):
         # body = self._driver.find_element_by_xpath("//div[@role='document']")  # --- Send Keys here
         total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
         total_pages = total_pages.text.split()[1]
-        self.doc_title = self._driver.title
+        self._doc_title = self._driver.title
         # Make document title safe for saving in the file system
-        self.doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self.doc_title)
+        self._doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
         if self._args.pages:  # If user inserted page range
             first_page = int(self._args.pages.split('-')[0])
             last_page = int(self._args.pages.split('-')[1])
@@ -138,7 +155,6 @@ class ScribdDL(object):
         # Enter full screen mode
         self._driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
         Pages = []  # Holds the actual image bytes of each page
-        chunk = 10  # After N pages, save them from memnory to temporary pdfs in the disk
         self._Temporary = []  # Holds the temporary pdfs. Will be used if selected page range >= chunk
         to_process = last_page - first_page + 1  # Total pages to process
         chunk_counter = 1
@@ -171,7 +187,7 @@ class ScribdDL(object):
             Pages.append(imgByteArr.getvalue())
 
             # Use this every <chunk> pages or in the last page
-            if (processed % chunk == 0) or (processed == to_process):
+            if (processed % self._chunk == 0) or (processed == to_process):
                 # Merge the images into a temporary pdf file
                 logging.disable(logging.CRITICAL)  # Disable img2pdf logging messages
                 pdf_bytes = img2pdf.convert(Pages)
@@ -189,8 +205,8 @@ class ScribdDL(object):
         merger = PdfFileMerger()
         for pdf in self._Temporary:
             merger.append(pdf)
-        path = '{}.pdf'.format(self.doc_title)
-        merger.write('{}.pdf'.format(self.doc_title))
+        path = '{}.pdf'.format(self._doc_title)
+        merger.write('{}.pdf'.format(self._doc_title))
         merger.close()
         print()
         self._logger.info('Successfully downloaded : %s', path)
@@ -216,6 +232,8 @@ def main():
             if not check:
                 error = True
             elif int(pages.split('-')[0]) > int(pages.split('-')[1]):
+                error = True
+            elif int(pages.split('-')[0]) == 0:
                 error = True
             if error:
                 msg = 'Not a valid page range : {}'.format(pages)
@@ -272,3 +290,4 @@ if __name__ == '__main__':
 
 
 # TODO : Mute DEVTOOLS Listening
+# TODO : Reduce instance attributes
