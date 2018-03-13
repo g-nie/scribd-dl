@@ -15,7 +15,7 @@ from scribd_dl import ScribdDL
 
 
 # Runs once at the beggining (setUp) and once when all tests have ended (tearDown)
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope='function', autouse=True)
 def scribd():  # Add request argument to access options
 
     # setUp
