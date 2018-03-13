@@ -14,7 +14,7 @@ env:
 - TOX_ENV=flake8
 
 before_install:
-- apt-cache google-chrome-stable
+- which google-chrome-stable | ls
 - export CHROME_BIN=google-chrome-stable
 
 install: pip install -U tox-travis
