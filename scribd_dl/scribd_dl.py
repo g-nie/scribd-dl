@@ -18,7 +18,7 @@ import img2pdf
 
 class ScribdDL(object):
 
-    def __init__(self, args, extra):
+    def __init__(self, args):
         self.START = datetime.now()
         self.args = args
         # LOG_FOLDER = '../logs/'
@@ -26,6 +26,9 @@ class ScribdDL(object):
         if not os.path.exists(LOG_FOLDER):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
+
+        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')
+        extra = {'doc_id': doc_id}
         self._logger = self._get_logger(LOG_FOLDER, LOG_FILE, extra)
 
         self._driver = None
@@ -180,7 +183,7 @@ class ScribdDL(object):
         for pdf in self._Temporary:
             merger.append(pdf)
         path = '{}.pdf'.format(self.doc_title)
-        merger.write('{}.pdf', format(self.doc_title))
+        merger.write('{}.pdf'.format(self.doc_title))
         merger.close()
         print()
         self._logger.info('Successfully downloaded : %s', path)
@@ -219,9 +222,10 @@ def main():
         parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
         args = parser.parse_args()
         url = args.url
-        doc_id = re.search(r'(?P<id>\d+)', url).group('id')  # Use the document id for logging
+        # doc_id = re.search(r'(?P<id>\d+)', url).group('id')  # Use the document id for logging
 
-        scribd = ScribdDL(args, {'doc_id': doc_id})
+        # scribd = ScribdDL(args, {'doc_id': doc_id})
+        scribd = ScribdDL(args)
         logger = scribd.logger
 
         scribd.start_browser()
