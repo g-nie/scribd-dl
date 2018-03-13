@@ -27,7 +27,7 @@ def test_22p_whole_document(scribd):
 
     scribd.args.url = URL
     scribd.visit_page(URL)
-    scribd.merge()
+    # scribd.merge()
 
     download = scribd.doc_title + '.pdf'
     if download in os.listdir() and _get_modified_time_diff(download) < 60:
@@ -36,14 +36,15 @@ def test_22p_whole_document(scribd):
         assert False
 
 
-def test_22p_one_page(scribd):
-    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
-    PAGES = '12-12'
+def test_90p_one_page(scribd):
+    URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
+    # PAGES = '24-24'
+    PAGES = '50-90'
 
     scribd.args.url = URL
     scribd.args.pages = PAGES
     scribd.visit_page(URL)
-    scribd.merge()
+    # scribd.merge()
 
     download = scribd.doc_title + '.pdf'
     if download in os.listdir() and _get_modified_time_diff(download) < 60:

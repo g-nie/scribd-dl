@@ -12,7 +12,7 @@ from io import BytesIO
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from PIL import Image
-from PyPDF2 import PdfFileMerger
+# from PyPDF2 import PdfFileMerger
 import img2pdf
 
 
@@ -37,8 +37,8 @@ class ScribdDL(object):
         self.DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
         self.LOAD_TIME = 20  # Stop loading page after 20 seconds
         self._doc_title = None
-        self._Temporary = None
-        self._chunk = 10  # After N pages, transfer images from menory to temporary pdfs in the disk
+        # self._Temporary = None
+        # self._chunk = 10  # After N pages, transfer images from menory to temporary pdfs in the disk
 
     @property
     def logger(self):
@@ -48,17 +48,17 @@ class ScribdDL(object):
     def driver(self):
         return self._driver
 
-    @property
-    def Temporary(self):
-        return self._Temporary
+    # @property
+    # def Temporary(self):
+    #     return self._Temporary
 
     @property
     def args(self):
         return self._args
 
-    @property
-    def chunk(self):
-        return self._chunk
+    # @property
+    # def chunk(self):
+    #     return self._chunk
 
     @property
     def doc_title(self):
@@ -68,9 +68,9 @@ class ScribdDL(object):
     def args(self, args):
         self._args = args
 
-    @chunk.setter
-    def chunk(self, chunk):
-        self._chunk = chunk
+    # @chunk.setter
+    # def chunk(self, chunk):
+    #     self._chunk = chunk
 
     # @doc_title.setter
     # def doc_title(self, doc_title):
@@ -159,9 +159,9 @@ class ScribdDL(object):
         # Enter full screen mode
         self._driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
         Pages = []  # Holds the actual image bytes of each page
-        self._Temporary = []  # Holds the temporary pdfs. Will be used if selected page range >= chunk
+        # self._Temporary = []  # Holds the temporary pdfs. Will be used if selected page range >= chunk
         to_process = last_page - first_page + 1  # Total pages to process
-        chunk_counter = 1
+        # chunk_counter = 1
         processed = 0
         self._logger.info('Processing pages : %s-%s...', first_page, last_page)
         if first_page > 80:  # Inform the user that scrolling may take a while
@@ -191,31 +191,31 @@ class ScribdDL(object):
             Pages.append(imgByteArr.getvalue())
 
             # Use this every <chunk> pages or in the last page
-            if (processed % self._chunk == 0) or (processed == to_process):
+            if processed == to_process:
                 # Merge the images into a temporary pdf file
                 logging.disable(logging.CRITICAL)  # Disable img2pdf logging messages
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                filename = 'tmp_{}.pdf'.format(chunk_counter)
+                filename = '{}.pdf'.format(self._doc_title)
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
-                self._Temporary.append(filename)
-                Pages.clear()  # Release memory used for image storing
-                chunk_counter += 1
+                # self._Temporary.append(filename)
+                # Pages.clear()  # Release memory used for image storing
+                # chunk_counter += 1
 
     # Merge all the temporary pdfs into one
-    def merge(self):
-        merger = PdfFileMerger()
-        for pdf in self._Temporary:
-            merger.append(pdf)
-        path = '{}.pdf'.format(self._doc_title)
-        merger.write('{}.pdf'.format(self._doc_title))
-        merger.close()
-        print()
-        self._logger.info('Successfully downloaded : %s', path)
-        for pdf in self._Temporary:  # Delete remained pdfs
-            os.remove(pdf)
+    # def merge(self):
+    #     merger = PdfFileMerger()
+    #     for pdf in self._Temporary:
+    #         merger.append(pdf)
+    #     path = '{}.pdf'.format(self._doc_title)
+    #     merger.write('{}.pdf'.format(self._doc_title))
+    #     merger.close()
+    #     print()
+    #     self._logger.info('Successfully downloaded : %s', path)
+    #     for pdf in self._Temporary:  # Delete remained pdfs
+    #         os.remove(pdf)
 
 
 def main():
@@ -262,16 +262,16 @@ def main():
 
         def _excepthook(*exc_info):  # Handle uncaught exceptions
             driver.quit()  # Close chromedriver when something unexpected occurs
-            if scribd.Temporary:
-                for t in scribd.Temporary:  # Remove temp pdf files
-                    os.remove(t)
+            # if scribd.Temporary:
+            #     for t in scribd.Temporary:  # Remove temp pdf files
+            #         os.remove(t)
             traceback.print_exception(*exc_info)
             # logger.error('An unexpected error occured. Exiting')  # --- Use this***
             sys.exit(1)
         sys.excepthook = _excepthook
 
         scribd.visit_page(url)
-        scribd.merge()
+        # scribd.merge()
         scribd.close_browser()
         logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds)
 
@@ -281,11 +281,11 @@ def main():
             driver.quit()
         except NameError:
             pass
-        try:
-            for t in scribd.Temporary:  # Remove temp pdf files
-                os.remove(t)
-        except (NameError, TypeError):
-            pass
+        # try:
+        #     for t in scribd.Temporary:  # Remove temp pdf files
+        #         os.remove(t)
+        # except (NameError, TypeError):
+        #     pass
         sys.exit(0)
 
 
