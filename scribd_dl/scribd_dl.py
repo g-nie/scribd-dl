@@ -20,7 +20,7 @@ class ScribdDL(object):
 
     def __init__(self, args):
         self.START = datetime.now()
-        self.args = args
+        self._args = args
         # LOG_FOLDER = '../logs/'
         LOG_FOLDER = 'C:/Users/Giannis/logs'  # ------
         if not os.path.exists(LOG_FOLDER):
@@ -50,6 +50,14 @@ class ScribdDL(object):
     def Temporary(self):
         return self._Temporary
 
+    @property
+    def args(self):
+        return self._args
+
+    @args.setter
+    def args(self, args):
+        self._args = args
+
     def _get_logger(self, LOG_FOLDER, LOG_FILE, extra):
         # Initialize and configure the logging system
         logging.basicConfig(level=logging.DEBUG,
@@ -59,7 +67,7 @@ class ScribdDL(object):
                             filemode='w')
         console_handler = logging.StreamHandler()
         # Use DEBUG logging level in console, if user selected --verbose
-        console_level = logging.DEBUG if self.args.verbose else logging.INFO
+        console_level = logging.DEBUG if self._args.verbose else logging.INFO
         console_handler.setLevel(console_level)
         # -- To change console output format
         # console_formatter = logging.Formatter('%(levelname)s - %(message)s')
@@ -86,7 +94,6 @@ class ScribdDL(object):
             self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
             self._driver = webdriver.Chrome(options=options)
-        return self._driver
 
     def close_browser(self):  # Exit chromedriver
         self._driver.delete_all_cookies()
@@ -114,9 +121,9 @@ class ScribdDL(object):
         self.doc_title = self._driver.title
         # Make document title safe for saving in the file system
         self.doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self.doc_title)
-        if self.args.pages:  # If user inserted page range
-            first_page = int(self.args.pages.split('-')[0])
-            last_page = int(self.args.pages.split('-')[1])
+        if self._args.pages:  # If user inserted page range
+            first_page = int(self._args.pages.split('-')[0])
+            last_page = int(self._args.pages.split('-')[1])
             if last_page > int(total_pages):
                 self._logger.warning('Given page (%s) cannot be greater than document\'s last page (%s)',
                                      last_page, total_pages)

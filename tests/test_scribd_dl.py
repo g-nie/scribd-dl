@@ -5,14 +5,29 @@
 
 import sys
 import os
-import argparse
 import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scribd_dl import ScribdDL
-from selenium import webdriver
 
 
-def test_t1(browser):
-    browser.get('https://www.google.com')
-    print(browser.title)  # ----
-    assert browser.title == 'Google'
+def test_22p_whole_document(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+    PAGES = '1-3'
+
+    scribd.args.url = URL
+    scribd.args.pages = PAGES
+
+    scribd.visit_page(URL)
+
+    assert True
+
+def test_XXp_whole_document(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+    PAGES = '1-3'
+
+    scribd.args.url = URL
+    scribd.args.pages = PAGES
+
+    scribd.visit_page(URL)
+
+    assert True
