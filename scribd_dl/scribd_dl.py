@@ -83,6 +83,7 @@ class ScribdDL(object):
             self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
             self._driver = webdriver.Chrome(options=options)
+        return self._driver
 
     def close_browser(self):  # Exit chromedriver
         self._driver.delete_all_cookies()
