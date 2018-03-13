@@ -19,7 +19,7 @@ env:
 
 before_install:
 - sudo apt-get update
-- sudo apt-get install chromium-chromedriver # Chrome v64.0
+- sudo apt-get install chromium-chromedriver=64.0.3282.167 # Chrome v64.0
 
 before_script:
 - "export PATH=$PATH:/usr/lib/chromium-browser/"
