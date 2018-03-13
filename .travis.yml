@@ -15,6 +15,7 @@ env:
 
 before_install:
 - which google-chrome-stable
+- export CHROME_BIN=google-chrome-stable
 
 install: pip install -U tox-travis
 
