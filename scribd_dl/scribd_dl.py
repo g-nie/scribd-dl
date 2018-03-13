@@ -22,7 +22,8 @@ class ScribdDL(object):
         self.START = datetime.now()
         self._args = args
 
-        LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
+        # LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
+        LOG_FOLDER = '..scribd_logs/'
         if not os.path.exists(LOG_FOLDER):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
