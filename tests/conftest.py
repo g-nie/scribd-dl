@@ -10,7 +10,7 @@ import pytest
 from scribd_dl import ScribdDL
 
 # def pytest_addoption(parser):
-#     parser.addoption("--driver", action="store", default="chrome", help="Type in browser type")
+#     parser.addoption("--driver", action="store", default="chrome", help="browser type")
 #     parser.addoption("--url", action="store", default="https://.../", help="url")
 
 
