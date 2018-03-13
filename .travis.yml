@@ -13,9 +13,8 @@ addons:
 env:
 - TOX_ENV=flake8
 
-before_install:
+# before_install:
 # - which google-chrome-stable
-- sudo ls /usr/bin/google-chrome-stable
 # - export CHROME_BIN=google-chrome-stable
 
 install: pip install -U tox-travis
@@ -24,8 +23,9 @@ install: pip install -U tox-travis
 # - sudo apt-get update
 # - sudo apt-get install chromium-chromedriver
 
-# before_script:
+before_script:
 # - "export PATH=$PATH:/usr/lib/chromium-browser/"
+- "export PATH=$PATH:/usr/bin/google-chrome-stable"
 # - "export DISPLAY=:99.0"
 # - "sh -e /etc/init.d/xvfb start"
 # - sleep 3 # give xvfb some time to start
