@@ -18,7 +18,7 @@ class TestScribd_dl(unittest.TestCase):
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
-        self.driver = webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome(executable_path='/usr/bin/google-chrome-stable', options=options)
 
     def tearDown(self):
         self.driver.delete_all_cookies()

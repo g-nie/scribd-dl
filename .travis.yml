@@ -23,9 +23,8 @@ install: pip install -U tox-travis
 # - sudo apt-get update
 # - sudo apt-get install chromium-chromedriver
 
-before_script:
-# - "export PATH=$PATH:/usr/lib/chromium-browser/"
-- "export PATH=$PATH:/usr/bin/google-chrome-stable"
+# before_script:
+# - "export PATH=$PATH:/usr/bin/google-chrome-stable"
 # - "export DISPLAY=:99.0"
 # - "sh -e /etc/init.d/xvfb start"
 # - sleep 3 # give xvfb some time to start
