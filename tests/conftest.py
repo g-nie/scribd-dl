@@ -14,15 +14,24 @@ from scribd_dl import ScribdDL
 #     parser.addoption("--url", action="store", default="https://.../", help="url")
 
 
-# Runs once at the beggining (setUp) and once when all tests have ended (tearDown)
-@pytest.fixture(scope='session', autouse=True)
-def scribd():  # Add request argument to access options
+# # Runs once at the beggining (setUp) and once when all tests have ended (tearDown)
+# @pytest.fixture(scope='session')
+# def scribd(request):
+#     # setUp
+#     args = argparse.Namespace(url='0000', pages='', verbose=False)  # PAGES ??
+#     sc = ScribdDL(args)
+#     sc.start_browser()
+#     yield sc
+#     # tearDown
+#     sc.close_browser()
 
-    # setUp
+@pytest.fixture(scope='session')
+def scribd(request):
     args = argparse.Namespace(url='0000', pages='', verbose=False)  # PAGES ??
     sc = ScribdDL(args)
     sc.start_browser()
-    yield sc
 
-    # tearDown
-    sc.close_browser()
+    def fin():
+        sc.close_browser()
+    request.addfinalizer(fin)
+    return sc  # provide the fixture value
