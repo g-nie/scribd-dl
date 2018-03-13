@@ -25,12 +25,13 @@ def browser():  # Add request as argument to access options
     # options.add_argument("--window-size=1600,2020")
     # driver = webdriver.Chrome(options=options)
 
-    driver = ScribdDL.start_browser()
-    yield driver
+    driver = ScribdDL()
+    yield driver.start_browser()
 
     # tearDown
-    driver.delete_all_cookies()
-    driver.quit()
+    driver.close_browser()
+    # driver.delete_all_cookies()
+    # driver.quit()
 
     # # tearDown
     # driver.delete_all_cookies()
