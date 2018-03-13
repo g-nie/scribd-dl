@@ -26,7 +26,7 @@ class TestScribd_dl(unittest.TestCase):
 
     def test_1(self):
         self.driver.get('https://www.google.com')
-        assertEquals(self.driver.title, 'Google')
+        self.assertEqual(self.driver.title, 'Google')
 
 
 if __name__ == '__main__':
