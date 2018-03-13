@@ -1,5 +1,5 @@
-dist: trusty
-sudo: required
+# dist: trusty
+# sudo: required
 
 language: python
 python:
@@ -7,8 +7,8 @@ python:
 - 3.5
 - 3.6
 
-addons:
-  chrome: stable
+# addons:
+  # chrome: stable
 
 env:
 - TOX_ENV=flake8
@@ -19,15 +19,15 @@ env:
 
 install: pip install -U tox-travis
 
-# before_install:
-# - sudo apt-get update
-# - sudo apt-get install chromium-chromedriver
+before_install:
+- sudo apt-get update
+- sudo apt-get install chromium-chromedriver
 
-# before_script:
+before_script:
 # - "export PATH=$PATH:/usr/bin/google-chrome-stable"
-# - "export DISPLAY=:99.0"
-# - "sh -e /etc/init.d/xvfb start"
-# - sleep 3 # give xvfb some time to start
+- "export DISPLAY=:99.0"
+- "sh -e /etc/init.d/xvfb start"
+- sleep 3 # give xvfb some time to start
 
 script:
 - tox -e $TOX_ENV
