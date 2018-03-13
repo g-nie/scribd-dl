@@ -12,7 +12,6 @@ python:
 
 env:
 - TOX_ENV=flake8
-- TOX_ENV=pytest
 
 # before_install:
 # - which google-chrome-stable
