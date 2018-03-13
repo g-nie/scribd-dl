@@ -7,6 +7,7 @@ test_2.py
 chromedriver.*
 URLS.txt
 
+.vscode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

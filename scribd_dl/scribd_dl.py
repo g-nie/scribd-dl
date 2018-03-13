@@ -21,8 +21,8 @@ class ScribdDL(object):
     def __init__(self, args):
         self.START = datetime.now()
         self._args = args
-        # LOG_FOLDER = '../logs/'
-        LOG_FOLDER = 'C:/Users/Giannis/logs'  # ------
+        LOG_FOLDER = '../logs/'
+        # LOG_FOLDER = 'C:/Users/Giannis/logs'  # ------
         if not os.path.exists(LOG_FOLDER):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
