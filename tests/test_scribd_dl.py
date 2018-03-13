@@ -13,11 +13,11 @@ class TestScribd_dl(unittest.TestCase):
 
     def setUp(self):
         options = webdriver.ChromeOptions()
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument('--log-level=3')
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
-        # options.add_argument("--window-size=1600,2020")
+        options.add_argument("--window-size=1600,2020")
         self.driver = webdriver.Chrome(options=options)
 
     def tearDown(self):
