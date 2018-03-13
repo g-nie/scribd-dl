@@ -17,8 +17,6 @@ env:
 # - which google-chrome-stable
 # - export CHROME_BIN=google-chrome-stable
 
-install: pip install -U tox-travis
-
 before_install:
 - sudo apt-get update
 - sudo apt-get install chromium-chromedriver
@@ -28,6 +26,8 @@ before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
+
+install: pip install -U tox-travis
 
 script:
 - tox -e $TOX_ENV
