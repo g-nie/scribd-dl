@@ -12,6 +12,7 @@ python:
 
 env:
 - TOX_ENV=flake8
+- TOX_ENV=pytest
 
 # before_install:
 # - which google-chrome-stable
@@ -31,7 +32,6 @@ install: pip install -U tox-travis
 
 script:
 - tox -e $TOX_ENV
-- tox
 
 deploy:
   provider: pypi
