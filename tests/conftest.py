@@ -15,11 +15,14 @@ from scribd_dl import ScribdDL
 
 
 # Runs once at the beggining (setUp) and once when all tests have ended (tearDown)
+
+# Runs at the first test and runs the finalizer after the last test has run.
+# (is available across multiple test functions, classes, and modules)
 @pytest.fixture(scope='session', autouse=True)
 def scribd():  # Add request argument to access options
 
     # setUp
-    args = argparse.Namespace(url='0000', pages='', verbose=False)  # PAGES ??
+    args = argparse.Namespace(url='0000', pages='', verbose=False)
     sc = ScribdDL(args)
     sc.start_browser()
     yield sc

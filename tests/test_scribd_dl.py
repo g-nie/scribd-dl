@@ -51,3 +51,36 @@ def test_22p_one_page(scribd):
         assert True
     else:
         assert False
+
+# --------------------------------------------------------
+
+
+def test_22p_whole_document(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+
+    scribd.args.url = URL
+    scribd.visit_page(URL)
+    scribd.merge()
+
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and _get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
+
+
+def test_22p_one_page(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+    PAGES = '12-12'
+
+    scribd.args.url = URL
+    scribd.args.pages = PAGES
+
+    scribd.visit_page(URL)
+    scribd.merge()
+
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and _get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
