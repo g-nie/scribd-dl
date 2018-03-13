@@ -37,7 +37,7 @@ class ScribdDL(object):
         self.LOAD_TIME = 20  # Stop loading page after 20 seconds
         self._doc_title = None
         self._Temporary = None
-        self._chunk = 10  # After N pages, transfer from menory to temporary pdfs in the disk
+        self._chunk = 10  # After N pages, transfer images from menory to temporary pdfs in the disk
 
     @property
     def logger(self):
@@ -108,9 +108,9 @@ class ScribdDL(object):
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
         if self.DRIVER_PATH:
-            self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
+            self._driver = webdriver.Chrome(self.DRIVER_PATH, chrome_options=options)
         else:
-            self._driver = webdriver.Chrome(options=options)
+            self._driver = webdriver.Chrome(chrome_options=options)
 
     def close_browser(self):  # Exit chromedriver
         self._driver.delete_all_cookies()
