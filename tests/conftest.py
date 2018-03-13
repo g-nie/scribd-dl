@@ -18,7 +18,7 @@ from scribd_dl import ScribdDL
 def browser():  # Add request as argument to access options
 
     # setUp
-    args = argparse.Namespace(url='0000', verbose=False)
+    args = argparse.Namespace(url='0000')
     driver = ScribdDL(args)
     yield driver.start_browser()
 
