@@ -1,7 +1,12 @@
 =========
+<<<<<<< HEAD
 scribd_dl
 =========
 
+=======
+scribd-dl
+=========
+>>>>>>> bd55c473667823571b9015f30dfa5b108bfcf4f2
 |
 | **Download documents from Scribd in pdf format**
 |
@@ -9,10 +14,14 @@ scribd_dl
 
 Installation
 ------------
+<<<<<<< HEAD
+=======
+
+>>>>>>> bd55c473667823571b9015f30dfa5b108bfcf4f2
 Clone it ::
 
-   >> git clone https://github.com/giannisterzopoulos/scribd_dl.git
-   >> cd scribd_dl
+   >> git clone https://github.com/giannisterzopoulos/scribd-dl.git
+   >> cd scribd-dl
    >> pip install .
 
 

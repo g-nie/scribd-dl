@@ -35,6 +35,9 @@ setup(
     description="Command-line program to download Scribd documents in pdf format",
     install_requires=requirements,
     license="MIT license",
+    entry_points={
+        'console_scripts': ['scribd-dl = scribd_dl.scribd_dl:main']
+    },
     long_description=long_description,
     include_package_data=True,
     keywords='scribd_dl',
@@ -43,7 +46,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/giannisterzopoulos/scribd_dl',
+    url='https://github.com/giannisterzopoulos/scribd-dl',
     version='0.1.0',
     zip_safe=False,
 )
