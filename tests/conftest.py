@@ -1,5 +1,5 @@
-# import pytest
-# from selenium import webdriver
+import pytest
+from selenium import webdriver
 
 
 # def pytest_addoption(parser):
@@ -9,26 +9,29 @@
 #     parser.addoption("--password", action="store", default="test", help="password")
 
 
-# @pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope='module', autouse=True)
 # def browser(request):
-#     # setUp
-#     # driver = request.config.getoption("--driver")
-#     # if driver == 'chrome':
-#     #     driver = webdriver.Chrome()
-#     #     driver.get("about:blank")
-#     #     driver.implicitly_wait(10)
-#     #     driver.maximize_window()
-#     # else:
-#     #     print('only chrome is supported at the moment')
-#     #     return driver
+def browser():
+    # driver = request.config.getoption("--driver")
+    # if driver == 'chrome':
+    #     driver = webdriver.Chrome()
+    #     driver.get("about:blank")
+    #     driver.implicitly_wait(10)
+    #     driver.maximize_window()
+    # else:
+    #     print('only chrome is supported at the moment')
+    #     return driver
 
-#     driver = webdriver.Chrome()
-#     driver.get("about:blank")
-#     driver.implicitly_wait(10)
-#     driver.maximize_window()
+    # setUp
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--log-level=3')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--disable-infobars')
+    options.add_argument("--window-size=1600,2020")
+    driver = webdriver.Chrome(options=options)
+    yield driver
 
-#     yield driver
-
-#     # tearDown
-#     driver.quit()
-# #
+    # tearDown
+    driver.delete_all_cookies()
+    driver.quit()
