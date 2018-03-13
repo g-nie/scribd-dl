@@ -80,9 +80,9 @@ class ScribdDL(object):
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
         if self.DRIVER_PATH:
-            self._driver = webdriver.Chrome(self.DRIVER_PATH, chrome_options=options)
+            self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
-            self._driver = webdriver.Chrome(chrome_options=options)
+            self._driver = webdriver.Chrome(options=options)
 
     def close_browser(self):  # Exit chromedriver
         self._driver.delete_all_cookies()
