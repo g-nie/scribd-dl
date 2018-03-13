@@ -14,20 +14,11 @@ from scribd_dl import ScribdDL
 #     parser.addoption("--url", action="store", default="https://.../", help="url")
 
 
-# # Runs once at the beggining (setUp) and once when all tests have ended (tearDown)
-# @pytest.fixture(scope='session')
-# def scribd(request):
-#     # setUp
-#     args = argparse.Namespace(url='0000', pages='', verbose=False)  # PAGES ??
-#     sc = ScribdDL(args)
-#     sc.start_browser()
-#     yield sc
-#     # tearDown
-#     sc.close_browser()
-
+# Run the fixture at the first test and run the finalizer after the last test has run.
+# (available across multiple test functions, classes, and modules)
 @pytest.fixture(scope='session')
 def scribd(request):
-    args = argparse.Namespace(url='0000', pages='', verbose=False)  # PAGES ??
+    args = argparse.Namespace(url='0000', pages='', verbose=False)
     sc = ScribdDL(args)
     sc.start_browser()
 

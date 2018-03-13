@@ -23,7 +23,7 @@ class ScribdDL(object):
         self._args = args
 
         # LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
-        LOG_FOLDER = '..scribd_logs/'
+        LOG_FOLDER = 'scribd_logs/'
         if not os.path.exists(LOG_FOLDER):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
@@ -127,7 +127,10 @@ class ScribdDL(object):
             pass
         # Figure out whether the document can be fully accessed
         is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self._driver.page_source)
-        is_restricted = literal_eval(is_restricted.group('bool').title())
+        try:
+            is_restricted = literal_eval(is_restricted.group('bool').title())
+        except AttributeError:
+            is_restricted = False
         if is_restricted:
             self._logger.warning('This document is only a preview and not fully availabe for reading.')
             self._logger.warning('Please try another document.')
