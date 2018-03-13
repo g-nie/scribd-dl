@@ -21,8 +21,8 @@ class ScribdDL(object):
     def __init__(self, args):
         self.START = datetime.now()
         self._args = args
-        LOG_FOLDER = '../logs/'
-        # LOG_FOLDER = 'C:/Users/Giannis/logs'  # ------
+
+        LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
         if not os.path.exists(LOG_FOLDER):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
@@ -108,9 +108,9 @@ class ScribdDL(object):
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
         if self.DRIVER_PATH:
-            self._driver = webdriver.Chrome(self.DRIVER_PATH, chrome_options=options)
+            self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
-            self._driver = webdriver.Chrome(chrome_options=options)
+            self._driver = webdriver.Chrome(options=options)
 
     def close_browser(self):  # Exit chromedriver
         self._driver.delete_all_cookies()
