@@ -34,6 +34,14 @@ class TestScribd_dl(unittest.TestCase):
         self.driver.get('https://www.google.com')
         self.assertEqual(self.driver.title, 'Google')
 
+    def test_3(self):
+        self.driver.get('https://www.google.com')
+        self.assertEqual(self.driver.title, 'Google')
+
+    def test_4(self):
+        self.driver.get('https://www.google.com')
+        self.assertEqual(self.driver.title, 'Google')
+
 
 if __name__ == '__main__':
     unittest.main()
