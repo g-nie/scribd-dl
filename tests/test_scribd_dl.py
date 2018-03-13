@@ -36,7 +36,7 @@ def test_22p_whole_document(scribd):
         assert False
 
 
-def test_22p_one_page_range(scribd):
+def test_22p_one_page(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
     PAGES = '12-12'
 
