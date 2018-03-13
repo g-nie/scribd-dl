@@ -1,12 +1,6 @@
 =========
-<<<<<<< HEAD
-scribd_dl
-=========
-
-=======
 scribd-dl
 =========
->>>>>>> bd55c473667823571b9015f30dfa5b108bfcf4f2
 |
 | **Download documents from Scribd in pdf format**
 |
@@ -14,10 +8,6 @@ scribd-dl
 
 Installation
 ------------
-<<<<<<< HEAD
-=======
-
->>>>>>> bd55c473667823571b9015f30dfa5b108bfcf4f2
 Clone it ::
 
    >> git clone https://github.com/giannisterzopoulos/scribd-dl.git
@@ -31,3 +21,4 @@ Requirements
 | See all available chromedriver downloads `here`_.
 
 .. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads
+
