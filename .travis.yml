@@ -19,11 +19,9 @@ env:
 
 before_install:
 - sudo apt-get update
-- sudo apt-get install chromium-chromedriver
+- sudo apt-get install chromium-chromedriver=65.0
 
 before_script:
-- chromium-chromedriver -v
-
 - "export PATH=$PATH:/usr/lib/chromium-browser/"
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
