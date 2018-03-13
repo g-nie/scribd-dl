@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# pylint: disable=C0413
+
 import sys
 import os
 import unittest
@@ -25,6 +27,10 @@ class TestScribd_dl(unittest.TestCase):
         self.driver.quit()
 
     def test_1(self):
+        self.driver.get('https://www.google.com')
+        self.assertEqual(self.driver.title, 'Google')
+
+    def test_2(self):
         self.driver.get('https://www.google.com')
         self.assertEqual(self.driver.title, 'Google')
 
