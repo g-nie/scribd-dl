@@ -97,7 +97,7 @@ class ScribdDL(object):
     def close_browser(self):  # Exit chromedriver
         try:
             self._driver.delete_all_cookies()
-        except ConnectionAbortedError:
+        except (ConnectionAbortedError, ConnectionRefusedError):
             pass
         self._driver.quit()
 

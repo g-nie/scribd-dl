@@ -38,13 +38,6 @@ def valid_pages(pages):
         return pages
 
 
-# # Returns True when given valid combination of args
-# def valid_args(args):
-#     if args.url and args.pages and args.verbose in ('True', 'False'):
-#         return True
-#     return False
-
-
 # Returns seconds past since the last file modification
 def get_modified_time_diff(f):
     mod = time.ctime(os.path.getmtime(f))

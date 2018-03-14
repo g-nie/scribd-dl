@@ -7,7 +7,6 @@ import sys
 import os
 from argparse import ArgumentTypeError
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# from scribd_dl import ScribdDL
 import pytest
 from scribd_dl.util import valid_url, valid_pages, get_modified_time_diff, GreaterThanLastPageError
 
