@@ -22,10 +22,25 @@ def _get_modified_time_diff(f):
     return (datetime.now() - mod_time).total_seconds()
 
 
-def test_22p_whole_document(scribd):
+# def test_22p_whole_document(scribd):
+#     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+
+#     scribd.args.url = URL
+#     scribd.visit_page(URL)
+#     # scribd.merge()
+
+#     download = scribd.doc_title + '.pdf'
+#     if download in os.listdir() and _get_modified_time_diff(download) < 60:
+#         assert True
+#     else:
+#         assert False
+
+def test_22p_two_pages(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+    PAGES = '2-3'
 
     scribd.args.url = URL
+    scribd.args.pages = PAGES
     scribd.visit_page(URL)
     # scribd.merge()
 
