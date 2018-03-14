@@ -13,7 +13,7 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from PIL import Image
 import img2pdf
-from .util import valid_url, valid_pages
+from .util import valid_url, valid_pages, GreaterThanLastPageError
 
 
 class ScribdDL(object):
@@ -95,7 +95,10 @@ class ScribdDL(object):
             self._driver = webdriver.Chrome(options=options)
 
     def close_browser(self):  # Exit chromedriver
-        self._driver.delete_all_cookies()
+        try:
+            self._driver.delete_all_cookies()
+        except ConnectionAbortedError:
+            pass
         self._driver.quit()
 
     def visit_page(self, url):
@@ -126,10 +129,11 @@ class ScribdDL(object):
             first_page = int(self._args.pages.split('-')[0])
             last_page = int(self._args.pages.split('-')[1])
             if last_page > int(total_pages):
-                self._logger.warning('Given page (%s) cannot be greater than document\'s last page (%s)',
-                                     last_page, total_pages)
+                # self._logger.warning('Given page (%s) cannot be greater than document\'s last page (%s)',
+                                    #  last_page, total_pages)
                 self.close_browser()
-                sys.exit(1)
+                # sys.exit(1)
+                raise GreaterThanLastPageError
         else:
             first_page = 1
             last_page = int(total_pages)
@@ -220,5 +224,6 @@ if __name__ == '__main__':
     main()
 
 
+# TODO : Support 1 page argument
 # TODO : Mute DEVTOOLS Listening
 # TODO : Reduce instance attributes

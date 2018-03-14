@@ -5,6 +5,11 @@ import time
 from datetime import datetime
 
 
+class GreaterThanLastPageError(Exception):
+    def __init__(self):
+        Exception.__init__(self, "Given page cannot be greater than document\'s last page")
+
+
 # Make sure input url is of valid format
 def valid_url(u):
     # check = re.match(r'(https://)?www.scribd.com/(?:doc|document)/\d+.*', u)

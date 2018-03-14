@@ -9,12 +9,8 @@ from argparse import ArgumentTypeError
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # from scribd_dl import ScribdDL
 import pytest
-from scribd_dl.util import valid_url, valid_pages, get_modified_time_diff
+from scribd_dl.util import valid_url, valid_pages, get_modified_time_diff, GreaterThanLastPageError
 
-
-# Assertions about expected exceptions
-# with pytest.raises(ValueError, match=r'.* 123 .*'):
-#         myfunc()
 
 def test_valid_args():
     URL = 'https://www.scribd.com/doc/90403141/Social-Media-Strategy'
@@ -62,52 +58,65 @@ def test_invalid_args():
         valid_pages(PAGES)
 
 
-def test_22p_whole(scribd):
-    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+# def test_22p_whole(scribd):
+#     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
-    scribd.args.url = URL
-    scribd.visit_page(URL)
+#     scribd.args.url = URL
+#     assert valid_url(URL)
 
-    assert valid_url(URL)
+#     scribd.visit_page(URL)
 
-    download = scribd.doc_title + '.pdf'
-    if download in os.listdir() and get_modified_time_diff(download) < 60:
-        assert True
-    else:
-        assert False
-
-
-def test_90p_first_page(scribd):
-    URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
-    PAGES = '1-1'
-
-    scribd.args.url = URL
-    scribd.args.pages = PAGES
-    scribd.visit_page(URL)
-
-    assert valid_url(URL)
-    assert valid_pages(PAGES)
-
-    download = scribd.doc_title + '.pdf'
-    if download in os.listdir() and get_modified_time_diff(download) < 60:
-        assert True
-    else:
-        assert False
+#     download = scribd.doc_title + '.pdf'
+#     if download in os.listdir() and get_modified_time_diff(download) < 60:
+#         assert True
+#     else:
+#         assert False
 
 
-def test_16p_last_page(scribd):
+# def test_90p_first_page(scribd):
+#     URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
+#     PAGES = '1-1'
+
+#     scribd.args.url = URL
+#     scribd.args.pages = PAGES
+#     assert valid_url(URL)
+#     assert valid_pages(PAGES)
+
+#     scribd.visit_page(URL)
+
+#     download = scribd.doc_title + '.pdf'
+#     if download in os.listdir() and get_modified_time_diff(download) < 60:
+#         assert True
+#     else:
+#         assert False
+
+
+# def test_16p_last_page(scribd):
+#     URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
+#     PAGES = '16-16'
+
+#     scribd.args.url = URL
+#     scribd.args.pages = PAGES
+#     assert valid_url(URL)
+#     assert valid_pages(PAGES)
+
+#     scribd.visit_page(URL)
+
+#     download = scribd.doc_title + '.pdf'
+#     if download in os.listdir() and get_modified_time_diff(download) < 60:
+#         assert True
+#     else:
+#         assert False
+
+
+def test_greater_than_last_page(scribd):
     URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
-    PAGES = '22-22'
+    PAGES = '15-22'
 
     scribd.args.url = URL
     scribd.args.pages = PAGES
-    scribd.visit_page(URL)
-
     assert valid_url(URL)
     assert valid_pages(PAGES)
 
-    download = scribd.doc_title + '.pdf'
-    if download in os.listdir() and get_modified_time_diff(download) < 60:
-        assert True
-    else:
-        assert False
+    with pytest.raises(GreaterThanLastPageError):
+        scribd.visit_page(URL)
