@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import argparse
 import re
 import os
@@ -12,7 +14,6 @@ class GreaterThanLastPageError(Exception):
 
 # Make sure input url is of valid format
 def valid_url(u):
-    # check = re.match(r'(https://)?www.scribd.com/(?:doc|document)/\d+.*', u)
     check = re.match(r'(https://)?www.scribd.com/(?:doc|document)/\d+(?:/.*|$)', u)
     if check:
         return u
@@ -23,14 +24,18 @@ def valid_url(u):
 
 # Make sure input page range is of valid format
 def valid_pages(pages):
-    check = re.match(r'\d+-\d+', pages)
+    check = re.fullmatch(r'(?:\d+-\d+|\d+)', pages)
     error = False
     if not check:
         error = True
-    elif int(pages.split('-')[0]) > int(pages.split('-')[1]):
-        error = True
-    elif int(pages.split('-')[0]) == 0:
-        error = True
+    else:
+        try:
+            pages_int = int(pages)  # user selected a single page
+            if pages_int == 0:
+                error = True
+        except ValueError:
+            if int(pages.split('-')[0]) > int(pages.split('-')[1]) or int(pages.split('-')[0]) == 0:
+                error = True
     if error:
         msg = 'Not a valid page range : {}'.format(pages)
         raise argparse.ArgumentTypeError(msg)

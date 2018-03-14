@@ -13,7 +13,7 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from PIL import Image
 import img2pdf
-from .util import valid_url, valid_pages, GreaterThanLastPageError
+from .utilities import valid_url, valid_pages, GreaterThanLastPageError
 
 
 class ScribdDL(object):
@@ -126,13 +126,13 @@ class ScribdDL(object):
         # Make document title safe for saving in the file system
         self._doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
         if self._args.pages:  # If user inserted page range
-            first_page = int(self._args.pages.split('-')[0])
-            last_page = int(self._args.pages.split('-')[1])
+            try:
+                first_page = int(self._args.pages.split('-')[0])
+                last_page = int(self._args.pages.split('-')[1])
+            except IndexError:  # user inserted only 1 page
+                first_page = last_page = int(self._args.pages)
             if last_page > int(total_pages):
-                # self._logger.warning('Given page (%s) cannot be greater than document\'s last page (%s)',
-                                    #  last_page, total_pages)
                 self.close_browser()
-                # sys.exit(1)
                 raise GreaterThanLastPageError
         else:
             first_page = 1
@@ -224,6 +224,5 @@ if __name__ == '__main__':
     main()
 
 
-# TODO : Support 1 page argument
 # TODO : Mute DEVTOOLS Listening
 # TODO : Reduce instance attributes
