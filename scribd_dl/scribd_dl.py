@@ -12,8 +12,8 @@ from io import BytesIO
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from PIL import Image
-# from PyPDF2 import PdfFileMerger
 import img2pdf
+from .util import valid_url, valid_pages
 
 
 class ScribdDL(object):
@@ -28,7 +28,7 @@ class ScribdDL(object):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
 
-        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')
+        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')  # Use the document id for logging
         extra = {'doc_id': doc_id}
         self._logger = self._get_logger(LOG_FOLDER, LOG_FILE, extra)
 
@@ -37,8 +37,6 @@ class ScribdDL(object):
         self.DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
         self.LOAD_TIME = 20  # Stop loading page after 20 seconds
         self._doc_title = None
-        # self._Temporary = None
-        # self._chunk = 10  # After N pages, transfer images from menory to temporary pdfs in the disk
 
     @property
     def logger(self):
@@ -48,17 +46,9 @@ class ScribdDL(object):
     def driver(self):
         return self._driver
 
-    # @property
-    # def Temporary(self):
-    #     return self._Temporary
-
     @property
     def args(self):
         return self._args
-
-    # @property
-    # def chunk(self):
-    #     return self._chunk
 
     @property
     def doc_title(self):
@@ -67,14 +57,6 @@ class ScribdDL(object):
     @args.setter
     def args(self, args):
         self._args = args
-
-    # @chunk.setter
-    # def chunk(self, chunk):
-    #     self._chunk = chunk
-
-    # @doc_title.setter
-    # def doc_title(self, doc_title):
-    #     self._doc_title = doc_title
 
     def _get_logger(self, LOG_FOLDER, LOG_FILE, extra):
         # Initialize and configure the logging system
@@ -104,7 +86,6 @@ class ScribdDL(object):
         options = webdriver.ChromeOptions()
         options.add_argument('--headless')
         options.add_argument('--log-level=3')
-        # options.add_argument('--disable-logging')
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
@@ -136,7 +117,6 @@ class ScribdDL(object):
             self._logger.warning('Please try another document.')
             self.close_browser()
             sys.exit(1)
-        # body = self._driver.find_element_by_xpath("//div[@role='document']")  # --- Send Keys here
         total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
         total_pages = total_pages.text.split()[1]
         self._doc_title = self._driver.title
@@ -159,9 +139,7 @@ class ScribdDL(object):
         # Enter full screen mode
         self._driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
         Pages = []  # Holds the actual image bytes of each page
-        # self._Temporary = []  # Holds the temporary pdfs. Will be used if selected page range >= chunk
         to_process = last_page - first_page + 1  # Total pages to process
-        # chunk_counter = 1
         processed = 0
         self._logger.info('Processing pages : %s-%s...', first_page, last_page)
         if first_page > 80:  # Inform the user that scrolling may take a while
@@ -200,60 +178,18 @@ class ScribdDL(object):
                 filename = '{}.pdf'.format(self._doc_title)
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
-                # self._Temporary.append(filename)
-                # Pages.clear()  # Release memory used for image storing
-                # chunk_counter += 1
-
-    # Merge all the temporary pdfs into one
-    # def merge(self):
-    #     merger = PdfFileMerger()
-    #     for pdf in self._Temporary:
-    #         merger.append(pdf)
-    #     path = '{}.pdf'.format(self._doc_title)
-    #     merger.write('{}.pdf'.format(self._doc_title))
-    #     merger.close()
-    #     print()
-    #     self._logger.info('Successfully downloaded : %s', path)
-    #     for pdf in self._Temporary:  # Delete remained pdfs
-    #         os.remove(pdf)
 
 
 def main():
     try:
-        # Make sure input url is of valid format
-        def valid_url(u):
-            check = re.match(r'https://www.scribd.com/(?:doc|document)/\d+/.*', u)
-            if check:
-                return u
-            else:
-                msg = 'Not a valid document url : {}'.format(u)
-                raise argparse.ArgumentTypeError(msg)
-
-        # Make sure input page range is of valid format
-        def valid_range(pages):
-            check = re.match(r'\d+-\d+', pages)
-            error = False
-            if not check:
-                error = True
-            elif int(pages.split('-')[0]) > int(pages.split('-')[1]):
-                error = True
-            elif int(pages.split('-')[0]) == 0:
-                error = True
-            if error:
-                msg = 'Not a valid page range : {}'.format(pages)
-                raise argparse.ArgumentTypeError(msg)
-            else:
-                return pages
-
         parser = argparse.ArgumentParser(description='Scribd document downloader')
         parser.add_argument('url', help='Url of the document', type=valid_url)  # Required positional argument
-        parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_range)
+        parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_pages)
         parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
         args = parser.parse_args()
         url = args.url
-        # doc_id = re.search(r'(?P<id>\d+)', url).group('id')  # Use the document id for logging
 
-        # scribd = ScribdDL(args, {'doc_id': doc_id})
+        scribd = ScribdDL(args)
         scribd = ScribdDL(args)
         logger = scribd.logger
 
@@ -262,16 +198,12 @@ def main():
 
         def _excepthook(*exc_info):  # Handle uncaught exceptions
             driver.quit()  # Close chromedriver when something unexpected occurs
-            # if scribd.Temporary:
-            #     for t in scribd.Temporary:  # Remove temp pdf files
-            #         os.remove(t)
             traceback.print_exception(*exc_info)
             # logger.error('An unexpected error occured. Exiting')  # --- Use this***
             sys.exit(1)
         sys.excepthook = _excepthook
 
         scribd.visit_page(url)
-        # scribd.merge()
         scribd.close_browser()
         logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds)
 
@@ -281,11 +213,6 @@ def main():
             driver.quit()
         except NameError:
             pass
-        # try:
-        #     for t in scribd.Temporary:  # Remove temp pdf files
-        #         os.remove(t)
-        # except (NameError, TypeError):
-        #     pass
         sys.exit(0)
 
 

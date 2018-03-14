@@ -5,65 +5,109 @@
 
 import sys
 import os
-import time
-from datetime import datetime
+from argparse import ArgumentTypeError
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # from scribd_dl import ScribdDL
-# import pytest
+import pytest
+from scribd_dl.util import valid_url, valid_pages, get_modified_time_diff
 
 
 # Assertions about expected exceptions
 # with pytest.raises(ValueError, match=r'.* 123 .*'):
 #         myfunc()
 
-def _get_modified_time_diff(f):
-    mod = time.ctime(os.path.getmtime(f))
-    mod_time = datetime.strptime(mod, '%a %b %d %H:%M:%S %Y')
-    return (datetime.now() - mod_time).total_seconds()
+def test_valid_args():
+    URL = 'https://www.scribd.com/doc/90403141/Social-Media-Strategy'
+    assert valid_url(URL)
+    URL = 'www.scribd.com/document/90403141/'
+    assert valid_url(URL)
+    URL = 'www.scribd.com/document/90403141'
+    assert valid_url(URL)
+    URL = 'https://www.scribd.com/doc/90403141'
+    assert valid_url(URL)
+
+    PAGES = '1-10'
+    assert valid_pages(PAGES)
+    PAGES = '6-6'
+    assert valid_pages(PAGES)
+    PAGES = '10-50'
+    assert valid_pages(PAGES)
 
 
-def test_22p_whole_document(scribd):
+def test_invalid_args():
+    URL = 'https://www.scribd.com/docLLL/90403141/Social-Media-Strategy'
+    with pytest.raises(ArgumentTypeError):
+        valid_url(URL)
+    URL = 'scribd.com/document/90403141/'
+    with pytest.raises(ArgumentTypeError):
+        valid_url(URL)
+    URL = 'https://www.scribd.com/doc/90403141-aaa/'
+    with pytest.raises(ArgumentTypeError):
+        valid_url(URL)
+
+    PAGES = '1-'
+    with pytest.raises(ArgumentTypeError):
+        valid_pages(PAGES)
+    PAGES = '-6'
+    with pytest.raises(ArgumentTypeError):
+        valid_pages(PAGES)
+    PAGES = '1 - 5'
+    with pytest.raises(ArgumentTypeError):
+        valid_pages(PAGES)
+    PAGES = '0-10'
+    with pytest.raises(ArgumentTypeError):
+        valid_pages(PAGES)
+    PAGES = '10-8'
+    with pytest.raises(ArgumentTypeError):
+        valid_pages(PAGES)
+
+
+def test_22p_whole(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
     scribd.args.url = URL
     scribd.visit_page(URL)
-    # scribd.merge()
+
+    assert valid_url(URL)
 
     download = scribd.doc_title + '.pdf'
-    if download in os.listdir() and _get_modified_time_diff(download) < 60:
+    if download in os.listdir() and get_modified_time_diff(download) < 60:
         assert True
     else:
         assert False
 
 
-def test_22p_two_pages(scribd):
-    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
-    PAGES = '2-3'
-
-    scribd.args.url = URL
-    scribd.args.pages = PAGES
-    scribd.visit_page(URL)
-    # scribd.merge()
-
-    download = scribd.doc_title + '.pdf'
-    if download in os.listdir() and _get_modified_time_diff(download) < 60:
-        assert True
-    else:
-        assert False
-
-
-def test_90p_one_page(scribd):
+def test_90p_first_page(scribd):
     URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
-    PAGES = '24-24'
-    # PAGES = '50-90'
+    PAGES = '1-1'
 
     scribd.args.url = URL
     scribd.args.pages = PAGES
     scribd.visit_page(URL)
-    # scribd.merge()
+
+    assert valid_url(URL)
+    assert valid_pages(PAGES)
 
     download = scribd.doc_title + '.pdf'
-    if download in os.listdir() and _get_modified_time_diff(download) < 60:
+    if download in os.listdir() and get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
+
+
+def test_16p_last_page(scribd):
+    URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
+    PAGES = '22-22'
+
+    scribd.args.url = URL
+    scribd.args.pages = PAGES
+    scribd.visit_page(URL)
+
+    assert valid_url(URL)
+    assert valid_pages(PAGES)
+
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 60:
         assert True
     else:
         assert False
