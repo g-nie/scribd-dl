@@ -38,8 +38,8 @@ def test_22p_whole_document(scribd):
 
 def test_90p_one_page(scribd):
     URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
-    # PAGES = '24-24'
-    PAGES = '50-90'
+    PAGES = '24-24'
+    # PAGES = '50-90'
 
     scribd.args.url = URL
     scribd.args.pages = PAGES
