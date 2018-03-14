@@ -58,55 +58,55 @@ def test_invalid_args():
         valid_pages(PAGES)
 
 
-# def test_22p_whole(scribd):
-#     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+def test_22p_whole(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
-#     scribd.args.url = URL
-#     assert valid_url(URL)
+    scribd.args.url = URL
+    assert valid_url(URL)
 
-#     scribd.visit_page(URL)
+    scribd.visit_page(URL)
 
-#     download = scribd.doc_title + '.pdf'
-#     if download in os.listdir() and get_modified_time_diff(download) < 60:
-#         assert True
-#     else:
-#         assert False
-
-
-# def test_90p_first_page(scribd):
-#     URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
-#     PAGES = '1-1'
-
-#     scribd.args.url = URL
-#     scribd.args.pages = PAGES
-#     assert valid_url(URL)
-#     assert valid_pages(PAGES)
-
-#     scribd.visit_page(URL)
-
-#     download = scribd.doc_title + '.pdf'
-#     if download in os.listdir() and get_modified_time_diff(download) < 60:
-#         assert True
-#     else:
-#         assert False
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
 
 
-# def test_16p_last_page(scribd):
-#     URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
-#     PAGES = '16-16'
+def test_90p_first_page(scribd):
+    URL = 'https://www.scribd.com/document/352366744/Big-Data-A-Twenty-First-Century-Arms-Race'
+    PAGES = '1-1'
 
-#     scribd.args.url = URL
-#     scribd.args.pages = PAGES
-#     assert valid_url(URL)
-#     assert valid_pages(PAGES)
+    scribd.args.url = URL
+    scribd.args.pages = PAGES
+    assert valid_url(URL)
+    assert valid_pages(PAGES)
 
-#     scribd.visit_page(URL)
+    scribd.visit_page(URL)
 
-#     download = scribd.doc_title + '.pdf'
-#     if download in os.listdir() and get_modified_time_diff(download) < 60:
-#         assert True
-#     else:
-#         assert False
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
+
+
+def test_16p_last_page(scribd):
+    URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
+    PAGES = '16-16'
+
+    scribd.args.url = URL
+    scribd.args.pages = PAGES
+    assert valid_url(URL)
+    assert valid_pages(PAGES)
+
+    scribd.visit_page(URL)
+
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 60:
+        assert True
+    else:
+        assert False
 
 
 def test_greater_than_last_page(scribd):
