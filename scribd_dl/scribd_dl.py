@@ -3,6 +3,7 @@
 import re
 import sys
 import os
+import time
 import argparse
 import logging
 import traceback
@@ -54,6 +55,10 @@ class ScribdDL(object):
     def doc_title(self):
         return self._doc_title
 
+    @logger.setter
+    def logger(self, logger):
+        self._logger = logger
+
     @args.setter
     def args(self, args):
         self._args = args
@@ -95,10 +100,10 @@ class ScribdDL(object):
             self._driver = webdriver.Chrome(options=options)
 
     def close_browser(self):  # Exit chromedriver
-        try:
-            self._driver.delete_all_cookies()
-        except (ConnectionAbortedError, ConnectionRefusedError):
-            pass
+        # try:
+        #     self._driver.delete_all_cookies()
+        # except (ConnectionAbortedError, ConnectionRefusedError):
+        #     pass
         self._driver.quit()
 
     def visit_page(self, url):
@@ -159,6 +164,7 @@ class ScribdDL(object):
             processed += 1
             self._logger.debug('Processing page : %s of %s', counter, last_page)
 
+            time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
             img = Image.open(BytesIO(self._driver.get_screenshot_as_png()))  # Load screenshot in memory
             # Crop the image to the speified size
             img = img.crop((
