@@ -11,7 +11,7 @@ from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from PIL import Image
 import img2pdf
 from .utilities import valid_url, valid_pages, GreaterThanLastPageError
@@ -33,7 +33,6 @@ class ScribdDL(object):
         LOG_FILE = 'scribd.log'
 
         doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')  # Use the document id for logging
-        # extra = {'doc_id': doc_id}
         self._extra = {'doc_id': doc_id}
         self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
         self._driver = None
@@ -135,8 +134,21 @@ class ScribdDL(object):
             self._logger.warning('Please try another document.', extra=self._extra)
             self.close_browser()
             sys.exit(1)
-        total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")  # Try/except NoSuchElementException
-        total_pages = total_pages.text.split()[1]
+        # total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")  # Try/except NoSuchElementException
+        # total_pages = total_pages.text.split()[1]
+
+        while True:
+            try:
+                self._driver.get(url)
+            except TimeoutException:
+                pass
+            try:
+                total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
+                total_pages = total_pages.text.split()[1]
+                break
+            except NoSuchElementException:  # total_pages element not available, try again
+                time.sleep(2)
+
         self._doc_title = self._driver.title
         # Make document title safe for saving in the file system
         self._doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
@@ -240,7 +252,6 @@ if __name__ == '__main__':
     main()
 
 
-# TODO : Handle NoSuchElementException in total_pages
 # TODO : Add more tests
 # TODO : Mute DEVTOOLS Listening
 # TODO : Use _excepthook message in production
