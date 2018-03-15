@@ -66,7 +66,6 @@ def test_22p_whole(scribd):
 
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': doc_id}
-    # scribd.logger = logging.LoggerAdapter(scribd.logger, {'doc_id': doc_id})
     scribd.args.url = URL
     assert valid_url(URL)
     scribd.visit_page(URL)
@@ -83,7 +82,7 @@ def test_90p_first_page(scribd):
     PAGES = '1'
 
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.logger = logging.LoggerAdapter(scribd.logger, {'doc_id': doc_id})
+    scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
     assert valid_url(URL)
@@ -102,7 +101,7 @@ def test_16p_last_page(scribd):
     PAGES = '16'
 
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.logger = logging.LoggerAdapter(scribd.logger, {'doc_id': doc_id})
+    scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
     assert valid_url(URL)
@@ -121,7 +120,7 @@ def test_16p_greater_than_last_page(scribd):
     PAGES = '15-22'
 
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.logger = logging.LoggerAdapter(scribd.logger, {'doc_id': doc_id})
+    scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
     assert valid_url(URL)

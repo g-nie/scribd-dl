@@ -88,7 +88,6 @@ class ScribdDL(object):
         logging.getLogger().addHandler(console_handler)
         logger = logging.getLogger(__name__)
         # logger = logging.LoggerAdapter(logger, extra)
-        logger = logging.LoggerAdapter(logger, None)
 
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
@@ -117,7 +116,7 @@ class ScribdDL(object):
         self._driver.quit()
 
     def visit_page(self, url):
-        self._logger.info('Visiting requested url')
+        self._logger.info('Visiting requested url', extra=self._extra)
         # self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
         self._driver.set_page_load_timeout(self.LOAD_TIME)
