@@ -129,16 +129,16 @@ def test_16p_greater_than_last_page(scribd):
         scribd.visit_page(URL)
 
 
-def test_16p_restricted_document(scribd):
-    URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
-    PAGES = '15-22'
+# def test_16p_restricted_document(scribd):
+#     URL = 'https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012'
+#     PAGES = '15-22'
 
-    doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.extra = {'doc_id': doc_id}
-    scribd.args.url = URL
-    scribd.args.pages = PAGES
-    assert valid_url(URL)
-    assert valid_pages(PAGES)
+#     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
+#     scribd.extra = {'doc_id': doc_id}
+#     scribd.args.url = URL
+#     scribd.args.pages = PAGES
+#     assert valid_url(URL)
+#     assert valid_pages(PAGES)
 
-    with pytest.raises(GreaterThanLastPageError):
-        scribd.visit_page(URL)
+#     with pytest.raises(GreaterThanLastPageError):
+#         scribd.visit_page(URL)

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# pylint: disable=C0413
+
 import re
 import sys
 import os
@@ -14,7 +16,8 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from PIL import Image
 import img2pdf
-from utilities import valid_url, valid_pages, GreaterThanLastPageError
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scribd_dl.utilities import valid_url, valid_pages, GreaterThanLastPageError
 
 
 class ScribdDL(object):
