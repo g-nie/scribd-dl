@@ -88,7 +88,7 @@ class ScribdDL(object):
         logging.getLogger().addHandler(console_handler)
         logger = logging.getLogger(__name__)
         # logger = logging.LoggerAdapter(logger, extra)
-        logger = logging.LoggerAdapter(logger)
+        logger = logging.LoggerAdapter(logger, None)
 
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
