@@ -254,6 +254,7 @@ if __name__ == '__main__':
     main()
 
 
+# TODO : Add test for restricted docs
 # TODO : Add more tests
 # TODO : Mute DEVTOOLS Listening
 # TODO : Use _excepthook message in production
