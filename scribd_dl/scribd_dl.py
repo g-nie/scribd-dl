@@ -19,10 +19,13 @@ from .utilities import valid_url, valid_pages, GreaterThanLastPageError
 
 class ScribdDL(object):
 
-    def __init__(self, args):
-        self.START = datetime.now()
-        self._args = args
+    # Replace with path to your chromedriver executable
+    DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
+    LOAD_TIME = 20  # Stop loading page after 20 seconds
+    START = datetime.now()
 
+    def __init__(self, args):
+        self._args = args
         # LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
         LOG_FOLDER = 'scribd_logs/'
         if not os.path.exists(LOG_FOLDER):
@@ -30,13 +33,10 @@ class ScribdDL(object):
         LOG_FILE = 'scribd.log'
 
         doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')  # Use the document id for logging
-        extra = {'doc_id': doc_id}
-        self._logger = self._get_logger(LOG_FOLDER, LOG_FILE, extra)
-
+        # extra = {'doc_id': doc_id}
+        self._extra = {'doc_id': doc_id}
+        self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
         self._driver = None
-        # Replace with path to your chromedriver executable
-        self.DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
-        self.LOAD_TIME = 20  # Stop loading page after 20 seconds
         self._doc_title = None
 
     @property
@@ -55,6 +55,10 @@ class ScribdDL(object):
     def doc_title(self):
         return self._doc_title
 
+    @property
+    def extra(self):
+        return self._extra
+
     @logger.setter
     def logger(self, logger):
         self._logger = logger
@@ -63,7 +67,11 @@ class ScribdDL(object):
     def args(self, args):
         self._args = args
 
-    def _get_logger(self, LOG_FOLDER, LOG_FILE, extra):
+    @extra.setter
+    def extra(self, extra):
+        self._extra = extra
+
+    def _get_logger(self, LOG_FOLDER, LOG_FILE):
         # Initialize and configure the logging system
         logging.basicConfig(level=logging.DEBUG,
                             format='(%(module)s) %(levelname)s [%(asctime)s] [%(doc_id)s]  %(message)s',
@@ -79,7 +87,8 @@ class ScribdDL(object):
         # console_handler.setFormatter(console_formatter)
         logging.getLogger().addHandler(console_handler)
         logger = logging.getLogger(__name__)
-        logger = logging.LoggerAdapter(logger, extra)
+        # logger = logging.LoggerAdapter(logger, extra)
+
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
         logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
@@ -107,7 +116,7 @@ class ScribdDL(object):
         self._driver.quit()
 
     def visit_page(self, url):
-        self._logger.info('Visiting requested url')
+        self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
         self._driver.set_page_load_timeout(self.LOAD_TIME)
         try:
@@ -121,11 +130,11 @@ class ScribdDL(object):
         except AttributeError:
             is_restricted = False
         if is_restricted:
-            self._logger.warning('This document is only a preview and not fully availabe for reading.')
-            self._logger.warning('Please try another document.')
+            self._logger.warning('This document is only a preview and not fully availabe for reading.', extra=self._extra)
+            self._logger.warning('Please try another document.', extra=self._extra)
             self.close_browser()
             sys.exit(1)
-        total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
+        total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")  # Try/except NoSuchElementException
         total_pages = total_pages.text.split()[1]
         self._doc_title = self._driver.title
         # Make document title safe for saving in the file system
@@ -150,9 +159,9 @@ class ScribdDL(object):
         Pages = []  # Holds the actual image bytes of each page
         to_process = last_page - first_page + 1  # Total pages to process
         processed = 0
-        self._logger.info('Processing pages : %s-%s...', first_page, last_page)
+        self._logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self._extra)
         if first_page > 80:  # Inform the user that scrolling may take a while
-            self._logger.info('Scrolling to page %s...', first_page)
+            self._logger.info('Scrolling to page %s...', first_page, extra=self._extra)
         for counter in range(1, int(total_pages) + 1):
             if counter > last_page:
                 break
@@ -162,7 +171,7 @@ class ScribdDL(object):
             if counter < first_page:  # Keep scrolling if it hasn't reached the first_page
                 continue
             processed += 1
-            self._logger.debug('Processing page : %s of %s', counter, last_page)
+            self._logger.debug('Processing page : %s of %s', counter, last_page, extra=self._extra)
 
             time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
             img = Image.open(BytesIO(self._driver.get_screenshot_as_png()))  # Load screenshot in memory
@@ -215,10 +224,10 @@ def main():
 
         scribd.visit_page(url)
         scribd.close_browser()
-        logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds)
+        logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
     except KeyboardInterrupt:
-        logger.warning('Interrupted.')
+        logger.warning('Interrupted.', extra=scribd.extra)
         try:
             driver.quit()
         except NameError:
@@ -231,4 +240,4 @@ if __name__ == '__main__':
 
 
 # TODO : Mute DEVTOOLS Listening
-# TODO : Reduce instance attributes
+# TODO : Use _excepthook message in production

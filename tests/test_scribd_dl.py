@@ -65,7 +65,8 @@ def test_22p_whole(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.logger = logging.LoggerAdapter(scribd.logger, {'doc_id': doc_id})
+    scribd.extra = {'doc_id': doc_id}
+    # scribd.logger = logging.LoggerAdapter(scribd.logger, {'doc_id': doc_id})
     scribd.args.url = URL
     assert valid_url(URL)
     scribd.visit_page(URL)
