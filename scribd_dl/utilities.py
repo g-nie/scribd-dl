@@ -14,7 +14,7 @@ class GreaterThanLastPageError(Exception):
 
 # Make sure input url is of valid format
 def valid_url(u):
-    check = re.match(r'(https://)?www.scribd.com/(?:doc|document)/\d+(?:/.*|$)', u)
+    check = re.match(r'(https://)?www.scribd.com/(?:doc|document|presentation)/\d+(?:/.*|$)', u)
     if check:
         return u
     else:
