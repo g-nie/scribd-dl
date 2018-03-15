@@ -127,3 +127,4 @@ def test_16p_greater_than_last_page(scribd):
 
     with pytest.raises(GreaterThanLastPageError):
         scribd.visit_page(URL)
+

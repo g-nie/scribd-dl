@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# pylint: disable=C0413
+
 import re
 import sys
 import os
@@ -14,7 +16,8 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from PIL import Image
 import img2pdf
-from .utilities import valid_url, valid_pages, GreaterThanLastPageError
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scribd_dl.utilities import valid_url, valid_pages, GreaterThanLastPageError
 
 
 class ScribdDL(object):
@@ -161,7 +164,7 @@ class ScribdDL(object):
             if last_page > int(total_pages):
                 self.close_browser()
                 raise GreaterThanLastPageError
-        else:
+        else:  # Use the whole document
             first_page = 1
             last_page = int(total_pages)
         self._scroll_pages(first_page, last_page, total_pages)
@@ -222,7 +225,6 @@ def main():
         url = args.url
 
         scribd = ScribdDL(args)
-        scribd = ScribdDL(args)
         logger = scribd.logger
 
         scribd.start_browser()
@@ -252,6 +254,7 @@ if __name__ == '__main__':
     main()
 
 
+# TODO : Add test for restricted docs
 # TODO : Add more tests
 # TODO : Mute DEVTOOLS Listening
 # TODO : Use _excepthook message in production
