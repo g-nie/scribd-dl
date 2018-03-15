@@ -8,7 +8,6 @@ scribd-dl
 
 Installation
 ------------
-
 Clone it ::
 
    >> git clone https://github.com/giannisterzopoulos/scribd-dl.git
@@ -22,3 +21,4 @@ Requirements
 | See all available chromedriver downloads `here`_.
 
 .. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads
+

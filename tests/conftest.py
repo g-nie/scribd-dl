@@ -18,7 +18,7 @@ from scribd_dl import ScribdDL
 # (available across multiple test functions, classes, and modules)
 @pytest.fixture(scope='session')
 def scribd(request):
-    args = argparse.Namespace(url='0000', pages='', verbose=False)
+    args = argparse.Namespace(url='0000', pages=None, verbose=False)
     sc = ScribdDL(args)
     sc.start_browser()
 
