@@ -12,7 +12,8 @@ requirements = [
     'selenium>=3.9.0',
     'Pillow>=4.3.0',
     'img2pdf>=0.2.4',
-    'PyPDF2>=1.26.0'
+    'PyPDF2>=1.26.0',
+    'requests>=2.18.4'
 ]
 
 setup_requirements = []
