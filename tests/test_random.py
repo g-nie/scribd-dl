@@ -8,7 +8,7 @@ import re
 import sys
 # sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # from scribd_dl import ScribdDL
-from scribd_dl.utilities import (
+from scribd_dl.utils import (
     valid_url,
     valid_pages,
     get_modified_time_diff,

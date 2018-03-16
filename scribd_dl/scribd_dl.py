@@ -17,7 +17,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from PIL import Image
 import img2pdf
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scribd_dl.utilities import (
+from scribd_dl.utils import (
     valid_url,
     valid_pages,
     GreaterThanLastPageError,
