@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # pylint: disable=C0413
 
 import re
@@ -94,7 +93,6 @@ class ScribdDL(object):
         # console_handler.setFormatter(console_formatter)
         logging.getLogger().addHandler(console_handler)
         logger = logging.getLogger(__name__)
-        # logger = logging.LoggerAdapter(logger, self._extra)
 
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
@@ -110,21 +108,18 @@ class ScribdDL(object):
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
+        logging.disable(logging.CRITICAL)
         if self.DRIVER_PATH:
             self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
             self._driver = webdriver.Chrome(options=options)
+        logging.disable(logging.NOTSET)
 
     def close_browser(self):  # Exit chromedriver
-        # try:
-        #     self._driver.delete_all_cookies()  # Caused unexpected errors
-        # except (ConnectionAbortedError, ConnectionRefusedError):
-        #     pass
         self._driver.quit()
 
     def visit_page(self, url):
         self._logger.info('Visiting requested url', extra=self._extra)
-        # self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
         self._driver.set_page_load_timeout(self.LOAD_TIME)
         try:
@@ -139,17 +134,10 @@ class ScribdDL(object):
             is_restricted = False
         if is_restricted:
             raise RestrictedDocumentError
-            # self._logger.warning('This document is only a preview and not fully availabe for reading.', extra=self._extra)
-            # self._logger.warning('Please try another document.', extra=self._extra)
-            # self.close_browser()
-            # sys.exit(1)
-
-        # total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")  # Try/except NoSuchElementException
-        # total_pages = total_pages.text.split()[1]
 
         retries = 0
         total_pages = None
-        while retries < 3:  # ------------------
+        while retries < 3:  # try up to 3 times to get the total_pages element
             try:
                 self._driver.get(url)
             except TimeoutException:
@@ -264,3 +252,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# TODO : Mute "DEVTOOLS Listening..."
+# TODO : Use _excepthook message in production

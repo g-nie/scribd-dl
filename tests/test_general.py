@@ -58,9 +58,6 @@ def test_16p_last_page(scribd):
 def test_22p_whole(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
-    # PAGES = '4'  # -------------------
-    # scribd.args.pages = PAGES
-
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': '{}-{}'.format(func_name, doc_id)}
