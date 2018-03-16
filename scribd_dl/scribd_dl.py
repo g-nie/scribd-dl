@@ -17,7 +17,12 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from PIL import Image
 import img2pdf
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scribd_dl.utilities import valid_url, valid_pages, GreaterThanLastPageError
+from scribd_dl.utilities import (
+    valid_url,
+    valid_pages,
+    GreaterThanLastPageError,
+    RestrictedDocumentError
+)
 
 
 class ScribdDL(object):
@@ -89,7 +94,7 @@ class ScribdDL(object):
         # console_handler.setFormatter(console_formatter)
         logging.getLogger().addHandler(console_handler)
         logger = logging.getLogger(__name__)
-        # logger = logging.LoggerAdapter(logger, extra)
+        # logger = logging.LoggerAdapter(logger, self._extra)
 
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
@@ -133,14 +138,18 @@ class ScribdDL(object):
         except AttributeError:
             is_restricted = False
         if is_restricted:
-            self._logger.warning('This document is only a preview and not fully availabe for reading.', extra=self._extra)
-            self._logger.warning('Please try another document.', extra=self._extra)
-            self.close_browser()
-            sys.exit(1)
+            raise RestrictedDocumentError
+            # self._logger.warning('This document is only a preview and not fully availabe for reading.', extra=self._extra)
+            # self._logger.warning('Please try another document.', extra=self._extra)
+            # self.close_browser()
+            # sys.exit(1)
+
         # total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")  # Try/except NoSuchElementException
         # total_pages = total_pages.text.split()[1]
 
-        while True:
+        retries = 0
+        total_pages = None
+        while retries < 3:  # ------------------
             try:
                 self._driver.get(url)
             except TimeoutException:
@@ -150,7 +159,10 @@ class ScribdDL(object):
                 total_pages = total_pages.text.split()[1]
                 break
             except NoSuchElementException:  # total_pages element not available, try again
+                retries += 1
                 time.sleep(2)
+        if total_pages is None:
+            raise NoSuchElementException
 
         self._doc_title = self._driver.title
         # Make document title safe for saving in the file system
@@ -252,9 +264,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# TODO : Add test for restricted docs
-# TODO : Add more tests
-# TODO : Mute DEVTOOLS Listening
-# TODO : Use _excepthook message in production
