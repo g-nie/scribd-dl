@@ -14,9 +14,9 @@ from scribd_dl import ScribdDL
 #     parser.addoption("--url", action="store", default="https://.../", help="url")
 
 
-@pytest.fixture(scope='module')  # Can be module, session, function, class
+@pytest.fixture(scope='session')  # Can be module, session, function, class
 def scribd(request):
-    args = argparse.Namespace(url='0000', pages=None, verbose=True)
+    args = argparse.Namespace(url='0000', pages=None, verbose=True, testing=True)
     sc = ScribdDL(args)
     sc.start_browser()
 

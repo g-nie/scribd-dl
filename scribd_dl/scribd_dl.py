@@ -82,6 +82,10 @@ class ScribdDL(object):
     def extra(self, extra):
         self._extra = extra
 
+    @doc_title_edited.setter
+    def doc_title_edited(self, doc_title_edited):
+        self._doc_title_edited = doc_title_edited
+
     def _get_logger(self, LOG_FOLDER, LOG_FILE):
         # Initialize and configure the logging system
         logging.basicConfig(level=logging.DEBUG,
@@ -118,14 +122,19 @@ class ScribdDL(object):
             self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
             self._driver = webdriver.Chrome(options=options)
+        # Visit the requested url without waiting more than LOAD_TIME seconds
+        self._driver.set_page_load_timeout(self.LOAD_TIME)
 
     def close_browser(self):  # Exit chromedriver
-        self._driver.quit()
+        try:  # Don't close the driver if called by pytest
+            t = self._args.testing
+        except AttributeError:
+            self._driver.quit()
 
     def visit_page(self, url):
         self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
-        self._driver.set_page_load_timeout(self.LOAD_TIME)
+        # self._driver.set_page_load_timeout(self.LOAD_TIME)
         try:
             self._driver.get(url)
         except TimeoutException:
@@ -137,6 +146,7 @@ class ScribdDL(object):
         except AttributeError:
             is_restricted = False
         if is_restricted:
+            self.close_browser()
             raise RestrictedDocumentError
 
         retries = 0
@@ -154,6 +164,7 @@ class ScribdDL(object):
                 retries += 1
                 time.sleep(2)
         if total_pages is None:
+            self.close_browser()
             raise NoSuchElementException
 
         self._doc_title = self._driver.title

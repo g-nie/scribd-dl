@@ -35,7 +35,7 @@ def test_2p_random_document_1(scribd):
     except RestrictedDocumentError:
         assert True
     else:
-        if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(download) < 10:
+        if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(scribd.doc_title_edited) < 10:
             assert True
         else:
             assert False
@@ -59,7 +59,7 @@ def test_2p_random_document_2(scribd):
     except RestrictedDocumentError:
         assert True
     else:
-        if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(download) < 10:
+        if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(scribd.doc_title_edited) < 10:
             assert True
         else:
             assert False
