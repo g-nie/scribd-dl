@@ -19,7 +19,6 @@ from scribd_dl.utils import (
 
 def test_2p_random_document_1(scribd):
     URL = generate_random_document()
-    print('-- Random document : {}'.format(URL))
     PAGES = '1-2'
 
     func_name = sys._getframe().f_code.co_name
@@ -43,7 +42,6 @@ def test_2p_random_document_1(scribd):
 
 def test_2p_random_document_2(scribd):
     URL = generate_random_document()
-    print('-- Random document : {}'.format(URL))
     PAGES = '1-2'
 
     func_name = sys._getframe().f_code.co_name

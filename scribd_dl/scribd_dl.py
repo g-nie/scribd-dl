@@ -8,6 +8,7 @@ import time
 import argparse
 import logging
 import traceback
+# import inspect
 from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
@@ -126,10 +127,16 @@ class ScribdDL(object):
         self._driver.set_page_load_timeout(self.LOAD_TIME)
 
     def close_browser(self):  # Exit chromedriver
-        try:  # Don't close the driver if called by pytest
-            t = self._args.testing
+        try:  # Don't close the driver if called by tests
+            t = self._args.testing  # pylint: disable=W0612
         except AttributeError:
             self._driver.quit()
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # print('--- Caller name : {}'.format(calframe[1][3]))
+
+    def force_close_browser(self):  # Exit chromedriver without checking
+        self._driver.quit()
 
     def visit_page(self, url):
         self._logger.info('Visiting requested url', extra=self._extra)
