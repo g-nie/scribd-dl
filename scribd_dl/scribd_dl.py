@@ -44,6 +44,7 @@ class ScribdDL(object):
         self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
         self._driver = None
         self._doc_title = None
+        self._doc_title_edited = None
 
     @property
     def logger(self):
@@ -64,6 +65,10 @@ class ScribdDL(object):
     @property
     def extra(self):
         return self._extra
+
+    @property
+    def doc_title_edited(self):
+        return self._doc_title_edited
 
     @logger.setter
     def logger(self, logger):
@@ -108,12 +113,11 @@ class ScribdDL(object):
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
-        logging.disable(logging.CRITICAL)
+        logging.getLogger('selenium.chrome.webdriver').setLevel(logging.ERROR)  # ----------
         if self.DRIVER_PATH:
             self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
             self._driver = webdriver.Chrome(options=options)
-        logging.disable(logging.NOTSET)
 
     def close_browser(self):  # Exit chromedriver
         self._driver.quit()
@@ -210,9 +214,13 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                filename = '{}.pdf'.format(self._doc_title)
+                if len(self._doc_title) > 100:
+                    filename = self._doc_title[:100] + '... .pdf'
+                else:
+                    filename = '{}.pdf'.format(self._doc_title)
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
+                self.doc_title_edited = filename
 
 
 def main():

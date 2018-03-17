@@ -21,7 +21,7 @@ def test_16p_restricted_document(scribd):
 
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.extra = {'doc_id': '{}-{}'.format(func_name, doc_id)}
+    scribd.extra = {'doc_id': '{} - {}'.format(func_name, doc_id)}
     scribd.args.url = URL
     scribd.args.pages = PAGES
     assert valid_url(URL)
