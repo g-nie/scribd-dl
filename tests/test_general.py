@@ -21,14 +21,15 @@ def test_90p_first_page(scribd):
 
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.extra = {'doc_id': '{} - {}'.format(func_name, doc_id)}
+    scribd.extra = {'doc_id': '({}) {}'.format(func_name, doc_id)}
     scribd.args.url = URL
     scribd.args.pages = PAGES
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
 
-    if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(scribd.doc_title_edited) < 10:
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 10:
         assert True
     else:
         assert False
@@ -40,14 +41,15 @@ def test_16p_last_page(scribd):
 
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.extra = {'doc_id': '{} - {}'.format(func_name, doc_id)}
+    scribd.extra = {'doc_id': '({}) {}'.format(func_name, doc_id)}
     scribd.args.url = URL
     scribd.args.pages = PAGES
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
 
-    if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(scribd.doc_title_edited) < 10:
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 10:
         assert True
     else:
         assert False
@@ -56,35 +58,15 @@ def test_16p_last_page(scribd):
 def test_22p_whole(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
-    scribd.args.pages = None
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.extra = {'doc_id': '{} - {}'.format(func_name, doc_id)}
+    scribd.extra = {'doc_id': '{}-{}'.format(func_name, doc_id)}
     scribd.args.url = URL
     assert valid_url(URL)
     scribd.visit_page(URL)
 
-    if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(scribd.doc_title_edited) < 10:
-        assert True
-    else:
-        assert False
-
-
-def test_78p_long_title_first_page(scribd):
-    URL = 'https://www.scribd.com/document/352506425/Hydroponic-Green-House-Farming-Detailed-Project-Report-' \
-        'Profile-Business-Plan-Industry-Trends-Market-Research-Survey-Raw-Materials-Feasibility-S'
-    PAGES = '1'
-
-    func_name = sys._getframe().f_code.co_name
-    doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
-    scribd.extra = {'doc_id': '{} - {}'.format(func_name, doc_id)}
-    scribd.args.url = URL
-    scribd.args.pages = PAGES
-    assert valid_url(URL)
-    assert valid_pages(PAGES)
-    scribd.visit_page(URL)
-
-    if scribd.doc_title_edited in os.listdir() and get_modified_time_diff(scribd.doc_title_edited) < 10:
+    download = scribd.doc_title + '.pdf'
+    if download in os.listdir() and get_modified_time_diff(download) < 10:
         assert True
     else:
         assert False

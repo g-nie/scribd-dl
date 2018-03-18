@@ -14,13 +14,13 @@ from scribd_dl import ScribdDL
 #     parser.addoption("--url", action="store", default="https://.../", help="url")
 
 
-@pytest.fixture(scope='session')  # Can be module, session, function, class
+@pytest.fixture(scope='module')  # Can be module, session, function, class
 def scribd(request):
-    args = argparse.Namespace(url='0000', pages=None, verbose=True, testing=True)
+    args = argparse.Namespace(url='0000', pages=None, verbose=True)
     sc = ScribdDL(args)
     sc.start_browser()
 
     def fin():
-        sc.force_close_browser()
+        sc.close_browser()
     request.addfinalizer(fin)
     return sc  # provide the fixture value
