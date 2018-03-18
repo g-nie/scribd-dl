@@ -8,6 +8,7 @@ import time
 import argparse
 import logging
 import traceback
+# import inspect
 from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
@@ -44,6 +45,7 @@ class ScribdDL(object):
         self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
         self._driver = None
         self._doc_title = None
+        self._doc_title_edited = None
 
     @property
     def logger(self):
@@ -65,6 +67,10 @@ class ScribdDL(object):
     def extra(self):
         return self._extra
 
+    @property
+    def doc_title_edited(self):
+        return self._doc_title_edited
+
     @logger.setter
     def logger(self, logger):
         self._logger = logger
@@ -76,6 +82,10 @@ class ScribdDL(object):
     @extra.setter
     def extra(self, extra):
         self._extra = extra
+
+    @doc_title_edited.setter
+    def doc_title_edited(self, doc_title_edited):
+        self._doc_title_edited = doc_title_edited
 
     def _get_logger(self, LOG_FOLDER, LOG_FILE):
         # Initialize and configure the logging system
@@ -108,20 +118,30 @@ class ScribdDL(object):
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
-        logging.disable(logging.CRITICAL)
+        logging.getLogger('selenium.chrome.webdriver').setLevel(logging.ERROR)  # ----------
         if self.DRIVER_PATH:
             self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
         else:
             self._driver = webdriver.Chrome(options=options)
-        logging.disable(logging.NOTSET)
+        # Visit the requested url without waiting more than LOAD_TIME seconds
+        self._driver.set_page_load_timeout(self.LOAD_TIME)
 
     def close_browser(self):  # Exit chromedriver
+        try:  # Don't close the driver if called by tests
+            t = self._args.testing  # pylint: disable=W0612
+        except AttributeError:
+            self._driver.quit()
+        # curframe = inspect.currentframe()
+        # calframe = inspect.getouterframes(curframe, 2)
+        # print('--- Caller name : {}'.format(calframe[1][3]))
+
+    def force_close_browser(self):  # Exit chromedriver without checking
         self._driver.quit()
 
     def visit_page(self, url):
         self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
-        self._driver.set_page_load_timeout(self.LOAD_TIME)
+        # self._driver.set_page_load_timeout(self.LOAD_TIME)
         try:
             self._driver.get(url)
         except TimeoutException:
@@ -133,6 +153,7 @@ class ScribdDL(object):
         except AttributeError:
             is_restricted = False
         if is_restricted:
+            self.close_browser()
             raise RestrictedDocumentError
 
         retries = 0
@@ -150,6 +171,7 @@ class ScribdDL(object):
                 retries += 1
                 time.sleep(2)
         if total_pages is None:
+            self.close_browser()
             raise NoSuchElementException
 
         self._doc_title = self._driver.title
@@ -210,9 +232,13 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                filename = '{}.pdf'.format(self._doc_title)
+                if len(self._doc_title) > 100:
+                    filename = self._doc_title[:100] + '... .pdf'
+                else:
+                    filename = '{}.pdf'.format(self._doc_title)
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
+                self.doc_title_edited = filename
 
 
 def main():
