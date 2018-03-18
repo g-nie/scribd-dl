@@ -30,15 +30,19 @@ from scribd_dl.utils import (
 
 class ScribdDL(object):
 
-    try:
-        assets_folder = os.listdir('../assets')
-    except FileNotFoundError:
-        logging.error('Could not load assets directory. Do not run the program '
-                      'from a different directory, unless it is properly installed.')
-        sys.exit(1)
+    file_path = os.path.abspath(os.path.dirname(__file__))
+    parent_dir = os.path.dirname(file_path)
+    assets_dir = os.path.join(parent_dir, 'assets')
+
+    # try:
+    #     assets_folder = os.listdir('../assets')
+    # except FileNotFoundError:
+    #     logging.error('Could not load assets directory. Do not run the program '
+    #                   'from a different directory, unless it is properly installed.')
+    #     sys.exit(1)
 
     DRIVER_PATH = None
-    for f in os.listdir('../assets'):
+    for f in os.listdir(assets_dir):
         if 'chromedriver' in f:
             DRIVER_PATH = f
     LOAD_TIME = 20  # Stop loading page after 20 seconds
@@ -143,7 +147,7 @@ class ScribdDL(object):
 
     def close_browser(self):  # Exit chromedriver
         try:  # Don't close the driver if called by tests
-            t = self._args.testing  # pylint: disable=W0612
+            t = self._args.testing  # noqa: F841 pylint: disable=W0612
         except AttributeError:
             self._driver.quit()
 
