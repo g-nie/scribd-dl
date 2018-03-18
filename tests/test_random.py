@@ -17,9 +17,9 @@ from scribd_dl.utils import (
 )
 
 
-def test_2p_random_document_1(scribd):
+def test_1p_random_document_1(scribd):
     URL = generate_random_document()
-    PAGES = '1-2'
+    PAGES = '1-1'
 
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
@@ -40,9 +40,9 @@ def test_2p_random_document_1(scribd):
             assert False
 
 
-def test_2p_random_document_2(scribd):
+def test_1p_random_document_2(scribd):
     URL = generate_random_document()
-    PAGES = '1-2'
+    PAGES = '1-1'
 
     func_name = sys._getframe().f_code.co_name
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
