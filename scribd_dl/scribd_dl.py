@@ -34,13 +34,6 @@ class ScribdDL(object):
     parent_dir = os.path.dirname(file_path)
     assets_dir = os.path.join(parent_dir, 'assets')
 
-    # try:
-    #     assets_folder = os.listdir('../assets')
-    # except FileNotFoundError:
-    #     logging.error('Could not load assets directory. Do not run the program '
-    #                   'from a different directory, unless it is properly installed.')
-    #     sys.exit(1)
-
     DRIVER_PATH = None
     for f in os.listdir(assets_dir):
         if 'chromedriver' in f:
