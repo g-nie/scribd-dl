@@ -8,12 +8,15 @@ import time
 import argparse
 import logging
 import traceback
-# import inspect
 from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import (
+    TimeoutException,
+    NoSuchElementException,
+    WebDriverException
+)
 from PIL import Image
 import img2pdf
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -27,8 +30,17 @@ from scribd_dl.utils import (
 
 class ScribdDL(object):
 
-    # Replace with path to your chromedriver executable
-    DRIVER_PATH = None  # Leave it as it is only if chromedriver is in PATH
+    try:
+        assets_folder = os.listdir('../assets')
+    except FileNotFoundError:
+        logging.error('Could not load assets directory. Do not run the program '
+                      'from a different directory, unless it is properly installed.')
+        sys.exit(1)
+
+    DRIVER_PATH = None
+    for f in os.listdir('../assets'):
+        if 'chromedriver' in f:
+            DRIVER_PATH = f
     LOAD_TIME = 20  # Stop loading page after 20 seconds
     START = datetime.now()
 
@@ -118,12 +130,15 @@ class ScribdDL(object):
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-infobars')
         options.add_argument("--window-size=1600,2020")
-        logging.getLogger('selenium.chrome.webdriver').setLevel(logging.ERROR)  # ----------
-        if self.DRIVER_PATH:
-            self._driver = webdriver.Chrome(self.DRIVER_PATH, options=options)
-        else:
-            self._driver = webdriver.Chrome(options=options)
-        # Visit the requested url without waiting more than LOAD_TIME seconds
+
+        if self.DRIVER_PATH:  # search for chromedriver in assets
+            self._driver = webdriver.Chrome(executable_path=self.DRIVER_PATH, options=options)
+        else:  # search for chromedriver in PATH
+            try:
+                self._driver = webdriver.Chrome(options=options)
+            except WebDriverException:
+                self._logger.error('Chromedriver needs to be in assets directory or in PATH')
+                sys.exit(1)
         self._driver.set_page_load_timeout(self.LOAD_TIME)
 
     def close_browser(self):  # Exit chromedriver
@@ -131,9 +146,6 @@ class ScribdDL(object):
             t = self._args.testing  # pylint: disable=W0612
         except AttributeError:
             self._driver.quit()
-        # curframe = inspect.currentframe()
-        # calframe = inspect.getouterframes(curframe, 2)
-        # print('--- Caller name : {}'.format(calframe[1][3]))
 
     def force_close_browser(self):  # Exit chromedriver without checking
         self._driver.quit()
@@ -141,7 +153,6 @@ class ScribdDL(object):
     def visit_page(self, url):
         self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
-        # self._driver.set_page_load_timeout(self.LOAD_TIME)
         try:
             self._driver.get(url)
         except TimeoutException:
@@ -273,7 +284,7 @@ def main():
             driver.quit()
         except NameError:
             pass
-        sys.exit(0)
+        sys.exit()
 
 
 if __name__ == '__main__':

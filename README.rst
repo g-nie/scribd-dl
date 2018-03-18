@@ -17,8 +17,9 @@ Clone it ::
 
 Requirements
 -------------
-| Scribd_dl requires chromedriver to work as expected. It is tested to work with chromedriver v2.37 and Chrome v65.0.
-| See all available chromedriver downloads `here`_.
+| Scribd_dl requires chromedriver in order to work. See all available chromedriver downloads `here`_.
+| Put the chromedriver executable in the assets folder or in your system PATH variable.
+| Tested to work with chromedriver v2.37 and Chrome v65.0.
 
 .. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads
 
