@@ -6,7 +6,7 @@ test_1.py
 test_2.py
 chromedriver.*
 URLS.txt
-
+*.exe
 .vscode/
 
 # Byte-compiled / optimized / DLL files
