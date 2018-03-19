@@ -37,7 +37,7 @@ setup(
     long_description=long_description,
     packages=find_packages(include=['scribd_dl']),
     package_data={
-        'scribd_dl': ['assets/README.txt']
+        'scribd_dl': ['assets/*']
     },
     include_package_data=True,
     entry_points={
