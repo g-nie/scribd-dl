@@ -31,8 +31,7 @@ from scribd_dl.utils import (
 class ScribdDL(object):
 
     file_path = os.path.abspath(os.path.dirname(__file__))
-    parent_dir = os.path.dirname(file_path)
-    assets_dir = os.path.join(parent_dir, 'assets')
+    assets_dir = os.path.join(file_path, 'assets')
 
     DRIVER_PATH = None
     for f in os.listdir(assets_dir):
@@ -49,8 +48,8 @@ class ScribdDL(object):
             os.makedirs(LOG_FOLDER)
         LOG_FILE = 'scribd.log'
 
-        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')  # Use the document id for logging
-        self._extra = {'doc_id': doc_id}
+        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')
+        self._extra = {'doc_id': doc_id}  # Use the document id for logging
         self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
         self._driver = None
         self._doc_title = None
@@ -147,6 +146,15 @@ class ScribdDL(object):
     def force_close_browser(self):  # Exit chromedriver without checking
         self._driver.quit()
 
+    def _edit_title(self):
+        # Make document title safe for saving in the file system
+        edited = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
+        if ' ' in edited.strip() and len(edited.split(' ')) >= 4:
+            edited = ' '.join(edited.split(' ')[:4])
+        else:
+            edited = edited[:30]
+        return edited
+
     def visit_page(self, url):
         self._logger.info('Visiting requested url', extra=self._extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
@@ -183,8 +191,6 @@ class ScribdDL(object):
             raise NoSuchElementException
 
         self._doc_title = self._driver.title
-        # Make document title safe for saving in the file system
-        self._doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
         if self._args.pages:  # If user inserted page range
             try:
                 first_page = int(self._args.pages.split('-')[0])
@@ -240,13 +246,10 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                if len(self._doc_title) > 100:
-                    filename = self._doc_title[:100] + '... .pdf'
-                else:
-                    filename = '{}.pdf'.format(self._doc_title)
+                self._doc_title_edited = self._edit_title()
+                filename = '{}-{}.pdf'.format(self._doc_title_edited, self.extra['doc_id'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
-                self.doc_title_edited = filename
 
 
 def main():
@@ -288,5 +291,7 @@ if __name__ == '__main__':
     main()
 
 
+# TODO : Save logs elsewhere
+# TODO : Handle no connection
 # TODO : Mute "DEVTOOLS Listening..."
 # TODO : Use _excepthook message in production

@@ -11,13 +11,15 @@ with open('README.rst', encoding='utf-8') as readme_file:
 requirements = [
     'selenium>=3.9.0',
     'Pillow>=4.3.0',
-    'img2pdf>=0.2.4',
-    'requests>=2.18.4'
+    'img2pdf>=0.2.4'
 ]
 
 setup_requirements = []
 
-test_requirements = []
+test_requirements = [
+    'pytest>=3.2.1',
+    'requests>=2.18.4'
+]
 
 setup(
     author="Giannis Terzopoulos",
@@ -35,14 +37,17 @@ setup(
     description="Command-line program to download Scribd documents in pdf format",
     install_requires=requirements,
     license="MIT license",
+    long_description=long_description,
+    packages=find_packages(include=['scribd_dl']),
+    package_data={
+        'scribd_dl': ['assets/README.txt']
+    },
+    include_package_data=True,
     entry_points={
         'console_scripts': ['scribd-dl = scribd_dl.scribd_dl:main']
     },
-    long_description=long_description,
-    include_package_data=True,
     keywords='scribd_dl',
     name='scribd_dl',
-    packages=find_packages(include=['scribd_dl']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

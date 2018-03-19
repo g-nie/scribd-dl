@@ -4,7 +4,7 @@ logs/
 test.py
 test_1.py
 test_2.py
-chromedriver.*
+chromedriver*
 URLS.txt
 *.exe
 .vscode/
