@@ -103,24 +103,6 @@ class ScribdDL(object):
             datefmt='%d-%m-%Y %H:%M:%S'
         )
         logger = logging.getLogger(__name__)
-
-        # Use for logging in file
-        # logging.basicConfig(level=logging.DEBUG,
-        #                     format='(%(module)s) %(levelname)s [%(asctime)s] [%(doc_id)s]  %(message)s',
-        #                     datefmt='%d-%m-%Y %H:%M:%S',
-        #                     filename=os.path.join(LOG_FOLDER, LOG_FILE),
-        #                     filemode='w')
-
-        # console_handler = logging.StreamHandler()
-        # # Use DEBUG logging level in console, if user selected --verbose
-        # console_level = logging.DEBUG if self._args.verbose else logging.INFO
-        # console_handler.setLevel(console_level)
-        # # -- To change console output format
-        # # console_formatter = logging.Formatter('%(levelname)s - %(message)s')
-        # # console_handler.setFormatter(console_formatter)
-        # logging.getLogger().addHandler(console_handler)
-        # logger = logging.getLogger(__name__)
-
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
         logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
