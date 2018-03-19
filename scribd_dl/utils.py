@@ -51,13 +51,13 @@ def valid_pages(pages):
         return pages
 
 
-# Generated a document url from scribd's explore page
 def get_modified_time_diff(f):
     mod = time.ctime(os.path.getmtime(f))
     mod_time = datetime.strptime(mod, '%a %b %d %H:%M:%S %Y')
     return (datetime.now() - mod_time).total_seconds()
 
 
+# Generated a document url from scribd's explore page
 def generate_random_document():
     logging.getLogger('requests').setLevel(logging.ERROR)
     logging.getLogger('urllib3').setLevel(logging.ERROR)

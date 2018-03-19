@@ -21,6 +21,6 @@ def scribd(request):
     sc.start_browser()
 
     def fin():
-        sc.force_close_browser()
+        sc.close_browser()
     request.addfinalizer(fin)
     return sc  # provide the fixture value

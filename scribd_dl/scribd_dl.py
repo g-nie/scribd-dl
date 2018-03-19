@@ -7,7 +7,6 @@ import os
 import time
 import argparse
 import logging
-import traceback
 from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
@@ -31,8 +30,7 @@ from scribd_dl.utils import (
 class ScribdDL(object):
 
     file_path = os.path.abspath(os.path.dirname(__file__))
-    parent_dir = os.path.dirname(file_path)
-    assets_dir = os.path.join(parent_dir, 'assets')
+    assets_dir = os.path.join(file_path, 'assets')
 
     DRIVER_PATH = None
     for f in os.listdir(assets_dir):
@@ -44,14 +42,14 @@ class ScribdDL(object):
     def __init__(self, args):
         self._args = args
         # LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
-        LOG_FOLDER = 'scribd_logs/'
-        if not os.path.exists(LOG_FOLDER):
-            os.makedirs(LOG_FOLDER)
-        LOG_FILE = 'scribd.log'
+        # LOG_FOLDER = 'scribd_logs/'
+        # if not os.path.exists(LOG_FOLDER):
+        # os.makedirs(LOG_FOLDER)
+        # LOG_FILE = 'scribd.log'
 
-        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')  # Use the document id for logging
-        self._extra = {'doc_id': doc_id}
-        self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
+        doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')
+        self._extra = {'doc_id': doc_id}  # Use the document id for logging
+        self._logger = self._get_logger()
         self._driver = None
         self._doc_title = None
         self._doc_title_edited = None
@@ -96,23 +94,15 @@ class ScribdDL(object):
     def doc_title_edited(self, doc_title_edited):
         self._doc_title_edited = doc_title_edited
 
-    def _get_logger(self, LOG_FOLDER, LOG_FILE):
+    def _get_logger(self):
         # Initialize and configure the logging system
-        logging.basicConfig(level=logging.DEBUG,
-                            format='(%(module)s) %(levelname)s [%(asctime)s] [%(doc_id)s]  %(message)s',
-                            datefmt='%d-%m-%Y %H:%M:%S',
-                            filename=os.path.join(LOG_FOLDER, LOG_FILE),
-                            filemode='w')
-        console_handler = logging.StreamHandler()
-        # Use DEBUG logging level in console, if user selected --verbose
         console_level = logging.DEBUG if self._args.verbose else logging.INFO
-        console_handler.setLevel(console_level)
-        # -- To change console output format
-        # console_formatter = logging.Formatter('%(levelname)s - %(message)s')
-        # console_handler.setFormatter(console_formatter)
-        logging.getLogger().addHandler(console_handler)
+        logging.basicConfig(
+            level=console_level,
+            format='[%(doc_id)s]  %(message)s',
+            datefmt='%d-%m-%Y %H:%M:%S'
+        )
         logger = logging.getLogger(__name__)
-
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
         logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
@@ -134,21 +124,30 @@ class ScribdDL(object):
             try:
                 self._driver = webdriver.Chrome(options=options)
             except WebDriverException:
-                self._logger.error('Chromedriver needs to be in assets directory or in PATH')
+                self.logger.error('Chromedriver needs to be in assets directory or in PATH')
                 sys.exit(1)
         self._driver.set_page_load_timeout(self.LOAD_TIME)
 
-    def close_browser(self):  # Exit chromedriver
+    def _cclose_browser(self):  # Exit chromedriver
         try:  # Don't close the driver if called by tests
             t = self._args.testing  # noqa: F841 pylint: disable=W0612
         except AttributeError:
             self._driver.quit()
 
-    def force_close_browser(self):  # Exit chromedriver without checking
+    def close_browser(self):  # Exit chromedriver without checking
         self._driver.quit()
 
+    def _edit_title(self):
+        # Make document title safe for saving in the file system
+        edited = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
+        if ' ' in edited.strip() and len(edited.split(' ')) >= 4:
+            edited = ' '.join(edited.split(' ')[:4])
+        else:
+            edited = edited[:30]
+        return edited
+
     def visit_page(self, url):
-        self._logger.info('Visiting requested url', extra=self._extra)
+        self.logger.info('Visiting requested url', extra=self.extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
         try:
             self._driver.get(url)
@@ -161,7 +160,7 @@ class ScribdDL(object):
         except AttributeError:
             is_restricted = False
         if is_restricted:
-            self.close_browser()
+            self._cclose_browser()
             raise RestrictedDocumentError
 
         retries = 0
@@ -179,12 +178,10 @@ class ScribdDL(object):
                 retries += 1
                 time.sleep(2)
         if total_pages is None:
-            self.close_browser()
+            self._cclose_browser()
             raise NoSuchElementException
 
         self._doc_title = self._driver.title
-        # Make document title safe for saving in the file system
-        self._doc_title = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
         if self._args.pages:  # If user inserted page range
             try:
                 first_page = int(self._args.pages.split('-')[0])
@@ -192,7 +189,7 @@ class ScribdDL(object):
             except IndexError:  # user inserted only 1 page
                 first_page = last_page = int(self._args.pages)
             if last_page > int(total_pages):
-                self.close_browser()
+                self._cclose_browser()
                 raise GreaterThanLastPageError
         else:  # Use the whole document
             first_page = 1
@@ -205,9 +202,9 @@ class ScribdDL(object):
         Pages = []  # Holds the actual image bytes of each page
         to_process = last_page - first_page + 1  # Total pages to process
         processed = 0
-        self._logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self._extra)
+        self.logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self.extra)
         if first_page > 80:  # Inform the user that scrolling may take a while
-            self._logger.info('Scrolling to page %s...', first_page, extra=self._extra)
+            self.logger.info('Scrolling to page %s...', first_page, extra=self.extra)
         for counter in range(1, int(total_pages) + 1):
             if counter > last_page:
                 break
@@ -217,7 +214,7 @@ class ScribdDL(object):
             if counter < first_page:  # Keep scrolling if it hasn't reached the first_page
                 continue
             processed += 1
-            self._logger.debug('Processing page : %s of %s', counter, last_page, extra=self._extra)
+            self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
             img = Image.open(BytesIO(self._driver.get_screenshot_as_png()))  # Load screenshot in memory
@@ -240,13 +237,11 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                if len(self._doc_title) > 100:
-                    filename = self._doc_title[:100] + '... .pdf'
-                else:
-                    filename = '{}.pdf'.format(self._doc_title)
+                self._doc_title_edited = self._edit_title()
+                filename = '{}-{}.pdf'.format(self._doc_title_edited, self.extra['doc_id'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
-                self.doc_title_edited = filename
+                self.logger.info('Destination: %s', filename, extra=self.extra)
 
 
 def main():
@@ -264,16 +259,9 @@ def main():
         scribd.start_browser()
         driver = scribd.driver
 
-        def _excepthook(*exc_info):  # Handle uncaught exceptions
-            driver.quit()  # Close chromedriver when something unexpected occurs
-            traceback.print_exception(*exc_info)
-            # logger.error('An unexpected error occured. Exiting')  # --- Use this***
-            sys.exit(1)
-        sys.excepthook = _excepthook
-
         scribd.visit_page(url)
         scribd.close_browser()
-        logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
+        logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
     except KeyboardInterrupt:
         logger.warning('Interrupted.', extra=scribd.extra)
@@ -283,10 +271,14 @@ def main():
             pass
         sys.exit()
 
+    except WebDriverException:
+        logger.error('Cannot establish a connection.', extra=scribd.extra)
+
 
 if __name__ == '__main__':
     main()
 
 
+# TODO : Try shorter package_data in setup.py
+# TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."
-# TODO : Use _excepthook message in production
