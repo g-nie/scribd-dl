@@ -43,14 +43,14 @@ class ScribdDL(object):
     def __init__(self, args):
         self._args = args
         # LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
-        LOG_FOLDER = 'scribd_logs/'
-        if not os.path.exists(LOG_FOLDER):
-            os.makedirs(LOG_FOLDER)
-        LOG_FILE = 'scribd.log'
+        # LOG_FOLDER = 'scribd_logs/'
+        # if not os.path.exists(LOG_FOLDER):
+        # os.makedirs(LOG_FOLDER)
+        # LOG_FILE = 'scribd.log'
 
         doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')
         self._extra = {'doc_id': doc_id}  # Use the document id for logging
-        self._logger = self._get_logger(LOG_FOLDER, LOG_FILE)
+        self._logger = self._get_logger()
         self._driver = None
         self._doc_title = None
         self._doc_title_edited = None
@@ -95,22 +95,32 @@ class ScribdDL(object):
     def doc_title_edited(self, doc_title_edited):
         self._doc_title_edited = doc_title_edited
 
-    def _get_logger(self, LOG_FOLDER, LOG_FILE):
+    def _get_logger(self):
         # Initialize and configure the logging system
-        logging.basicConfig(level=logging.DEBUG,
-                            format='(%(module)s) %(levelname)s [%(asctime)s] [%(doc_id)s]  %(message)s',
-                            datefmt='%d-%m-%Y %H:%M:%S',
-                            filename=os.path.join(LOG_FOLDER, LOG_FILE),
-                            filemode='w')
-        console_handler = logging.StreamHandler()
-        # Use DEBUG logging level in console, if user selected --verbose
         console_level = logging.DEBUG if self._args.verbose else logging.INFO
-        console_handler.setLevel(console_level)
-        # -- To change console output format
-        # console_formatter = logging.Formatter('%(levelname)s - %(message)s')
-        # console_handler.setFormatter(console_formatter)
-        logging.getLogger().addHandler(console_handler)
+        logging.basicConfig(
+            level=console_level,
+            format='[%(doc_id)s]  %(message)s',
+            datefmt='%d-%m-%Y %H:%M:%S'
+        )
         logger = logging.getLogger(__name__)
+
+        # Use for logging in file
+        # logging.basicConfig(level=logging.DEBUG,
+        #                     format='(%(module)s) %(levelname)s [%(asctime)s] [%(doc_id)s]  %(message)s',
+        #                     datefmt='%d-%m-%Y %H:%M:%S',
+        #                     filename=os.path.join(LOG_FOLDER, LOG_FILE),
+        #                     filemode='w')
+
+        # console_handler = logging.StreamHandler()
+        # # Use DEBUG logging level in console, if user selected --verbose
+        # console_level = logging.DEBUG if self._args.verbose else logging.INFO
+        # console_handler.setLevel(console_level)
+        # # -- To change console output format
+        # # console_formatter = logging.Formatter('%(levelname)s - %(message)s')
+        # # console_handler.setFormatter(console_formatter)
+        # logging.getLogger().addHandler(console_handler)
+        # logger = logging.getLogger(__name__)
 
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
@@ -133,7 +143,7 @@ class ScribdDL(object):
             try:
                 self._driver = webdriver.Chrome(options=options)
             except WebDriverException:
-                self._logger.error('Chromedriver needs to be in assets directory or in PATH')
+                self.logger.error('Chromedriver needs to be in assets directory or in PATH')
                 sys.exit(1)
         self._driver.set_page_load_timeout(self.LOAD_TIME)
 
@@ -156,7 +166,7 @@ class ScribdDL(object):
         return edited
 
     def visit_page(self, url):
-        self._logger.info('Visiting requested url', extra=self._extra)
+        self.logger.info('Visiting requested url', extra=self.extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
         try:
             self._driver.get(url)
@@ -211,9 +221,9 @@ class ScribdDL(object):
         Pages = []  # Holds the actual image bytes of each page
         to_process = last_page - first_page + 1  # Total pages to process
         processed = 0
-        self._logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self._extra)
+        self.logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self.extra)
         if first_page > 80:  # Inform the user that scrolling may take a while
-            self._logger.info('Scrolling to page %s...', first_page, extra=self._extra)
+            self.logger.info('Scrolling to page %s...', first_page, extra=self.extra)
         for counter in range(1, int(total_pages) + 1):
             if counter > last_page:
                 break
@@ -223,7 +233,7 @@ class ScribdDL(object):
             if counter < first_page:  # Keep scrolling if it hasn't reached the first_page
                 continue
             processed += 1
-            self._logger.debug('Processing page : %s of %s', counter, last_page, extra=self._extra)
+            self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
             img = Image.open(BytesIO(self._driver.get_screenshot_as_png()))  # Load screenshot in memory
@@ -250,6 +260,7 @@ class ScribdDL(object):
                 filename = '{}-{}.pdf'.format(self._doc_title_edited, self.extra['doc_id'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
+                self.logger.info('Destination: %s', filename, extra=self.extra)
 
 
 def main():
@@ -276,7 +287,7 @@ def main():
 
         scribd.visit_page(url)
         scribd.close_browser()
-        logger.info('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
+        logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
     except KeyboardInterrupt:
         logger.warning('Interrupted.', extra=scribd.extra)
@@ -291,7 +302,6 @@ if __name__ == '__main__':
     main()
 
 
-# TODO : Save logs elsewhere
 # TODO : Handle no connection
 # TODO : Mute "DEVTOOLS Listening..."
 # TODO : Use _excepthook message in production
