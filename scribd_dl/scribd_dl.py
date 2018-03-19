@@ -147,13 +147,13 @@ class ScribdDL(object):
                 sys.exit(1)
         self._driver.set_page_load_timeout(self.LOAD_TIME)
 
-    def close_browser(self):  # Exit chromedriver
+    def _cclose_browser(self):  # Exit chromedriver
         try:  # Don't close the driver if called by tests
             t = self._args.testing  # noqa: F841 pylint: disable=W0612
         except AttributeError:
             self._driver.quit()
 
-    def force_close_browser(self):  # Exit chromedriver without checking
+    def close_browser(self):  # Exit chromedriver without checking
         self._driver.quit()
 
     def _edit_title(self):
@@ -179,7 +179,7 @@ class ScribdDL(object):
         except AttributeError:
             is_restricted = False
         if is_restricted:
-            self.close_browser()
+            self._cclose_browser()
             raise RestrictedDocumentError
 
         retries = 0
@@ -197,7 +197,7 @@ class ScribdDL(object):
                 retries += 1
                 time.sleep(2)
         if total_pages is None:
-            self.close_browser()
+            self._cclose_browser()
             raise NoSuchElementException
 
         self._doc_title = self._driver.title
@@ -208,7 +208,7 @@ class ScribdDL(object):
             except IndexError:  # user inserted only 1 page
                 first_page = last_page = int(self._args.pages)
             if last_page > int(total_pages):
-                self.close_browser()
+                self._cclose_browser()
                 raise GreaterThanLastPageError
         else:  # Use the whole document
             first_page = 1
@@ -303,5 +303,6 @@ if __name__ == '__main__':
 
 
 # TODO : Handle no connection
+# TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."
 # TODO : Use _excepthook message in production
