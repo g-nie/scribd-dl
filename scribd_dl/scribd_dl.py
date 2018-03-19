@@ -41,12 +41,6 @@ class ScribdDL(object):
 
     def __init__(self, args):
         self._args = args
-        # LOG_FOLDER = os.path.join(os.path.expanduser("~"), 'scribd_logs')
-        # LOG_FOLDER = 'scribd_logs/'
-        # if not os.path.exists(LOG_FOLDER):
-        # os.makedirs(LOG_FOLDER)
-        # LOG_FILE = 'scribd.log'
-
         doc_id = re.search(r'(?P<id>\d+)', args.url).group('id')
         self._extra = {'doc_id': doc_id}  # Use the document id for logging
         self._logger = self._get_logger()
