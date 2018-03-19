@@ -16,10 +16,7 @@ requirements = [
 
 setup_requirements = []
 
-test_requirements = [
-    'pytest',
-    'requests'
-]
+test_requirements = []
 
 setup(
     author="Giannis Terzopoulos",

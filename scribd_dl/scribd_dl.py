@@ -279,5 +279,6 @@ if __name__ == '__main__':
     main()
 
 
+# TODO : Try shorter package_data in setup.py
 # TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."
