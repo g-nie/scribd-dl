@@ -277,13 +277,6 @@ def main():
         scribd.start_browser()
         driver = scribd.driver
 
-        # def _excepthook(*exc_info):  # Handle uncaught exceptions
-        #     driver.quit()  # Close chromedriver when something unexpected occurs
-        #     traceback.print_exception(*exc_info)
-        #     # logger.error('An unexpected error occured. Exiting')
-        #     sys.exit(1)
-        # sys.excepthook = _excepthook
-
         scribd.visit_page(url)
         scribd.close_browser()
         logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
