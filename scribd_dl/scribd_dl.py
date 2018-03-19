@@ -280,8 +280,8 @@ def main():
 
         def _excepthook(*exc_info):  # Handle uncaught exceptions
             driver.quit()  # Close chromedriver when something unexpected occurs
-            traceback.print_exception(*exc_info)
-            # logger.error('An unexpected error occured. Exiting')  # --- Use this***
+            # traceback.print_exception(*exc_info)
+            logger.error('An unexpected error occured. Exiting')
             sys.exit(1)
         sys.excepthook = _excepthook
 
@@ -305,7 +305,5 @@ if __name__ == '__main__':
     main()
 
 
-# TODO : Handle no connection
 # TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."
-# TODO : Use _excepthook message in production
