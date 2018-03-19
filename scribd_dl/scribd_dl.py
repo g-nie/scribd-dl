@@ -297,6 +297,9 @@ def main():
             pass
         sys.exit()
 
+    except WebDriverException:
+        logger.error('Cannot establish a connection.', extra=scribd.extra)
+
 
 if __name__ == '__main__':
     main()
