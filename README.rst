@@ -12,12 +12,12 @@ scribd-dl
         :alt: PyPI Version
 
 
-.. image:: https://img.shields.io/pypi/pyversions/scribd-dl.svg
-        :target: https://pypi.python.org/pypi/scribd-dl
-
-
 .. image:: https://img.shields.io/badge/built%20with-Selenium-yellow.svg
         :target: https://github.com/SeleniumHQ/selenium
+
+
+.. image:: https://img.shields.io/pypi/pyversions/scribd-dl.svg
+        :target: https://pypi.python.org/pypi/scribd-dl
 
 
 |
