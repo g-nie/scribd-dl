@@ -11,7 +11,6 @@ python:
   # - TOX_ENV=flake8
 
 before_install:
-before_install:
   - sudo apt-get update
   - sudo apt-get install chromium-chromedriver  # chrome v64.0
 
@@ -24,6 +23,7 @@ before_script:
 install: 
   # - pip install -U tox-travis
   # - pip install -r requirements.txt
+  - pip install flake8
   - pip install coverage
   # - pip install pytest
 
