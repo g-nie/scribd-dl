@@ -28,7 +28,7 @@ Clone it ::
    $ cd scribd-dl
    $ pip install .
 
-or install using pip ::
+or install from PyPI ::
 
    $ pip install scribd-dl
 
