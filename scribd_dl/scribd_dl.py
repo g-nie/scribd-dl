@@ -117,6 +117,9 @@ class ScribdDL(object):
         else:  # search for chromedriver in PATH
             try:
                 self._driver = webdriver.Chrome(options=options)
+            except ConnectionResetError as e:
+                self.logger.error('Failed to start webdriver: ' + str(e))
+                sys.exit(1)
             except WebDriverException:
                 self.logger.error('Chromedriver needs to be in assets directory or in PATH')
                 sys.exit(1)
