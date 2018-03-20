@@ -24,6 +24,7 @@ before_script:
 install: 
   - pip install -U tox-travis
   - pip install coverage
+  - pip install pytest
 
 script:
   - tox -e $TOX_ENV
