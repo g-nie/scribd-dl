@@ -29,7 +29,7 @@ install:
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  - coverage run --source=scribd_dl -m pytest discover -s tests/
+  - coverage run --source=scribd_dl -m pytest -s tests/
 
 # after_success:
 #   - pip install codecov
