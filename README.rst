@@ -2,6 +2,7 @@
 .. image:: https://img.shields.io/travis/giannisterzopoulos/scribd-dl.svg
         :target: https://travis-ci.org/giannisterzopoulos/scribd-dl
 
+
 .. image:: https://img.shields.io/pypi/v/scribd-dl.svg
         :target: https://pypi.python.org/pypi/scribd-dl
 
