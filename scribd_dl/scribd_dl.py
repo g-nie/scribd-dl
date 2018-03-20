@@ -273,6 +273,9 @@ if __name__ == '__main__':
     main()
 
 
-# TODO : Try shorter package_data in setup.py
+# TODO : add github badges
+# TODO : add --version argument
 # TODO : Restructure for API use
+# TODO : Update README - pip install ...
+# TODO : Try shorter package_data in setup.py
 # TODO : Mute "DEVTOOLS Listening..."
