@@ -17,14 +17,13 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 
-install: 
+install:
   - pip install -r requirements.txt
   - pip install flake8 coverage
-  - pip install coverage
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  - coverage run --source=scribd_dl --include=scribd_dl.py,utils.py -m pytest tests/
+  - coverage run --source=scribd_dl --omit=*__init__*,scribd_dl/version.py -m pytest tests/
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
