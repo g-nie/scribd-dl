@@ -24,13 +24,13 @@ Installation
 ------------
 Clone it ::
 
-   >> git clone https://github.com/giannisterzopoulos/scribd-dl.git
-   >> cd scribd-dl
-   >> pip install .
+   $ git clone https://github.com/giannisterzopoulos/scribd-dl.git
+   $ cd scribd-dl
+   $ pip install .
 
 or install using pip ::
 
-   >> pip install scribd-dl
+   $ pip install scribd-dl
 
 Requirements
 -------------
