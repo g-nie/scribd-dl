@@ -11,6 +11,7 @@ env:
   - TOX_ENV=flake8
 
 before_install:
+before_install:
   - sudo apt-get update
   - sudo apt-get install chromium-chromedriver  # chrome v64.0
 
@@ -22,14 +23,14 @@ before_script:
 
 install: 
   - pip install -U tox-travis
-  - pip install coveralls
+  - pip install codecov
 
 script:
   - tox -e $TOX_ENV
   - tox
 
 after_success:
-  - coveralls
+  - codecov
 
 deploy:
   provider: pypi
