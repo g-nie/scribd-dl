@@ -23,14 +23,17 @@ before_script:
 
 install: 
   - pip install -U tox-travis
-  - pip install codecov
 
 script:
   - tox -e $TOX_ENV
   - tox
 
+# after_success:
+#   - pip install codecov
+#   - codecov  # ------
+
 after_success:
-  - codecov  # ------
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
