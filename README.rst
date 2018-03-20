@@ -34,7 +34,8 @@ or install from PyPI ::
 
 Requirements
 -------------
-| Scribd-dl requires chromedriver in order to work. See all available chromedriver downloads `here`_.
+| Scribd-dl supports **Python 3.4-3.6**
+| It requires chromedriver in order to work. See all available chromedriver downloads `here`_.
 | Put the chromedriver executable in the assets folder or in your system PATH variable.
 | Tested to work with chromedriver v2.37 and Chrome v65.0.
 
