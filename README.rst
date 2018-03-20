@@ -3,9 +3,14 @@
 scribd-dl
 =========
 
-|Build Status| |PyPI version|
+.. image:: https://travis-ci.org/giannisterzopoulos/scribd-dl.svg?branch=master
+        :target: https://travis-ci.org/giannisterzopoulos/scribd-dl
 
-|
+
+.. image:: https://badge.fury.io/py/scribd-dl.svg
+        :target: https://badge.fury.io/py/scribd-dl
+
+
 | **Download documents from Scribd in pdf format**
 |
 | Scribd_dl uses selenium and headless Chrome to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
@@ -26,4 +31,3 @@ Requirements
 | Tested to work with chromedriver v2.37 and Chrome v65.0.
 
 .. _`here`: https://sites.google.com/a/chromium.org/chromedriver/downloads
-
