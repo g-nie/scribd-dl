@@ -11,7 +11,8 @@ with open('README.rst', encoding='utf-8') as readme_file:
 requirements = [
     'selenium>=3.9.0',
     'Pillow>=4.3.0',
-    'img2pdf>=0.2.4'
+    'img2pdf>=0.2.4',
+    'requests>=2.18.4'
 ]
 
 setup_requirements = []
