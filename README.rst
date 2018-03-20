@@ -1,4 +1,8 @@
 
+=========
+scribd-dl
+=========
+
 .. image:: https://img.shields.io/travis/giannisterzopoulos/scribd-dl.svg
         :target: https://travis-ci.org/giannisterzopoulos/scribd-dl
 
@@ -7,9 +11,6 @@
         :target: https://pypi.python.org/pypi/scribd-dl
 
 
-=========
-scribd-dl
-=========
 |
 | **Download documents from Scribd in pdf format**
 |
