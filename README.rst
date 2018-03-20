@@ -9,7 +9,6 @@ scribd-dl
 
 .. image:: https://img.shields.io/pypi/v/scribd-dl.svg
         :target: https://pypi.python.org/pypi/scribd-dl
-        :alt: PyPI Version
 
 
 .. image:: https://img.shields.io/pypi/pyversions/scribd-dl.svg
