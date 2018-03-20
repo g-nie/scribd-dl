@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# pylint: disable=E0602,W0122
+
 """The setup script."""
 
 from setuptools import setup, find_packages
@@ -19,11 +21,14 @@ setup_requirements = []
 
 test_requirements = []
 
+# Get the data from scribd_dl/version.py without importing the package
+exec(compile(open('scribd_dl/version.py').read(), 'version.py', 'exec'))
+
 setup(
-    author="Giannis Terzopoulos",
-    author_email='terzo.giannis@gmail.com',
+    author=AUTHOR,
+    author_email=EMAIL,
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        STATUS,
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
@@ -50,6 +55,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/giannisterzopoulos/scribd-dl',
-    version='0.3.0',
+    version=VERSION,
     zip_safe=False,
 )
