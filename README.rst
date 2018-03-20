@@ -28,6 +28,9 @@ Clone it ::
    >> cd scribd-dl
    >> pip install .
 
+or install using pip ::
+
+   >> pip install scribd-dl
 
 Requirements
 -------------
