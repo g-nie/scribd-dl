@@ -23,17 +23,21 @@ before_script:
 
 install: 
   - pip install -U tox-travis
+  - pip install coverage
 
 script:
   - tox -e $TOX_ENV
-  - tox
+  # - tox
+  - coverage run --source=scribd_dl -m pytest discover -s tests/
 
 # after_success:
 #   - pip install codecov
 #   - codecov  # ------
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - pip install codecov
+  - codecov
+  # - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
