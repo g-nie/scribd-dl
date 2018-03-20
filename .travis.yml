@@ -7,9 +7,6 @@ python:
   - 3.5
   - 3.6
 
-env:
-  - TOX_ENV=flake8
-
 before_install:
   - sudo apt-get update
   - sudo apt-get install chromium-chromedriver  # chrome v64.0
@@ -21,15 +18,18 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 install: 
-  - pip install -U tox-travis
-  - pip install coveralls
+  - pip install -r requirements.txt
+  - pip install flake8 coverage
+  - pip install coverage
 
 script:
-  - tox -e $TOX_ENV
-  - tox
+  - flake8 scribd_dl --ignore=E402,E501,E731,E741
+  - coverage run --source=scribd_dl --omit=*__init__*,version.py -m pytest tests/
 
 after_success:
-  - coveralls
+  # - pip install codecov
+  # - codecov
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
@@ -42,3 +42,7 @@ deploy:
     repo: giannisterzopoulos/scribd-dl
     branch: master
     python: 3.6
+
+notifications:
+  on_success: change
+  on_failure: change
