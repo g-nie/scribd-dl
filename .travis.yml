@@ -38,7 +38,7 @@ script:
 after_success:
   - pip install codecov
   - codecov
-  # - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
