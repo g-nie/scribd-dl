@@ -2,7 +2,7 @@
 
 # Set version number here
 AUTHOR = """Giannis Terzopoulos"""
-EMAIL = '<terzo.giannis@gmail.com>'
+EMAIL = 'terzo.giannis@gmail.com'
 STATUS = '4 - Beta'
 VERSION = '0.3.0'
 DATE = '2018 March'
