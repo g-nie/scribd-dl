@@ -278,6 +278,7 @@ if __name__ == '__main__':
 
 
 # TODO : add github badges
+# TODO : change install_requires to minimum versions possible
 # TODO : add --version argument
 # TODO : Restructure for API use
 # TODO : Update README - pip install ...

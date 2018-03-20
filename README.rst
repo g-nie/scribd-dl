@@ -10,6 +10,11 @@ scribd-dl
 .. image:: https://badge.fury.io/py/scribd-dl.svg
         :target: https://badge.fury.io/py/scribd-dl
 
+
+.. image:: https://img.shields.io/pypi/pyversions/scribd-dl.svg
+        :target: https://pypi.python.org/pypi/scribd-dl
+
+
 |
 | **Download documents from Scribd in pdf format**
 |
