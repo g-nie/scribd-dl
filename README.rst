@@ -18,6 +18,11 @@ scribd-dl
         :alt: Built with Selenium
 
 
+.. image:: https://codecov.io/gh/giannisterzopoulos/scribd-dl/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/giannisterzopoulos/scribd-dl
+        :alt: Coverage
+
+
 |
 | **Download documents from Scribd in pdf format**
 |
