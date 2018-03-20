@@ -15,10 +15,6 @@ scribd-dl
         :target: https://github.com/SeleniumHQ/selenium
 
 
-.. image:: https://img.shields.io/pypi/pyversions/scribd-dl.svg
-        :target: https://pypi.python.org/pypi/scribd-dl
-
-
 |
 | **Download documents from Scribd in pdf format**
 |
