@@ -5,14 +5,17 @@ scribd-dl
 
 .. image:: https://travis-ci.org/giannisterzopoulos/scribd-dl.svg?branch=master
         :target: https://travis-ci.org/giannisterzopoulos/scribd-dl
+        :alt: Build Status
 
 
 .. image:: https://badge.fury.io/py/scribd-dl.svg
-        :target: https://badge.fury.io/py/scribd-dl
+        :target: https://pypi.python.org/pypi/scribd-dl/
+        :alt: PyPI Version
 
 
 .. image:: https://img.shields.io/badge/built%20with-Selenium-yellow.svg
         :target: https://github.com/SeleniumHQ/selenium
+        :alt: Built with Selenium
 
 
 |
