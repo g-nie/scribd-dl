@@ -26,10 +26,10 @@ script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
   - coverage run --source=scribd_dl --omit=*__init__*,version.py -m pytest tests/
 
-# after_success:
+after_success:
 # - pip install codecov
 # - codecov
-# - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
