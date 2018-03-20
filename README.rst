@@ -19,7 +19,7 @@ scribd-dl
 
 
 .. image:: https://coveralls.io/repos/github/giannisterzopoulos/scribd-dl/badge.svg?branch=master
-        :target: https://coveralls.io/github/giannisterzopoulos/scribd-dl?branch=master
+        :target: https://coveralls.io/github/giannisterzopoulos/scribd-dl?branch=master&service=github
         :alt: Coverage
 
 
