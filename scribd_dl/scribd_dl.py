@@ -117,6 +117,9 @@ class ScribdDL(object):
         else:  # search for chromedriver in PATH
             try:
                 self._driver = webdriver.Chrome(options=options)
+            except ConnectionResetError as e:
+                self.logger.error('Failed to start webdriver: ' + str(e))
+                sys.exit(1)
             except WebDriverException:
                 self.logger.error('Chromedriver needs to be in assets directory or in PATH')
                 sys.exit(1)
@@ -174,6 +177,7 @@ class ScribdDL(object):
         if total_pages is None:
             self._cclose_browser()
             raise NoSuchElementException
+        total_pages = int(total_pages.replace(',', '').replace('.', ''))
 
         self._doc_title = self._driver.title
         if self._args.pages:  # If user inserted page range
@@ -182,12 +186,12 @@ class ScribdDL(object):
                 last_page = int(self._args.pages.split('-')[1])
             except IndexError:  # user inserted only 1 page
                 first_page = last_page = int(self._args.pages)
-            if last_page > int(total_pages):
+            if last_page > total_pages:
                 self._cclose_browser()
                 raise GreaterThanLastPageError
         else:  # Use the whole document
             first_page = 1
-            last_page = int(total_pages)
+            last_page = total_pages
         self._scroll_pages(first_page, last_page, total_pages)
 
     def _scroll_pages(self, first_page, last_page, total_pages):
@@ -199,7 +203,7 @@ class ScribdDL(object):
         self.logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self.extra)
         if first_page > 80:  # Inform the user that scrolling may take a while
             self.logger.info('Scrolling to page %s...', first_page, extra=self.extra)
-        for counter in range(1, int(total_pages) + 1):
+        for counter in range(1, total_pages + 1):
             if counter > last_page:
                 break
             # Generate WebElement of the next page
