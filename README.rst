@@ -16,6 +16,10 @@ scribd-dl
         :target: https://pypi.python.org/pypi/scribd-dl
 
 
+.. image:: https://img.shields.io/badge/built%20with-Selenium-yellow.svg
+        :target: https://github.com/SeleniumHQ/selenium
+
+
 |
 | **Download documents from Scribd in pdf format**
 |
