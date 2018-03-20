@@ -10,7 +10,7 @@ scribd-dl
 .. image:: https://badge.fury.io/py/scribd-dl.svg
         :target: https://badge.fury.io/py/scribd-dl
 
-
+|
 | **Download documents from Scribd in pdf format**
 |
 | Scribd_dl uses selenium and headless Chrome to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
