@@ -23,7 +23,7 @@ install:
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+  - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
   # - coverage report -m
 
 # after_success:
@@ -40,12 +40,12 @@ deploy:
 deploy:
   - provider: script
     script:
-      - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+      # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
       - coverage report -m
       - bash <(curl -s https://codecov.io/bash)
     on:
       condition: if [ "$TRAVIS_TEST_RESULT" = "1" ]; then exit; fi  # Skip codecov deployment if tests failed
-      branch: experimental  # -----------------------
+      branch: master  # -----------------------
       python: 3.6
   - provider: pypi
     distributions: sdist bdist_wheel
