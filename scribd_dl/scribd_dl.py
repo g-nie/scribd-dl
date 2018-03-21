@@ -236,7 +236,6 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : use coverage only in 3.6
 # TODO : do I need setup.cfg
 # TODO : change install_requires to minimum versions possible
 # TODO : add --version argument
