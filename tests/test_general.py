@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# pylint: disable=C0413,W0621,W0212
-
 import os
 import re
-# import sys
-# sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# from scribd_dl import ScribdDL
 from scribd_dl.utils import (
     valid_url,
     valid_pages,
@@ -23,6 +18,7 @@ def test_90p_first_page(scribd):
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
@@ -42,6 +38,7 @@ def test_16p_last_page(scribd):
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
@@ -53,13 +50,15 @@ def test_16p_last_page(scribd):
         assert False
 
 
-def test_22p_whole(scribd):
-    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+def test_6p_whole(scribd):
+    URL = 'https://www.scribd.com/document/372746970/Nunes-to-Sessions-FBI-may-have' \
+        '-violated-criminal-statutes-in-Carter-Page-FISA-application'
 
-    scribd.args.pages = None
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
+    scribd.args.pages = None
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     scribd.visit_page(URL)
 
@@ -79,8 +78,28 @@ def test_78p_long_title_first_page(scribd):
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     assert valid_pages(PAGES)
+    scribd.visit_page(URL)
+
+    saved_file = '{}-{}.pdf'.format(scribd.doc_title_edited, doc_id)
+    if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
+        assert True
+    else:
+        assert False
+
+
+def test_22p_edited_title(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+
+    scribd.args.pages = '1-2'
+    doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
+    scribd.extra = {'doc_id': doc_id}
+    scribd.args.url = URL
+    scribd.doc_title_edited = None
+    assert valid_url(URL)
+    scribd.doc_title_edited = 'Edited title'
     scribd.visit_page(URL)
 
     saved_file = '{}-{}.pdf'.format(scribd.doc_title_edited, doc_id)

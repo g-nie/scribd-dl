@@ -23,22 +23,35 @@ install:
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  - coverage run --source=scribd_dl --omit=*__init__*,scribd_dl/version.py -m pytest tests/
+  - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+  # - coverage report -m
+
+# after_success:
+#   - bash <(curl -s https://codecov.io/bash)
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - coverage report -m
 
 deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: giannis.terzopoulos
-  password:
-    secure: JOA3DG4tqdmDGp5dwugdTZZ7u29ILOTeAxIgf8QmzcSvGRVt1B9yP8OVq3gX5YtFDf5D+tVm3BsR6kiYrS54qZ7cmWXcC+QB8vN4g9AGh3FN3LJ4CuvxG5E4rhZtkFPGfMB0TmCmV9/HbmSHtPLKsIKMTZSVQAuAg3XFgmryrj8r4jdE7Ryzp7BK2iAFz60Ajq7u7qOjHZyTtpoVsj1W8SsBREE0UA7fJsz2X+GazqWeGv78hVT4ft9mWahrR3LtSyLqq54ani4NIgOCtrSc/H4vlGV2t/RA1mIX50S5XY5gmdAvhuu1j35Q2HpihsSh2HE9n+TBAp7IigzghKXZJ8cKnQWiDxtQPQsdlGov5oGUt5YJLUDFZ8njE73ZQpkYb4MIL++lnEf/sgm+tMap9FF2068nfqwt+nRN223NkxA1Mb7t6KeEiSG7L1W9QY3D+lJesEvLNp0+49vzPmdJXn4/Pszvwl0A4K8PXekZNqEeXSHrup8xJa2ex1vCIw8ZjO2f/zTvA5azkK436/KmQJilJeVZ8yiBuEgX+mKYsJWuOLNFad7i5x5TpjYSOvQQ3MPEld8m9RYwG5AxGsvFlY0mlPE5a+6rqfSh0ijISC7FB41+spK4OLtx8zpnP4NDPMFCTIkXru2RuP4kBXVP/DIucVBHzPaBwrfHt7vYCnw=
-  on:
-    tags: true
-    repo: giannisterzopoulos/scribd-dl
-    branch: master
-    python: 3.6
+  - provider: script
+    script:
+      # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+      # - coverage report -m
+      - bash <(curl -s https://codecov.io/bash)
+    on:
+      condition: if [ "$TRAVIS_TEST_RESULT" = "1" ]; then exit; fi  # Skip codecov deployment if tests failed
+      branch: master  # -----------------------
+      python: 3.6
+  - provider: pypi
+    distributions: sdist bdist_wheel
+    user: giannis.terzopoulos
+    password:
+      secure: JOA3DG4tqdmDGp5dwugdTZZ7u29ILOTeAxIgf8QmzcSvGRVt1B9yP8OVq3gX5YtFDf5D+tVm3BsR6kiYrS54qZ7cmWXcC+QB8vN4g9AGh3FN3LJ4CuvxG5E4rhZtkFPGfMB0TmCmV9/HbmSHtPLKsIKMTZSVQAuAg3XFgmryrj8r4jdE7Ryzp7BK2iAFz60Ajq7u7qOjHZyTtpoVsj1W8SsBREE0UA7fJsz2X+GazqWeGv78hVT4ft9mWahrR3LtSyLqq54ani4NIgOCtrSc/H4vlGV2t/RA1mIX50S5XY5gmdAvhuu1j35Q2HpihsSh2HE9n+TBAp7IigzghKXZJ8cKnQWiDxtQPQsdlGov5oGUt5YJLUDFZ8njE73ZQpkYb4MIL++lnEf/sgm+tMap9FF2068nfqwt+nRN223NkxA1Mb7t6KeEiSG7L1W9QY3D+lJesEvLNp0+49vzPmdJXn4/Pszvwl0A4K8PXekZNqEeXSHrup8xJa2ex1vCIw8ZjO2f/zTvA5azkK436/KmQJilJeVZ8yiBuEgX+mKYsJWuOLNFad7i5x5TpjYSOvQQ3MPEld8m9RYwG5AxGsvFlY0mlPE5a+6rqfSh0ijISC7FB41+spK4OLtx8zpnP4NDPMFCTIkXru2RuP4kBXVP/DIucVBHzPaBwrfHt7vYCnw=
+    on:
+      tags: true
+      repo: giannisterzopoulos/scribd-dl
+      branch: master
+      python: 3.6
 
 notifications:
   on_success: change
