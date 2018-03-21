@@ -47,7 +47,8 @@ setup(
     },
     include_package_data=True,
     entry_points={
-        'console_scripts': ['scribd-dl = scribd_dl.scribd_dl:main']
+        # 'console_scripts': ['scribd-dl = scribd_dl.scribd_dl:main']
+        'console_scripts': ['scribd-dl = scribd_dl:main']
     },
     keywords='scribd_dl',
     name='scribd_dl',

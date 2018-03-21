@@ -9,7 +9,6 @@ from .scribd_dl import ScribdDL  # noqa: F401
 from .version import AUTHOR, EMAIL, STATUS, VERSION, DATE
 from .utils import valid_url, valid_pages
 
-
 __author__ = AUTHOR
 __email__ = EMAIL
 __status__ = STATUS
