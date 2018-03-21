@@ -4,7 +4,7 @@
 AUTHOR = """Giannis Terzopoulos"""
 EMAIL = 'terzo.giannis@gmail.com'
 STATUS = '4 - Beta'
-VERSION = '0.3.0'
+VERSION = '0.4.0'
 DATE = '2018 March'
 
 # Development Status :: 1 - Planning
