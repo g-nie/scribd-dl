@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# pylint: disable=C0413,W0621
-
 from argparse import ArgumentTypeError
 import pytest
 from scribd_dl.utils import (

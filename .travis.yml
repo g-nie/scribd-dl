@@ -23,7 +23,7 @@ install:
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  - coverage run --source=scribd_dl --omit=*__init__*,scribd_dl/version.py -m pytest tests/
+  - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

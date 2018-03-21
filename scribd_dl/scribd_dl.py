@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=C0413
 
 import re
 import sys
@@ -18,7 +17,7 @@ from selenium.common.exceptions import (
 from PIL import Image
 import img2pdf
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scribd_dl.utils import GreaterThanLastPageError, RestrictedDocumentError
+from scribd_dl.utils import GreaterThanLastPageError, RestrictedDocumentError  # pylint: disable=C0413
 
 
 class ScribdDL(object):
@@ -30,7 +29,7 @@ class ScribdDL(object):
     for f in os.listdir(assets_dir):
         if 'chromedriver' in f:
             DRIVER_PATH = f
-    LOAD_TIME = 20  # Stop loading page after 20 seconds
+    LOAD_TIME = 20  # Stop loading the page after 20 seconds
     START = datetime.now()
 
     def __init__(self, args):
@@ -70,9 +69,9 @@ class ScribdDL(object):
     def logger(self, logger):
         self._logger = logger
 
-    @args.setter
-    def args(self, args):
-        self._args = args
+    # @args.setter
+    # def args(self, args):
+    #     self._args = args
 
     @extra.setter
     def extra(self, extra):
@@ -156,7 +155,7 @@ class ScribdDL(object):
 
         retries = 0
         total_pages = None
-        while retries < 3:  # try up to 3 times to get the total_pages element
+        while retries < 2:  # try up to 2 times to get the total_pages element
             try:
                 self.driver.get(url)
             except TimeoutException:

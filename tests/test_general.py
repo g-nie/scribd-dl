@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# pylint: disable=C0413,W0621,W0212
-
 import os
 import re
 from scribd_dl.utils import (
@@ -52,8 +50,9 @@ def test_16p_last_page(scribd):
         assert False
 
 
-def test_22p_half(scribd):
-    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+def test_6p_whole(scribd):
+    URL = 'https://www.scribd.com/document/372746970/Nunes-to-Sessions-FBI-may-have' \
+        '-violated-criminal-statutes-in-Carter-Page-FISA-application'
 
     scribd.args.pages = '12-22'
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')

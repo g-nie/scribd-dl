@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# pylint: disable=W0212
-
 import os
 import re
 from scribd_dl.utils import (
