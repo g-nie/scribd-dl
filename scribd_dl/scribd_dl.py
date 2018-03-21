@@ -5,7 +5,6 @@ import re
 import sys
 import os
 import time
-import argparse
 import logging
 from datetime import datetime
 from ast import literal_eval
@@ -19,12 +18,7 @@ from selenium.common.exceptions import (
 from PIL import Image
 import img2pdf
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scribd_dl.utils import (
-    valid_url,
-    valid_pages,
-    GreaterThanLastPageError,
-    RestrictedDocumentError
-)
+from scribd_dl.utils import GreaterThanLastPageError, RestrictedDocumentError
 
 
 class ScribdDL(object):
@@ -243,44 +237,12 @@ class ScribdDL(object):
                 self.logger.info('Destination: %s', filename, extra=self.extra)
 
 
-def main(args=None):
-    try:
-        parser = argparse.ArgumentParser(description='Scribd document downloader')
-        parser.add_argument('url', help='Url of the document', type=valid_url)  # Required positional argument
-        parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_pages)
-        parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
-        if not args:
-            args = parser.parse_args()
-        url = args.url
-
-        scribd = ScribdDL(args)
-        logger = scribd.logger
-
-        scribd.start_browser()
-        driver = scribd.driver
-
-        scribd.visit_page(url)
-        scribd.close_browser()
-        logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
-
-    except KeyboardInterrupt:
-        logger.warning('Interrupted.', extra=scribd.extra)
-        try:
-            driver.quit()
-        except NameError:
-            pass
-        sys.exit()
-
-    except WebDriverException:
-        logger.error('Cannot establish a connection.', extra=scribd.extra)
-
-
 if __name__ == '__main__':
-    main()
+    import scribd_dl  # use __init__ main()
+    scribd_dl.main()
 
 
-# TODO : use pytest-cov
-# TODO : user coverage only in 3.6
+# TODO : use coverage only in 3.6
 # TODO : Test main / Put main in another file
 # TODO : do I need setup.cfg
 # TODO : change install_requires to minimum versions possible

@@ -5,9 +5,6 @@
 
 import os
 import re
-# import sys
-# sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# from scribd_dl import ScribdDL
 from scribd_dl.utils import (
     valid_url,
     valid_pages,
@@ -23,6 +20,7 @@ def test_90p_first_page(scribd):
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
@@ -42,6 +40,7 @@ def test_16p_last_page(scribd):
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
@@ -60,6 +59,7 @@ def test_22p_half(scribd):
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     scribd.visit_page(URL)
 
@@ -79,6 +79,7 @@ def test_78p_long_title_first_page(scribd):
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
     scribd.args.pages = PAGES
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     assert valid_pages(PAGES)
     scribd.visit_page(URL)
@@ -97,6 +98,7 @@ def test_22p_edited_title(scribd):
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
+    scribd.doc_title_edited = None
     assert valid_url(URL)
     scribd.doc_title_edited = 'Edited title'
     scribd.visit_page(URL)
