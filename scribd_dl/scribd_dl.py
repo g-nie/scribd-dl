@@ -179,6 +179,7 @@ class ScribdDL(object):
         else:  # Use the whole document
             first_page = 1
             last_page = total_pages
+        time.sleep(0.15)
         self._scroll_pages(first_page, last_page, total_pages)
 
     def _scroll_pages(self, first_page, last_page, total_pages):
