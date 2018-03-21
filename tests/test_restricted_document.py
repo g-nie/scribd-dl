@@ -19,7 +19,7 @@ def test_16p_restricted_document(scribd):
     scribd.args.url = URL
     scribd.args.pages = PAGES
     scribd.doc_title_edited = None
-    assert not valid_url(URL)  # ----------------------
+    assert valid_url(URL)
     assert valid_pages(PAGES)
 
     with pytest.raises(RestrictedDocumentError):
