@@ -1,9 +1,9 @@
 """This module contains package meta information."""
 
 # Set version number here
-AUTHOR = """Giannis Terzopoulos"""
+AUTHOR = "Giannis Terzopoulos"
 EMAIL = 'terzo.giannis@gmail.com'
-STATUS = '4 - Beta'
+STATUS = 'Development Status :: 4 - Beta'
 VERSION = '0.4.0'
 DATE = '2018 March'
 
