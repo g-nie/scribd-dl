@@ -29,19 +29,14 @@ script:
 # after_success:
 #   - bash <(curl -s https://codecov.io/bash)
 
-deploy:
-  - provider: cloudcontrol
-    email: "YOUR CLOUDCONTROL EMAIL"
-    password: "YOUR CLOUDCONTROL PASSWORD"
-    deployment: "APP_NAME/DEP_NAME"
-  - provider: heroku
-    api_key: "YOUR HEROKU API KEY"
+after_success:
+  - coverage report -m
 
 deploy:
   - provider: script
     script:
       # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
-      - coverage report -m
+      # - coverage report -m
       - bash <(curl -s https://codecov.io/bash)
     on:
       condition: if [ "$TRAVIS_TEST_RESULT" = "1" ]; then exit; fi  # Skip codecov deployment if tests failed
