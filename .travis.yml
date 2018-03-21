@@ -31,17 +31,18 @@ script:
 
 after_success:
   - coverage report -m
+  - bash <(curl -s https://codecov.io/bash)
 
-deploy:
-  - provider: script
-    script:
-      # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
-      # - coverage report -m
-      - bash <(curl -s https://codecov.io/bash)
-    on:
-      condition: if [ "$TRAVIS_TEST_RESULT" = "1" ]; then exit; fi  # Skip codecov deployment if tests failed
-      branch: master  # -----------------------
-      python: 3.6
+# deploy:
+#   - provider: script
+#     script:
+#       # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+#       # - coverage report -m
+#       - bash <(curl -s https://codecov.io/bash)
+#     on:
+#       condition: if [ "$TRAVIS_TEST_RESULT" = "1" ]; then exit; fi  # Skip codecov deployment if tests failed
+#       branch: master  # -----------------------
+#       python: 3.6
   - provider: pypi
     distributions: sdist bdist_wheel
     user: giannis.terzopoulos
