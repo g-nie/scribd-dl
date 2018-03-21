@@ -54,10 +54,10 @@ def test_6p_whole(scribd):
     URL = 'https://www.scribd.com/document/372746970/Nunes-to-Sessions-FBI-may-have' \
         '-violated-criminal-statutes-in-Carter-Page-FISA-application'
 
-    scribd.args.pages = '12-22'
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
+    scribd.args.pages = None
     scribd.doc_title_edited = None
     assert valid_url(URL)
     scribd.visit_page(URL)

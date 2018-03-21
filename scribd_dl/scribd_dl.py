@@ -138,29 +138,23 @@ class ScribdDL(object):
 
     def visit_page(self, url):
         self.logger.info('Visiting requested url', extra=self.extra)
-        # Visit the requested url without waiting more than LOAD_TIME seconds
-        try:
-            self.driver.get(url)
-        except TimeoutException:
-            pass
-        # Figure out whether the document can be fully accessed
-        is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self.driver.page_source)
-        try:
-            is_restricted = literal_eval(is_restricted.group('bool').title())
-        except AttributeError:
-            is_restricted = False
-        if is_restricted:
-            self._cclose_browser()
-            raise RestrictedDocumentError
-
         retries = 0
         total_pages = None
-        while retries < 2:  # try up to 2 times to get the total_pages element
+        while retries < 2:
             try:
-                self.driver.get(url)
+                self.driver.get(url)  # Visit the requested url without waiting more than LOAD_TIME seconds
             except TimeoutException:
                 pass
+            # Figure out whether the document can be fully accessed
+            is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self.driver.page_source)
             try:
+                is_restricted = literal_eval(is_restricted.group('bool').title())
+            except AttributeError:
+                is_restricted = False
+            if is_restricted:
+                self._cclose_browser()
+                raise RestrictedDocumentError
+            try:  # Refresh the page in case it could not retrieve the total_pages element
                 total_pages = self.driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
                 total_pages = total_pages.text.split()[1]
                 break
