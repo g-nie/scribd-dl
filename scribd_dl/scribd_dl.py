@@ -236,7 +236,6 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : add --version argument
 # TODO : add usage in readme
 # TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."

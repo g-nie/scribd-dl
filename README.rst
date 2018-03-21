@@ -28,17 +28,30 @@ scribd-dl
 |
 | Scribd-dl uses selenium and headless Chrome to take high resolutions screenshots of the document pages, and eventually merges them into a pdf file.
 
+Usage
+------------
+
+.. code-block:: shell
+
+    $ scribd-dl (https://)www.scribd.com/(doc|document|presentation)/(document_id)/* [-p PAGES]
+
+Examples ::
+
+    $ scribd-dl https://www.scribd.com/document/90403141/Social-Media-Strategy
+    $ scribd-dl https://www.scribd.com/document/352366744 -p 10-16
+    $ scribd-dl https://www.scribd.com/document/351688288 -p 20 --verbose
+
 Installation
 ------------
 Clone it ::
 
-   $ git clone https://github.com/giannisterzopoulos/scribd-dl.git
-   $ cd scribd-dl
-   $ pip install .
+    $ git clone https://github.com/giannisterzopoulos/scribd-dl.git
+    $ cd scribd-dl
+    $ pip install .
 
 or install from PyPI ::
 
-   $ pip install scribd-dl
+    $ pip install scribd-dl
 
 Requirements
 -------------
