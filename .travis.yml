@@ -33,7 +33,7 @@ after_success:
   - coverage report -m
   - bash <(curl -s https://codecov.io/bash)
 
-# deploy:
+deploy:
 #   - provider: script
 #     script:
 #       # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
