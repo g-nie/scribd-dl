@@ -236,11 +236,8 @@ if __name__ == '__main__':
 
 
 # TODO : use coverage only in 3.6
-# TODO : Test main / Put main in another file
 # TODO : do I need setup.cfg
 # TODO : change install_requires to minimum versions possible
 # TODO : add --version argument
 # TODO : Restructure for API use
-# TODO : Update README - pip install ...
-# TODO : Try shorter package_data in setup.py
 # TODO : Mute "DEVTOOLS Listening..."

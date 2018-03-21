@@ -7,6 +7,11 @@ python:
   - 3.5
   - 3.6
 
+matrix:
+  include:
+    - python: '3.6'
+      env: COVERAGE=true
+
 before_install:
   - sudo apt-get update
   - sudo apt-get install chromium-chromedriver  # chrome v64.0
@@ -23,7 +28,7 @@ install:
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+  - env $COVERAGE coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
