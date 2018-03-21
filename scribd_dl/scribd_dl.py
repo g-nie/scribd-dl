@@ -8,14 +8,14 @@ import logging
 from datetime import datetime
 from ast import literal_eval
 from io import BytesIO
+from PIL import Image
+import img2pdf
 from selenium import webdriver
 from selenium.common.exceptions import (
     TimeoutException,
     NoSuchElementException,
     WebDriverException
 )
-from PIL import Image
-import img2pdf
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scribd_dl.utils import GreaterThanLastPageError, RestrictedDocumentError  # pylint: disable=C0413
 
@@ -236,8 +236,7 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : do I need setup.cfg
-# TODO : change install_requires to minimum versions possible
 # TODO : add --version argument
+# TODO : add usage in readme
 # TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."

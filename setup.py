@@ -11,10 +11,10 @@ with open('README.rst', encoding='utf-8') as readme_file:
     long_description = '\n' + readme_file.read()
 
 requirements = [
-    'selenium>=3.9.0',
-    'Pillow>=4.3.0',
-    'img2pdf>=0.2.4',
-    'requests>=2.18.4'
+    'selenium>=3.8.0',
+    'Pillow>=4.0.0',
+    'img2pdf>=0.2.3',
+    'requests>=2.10.0'
 ]
 
 setup_requirements = []
@@ -43,7 +43,7 @@ setup(
     long_description=long_description,
     packages=find_packages(include=['scribd_dl']),
     package_data={
-        'scribd_dl': ['assets/README.txt']
+        'scribd_dl': ['assets/README.txt', 'version.py']
     },
     include_package_data=True,
     entry_points={

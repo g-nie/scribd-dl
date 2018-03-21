@@ -19,12 +19,12 @@ __date__ = DATE
 def main(args=None):
     try:
         if not args:
-            parser = argparse.ArgumentParser(description='Scribd document downloader')
+            parser = argparse.ArgumentParser(description='Scribd document downloader', prog='scribd-dl')
             parser.add_argument('url', help='Url of the document', type=valid_url)  # Required positional argument
             parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_pages)
             parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
+            parser.add_argument('--version', action='version', version='%(prog)s {}'.format(__version__))
             args = parser.parse_args()
-        url = args.url
 
         scribd = ScribdDL(args)
         logger = scribd.logger
@@ -32,7 +32,7 @@ def main(args=None):
         scribd.start_browser()
         driver = scribd.driver
 
-        scribd.visit_page(url)
+        scribd.visit_page(args.url)
         scribd.close_browser()
         logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
