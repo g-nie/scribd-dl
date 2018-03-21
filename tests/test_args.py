@@ -44,6 +44,9 @@ def test_invalid_args():
     with pytest.raises(ArgumentTypeError):
         valid_url(URL)
 
+    PAGES = '0'
+    with pytest.raises(ArgumentTypeError):
+        valid_pages(PAGES)
     PAGES = '1-'
     with pytest.raises(ArgumentTypeError):
         valid_pages(PAGES)

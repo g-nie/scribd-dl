@@ -123,20 +123,20 @@ class ScribdDL(object):
             except WebDriverException:
                 self.logger.error('Chromedriver needs to be in assets directory or in PATH')
                 sys.exit(1)
-        self._driver.set_page_load_timeout(self.LOAD_TIME)
+        self.driver.set_page_load_timeout(self.LOAD_TIME)
 
     def _cclose_browser(self):  # Exit chromedriver
         try:  # Don't close the driver if called by tests
             t = self._args.testing  # noqa: F841 pylint: disable=W0612
         except AttributeError:
-            self._driver.quit()
+            self.driver.quit()
 
     def close_browser(self):  # Exit chromedriver without checking
-        self._driver.quit()
+        self.driver.quit()
 
     def _edit_title(self):
         # Make document title safe for saving in the file system
-        edited = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self._doc_title)
+        edited = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self.doc_title)
         if ' ' in edited.strip() and len(edited.split(' ')) >= 4:
             edited = ' '.join(edited.split(' ')[:4])
         else:
@@ -147,11 +147,11 @@ class ScribdDL(object):
         self.logger.info('Visiting requested url', extra=self.extra)
         # Visit the requested url without waiting more than LOAD_TIME seconds
         try:
-            self._driver.get(url)
+            self.driver.get(url)
         except TimeoutException:
             pass
         # Figure out whether the document can be fully accessed
-        is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self._driver.page_source)
+        is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self.driver.page_source)
         try:
             is_restricted = literal_eval(is_restricted.group('bool').title())
         except AttributeError:
@@ -164,11 +164,11 @@ class ScribdDL(object):
         total_pages = None
         while retries < 3:  # try up to 3 times to get the total_pages element
             try:
-                self._driver.get(url)
+                self.driver.get(url)
             except TimeoutException:
                 pass
             try:
-                total_pages = self._driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
+                total_pages = self.driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
                 total_pages = total_pages.text.split()[1]
                 break
             except NoSuchElementException:  # total_pages element not available, try again
@@ -179,7 +179,7 @@ class ScribdDL(object):
             raise NoSuchElementException
         total_pages = int(total_pages.replace(',', '').replace('.', ''))
 
-        self._doc_title = self._driver.title
+        self._doc_title = self.driver.title
         if self._args.pages:  # If user inserted page range
             try:
                 first_page = int(self._args.pages.split('-')[0])
@@ -196,7 +196,7 @@ class ScribdDL(object):
 
     def _scroll_pages(self, first_page, last_page, total_pages):
         # Enter full screen mode
-        self._driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
+        self.driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
         Pages = []  # Holds the actual image bytes of each page
         to_process = last_page - first_page + 1  # Total pages to process
         processed = 0
@@ -207,15 +207,15 @@ class ScribdDL(object):
             if counter > last_page:
                 break
             # Generate WebElement of the next page
-            page = self._driver.find_element_by_xpath("//div[@id='outer_page_{}']".format(counter))
-            self._driver.execute_script("arguments[0].scrollIntoView();", page)  # Scroll to it
+            page = self.driver.find_element_by_xpath("//div[@id='outer_page_{}']".format(counter))
+            self.driver.execute_script("arguments[0].scrollIntoView();", page)  # Scroll to it
             if counter < first_page:  # Keep scrolling if it hasn't reached the first_page
                 continue
             processed += 1
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
-            img = Image.open(BytesIO(self._driver.get_screenshot_as_png()))  # Load screenshot in memory
+            img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Load screenshot in memory
             # Crop the image to the speified size
             img = img.crop((
                 page.location['x'],
@@ -235,20 +235,22 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                self._doc_title_edited = self._edit_title()
-                filename = '{}-{}.pdf'.format(self._doc_title_edited, self.extra['doc_id'])
+                if not self.doc_title_edited:  # calculate filename if not previously set
+                    self.doc_title_edited = self._edit_title()
+                filename = '{}-{}.pdf'.format(self.doc_title_edited, self.extra['doc_id'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
                 self.logger.info('Destination: %s', filename, extra=self.extra)
 
 
-def main():
+def main(args=None):
     try:
         parser = argparse.ArgumentParser(description='Scribd document downloader')
         parser.add_argument('url', help='Url of the document', type=valid_url)  # Required positional argument
         parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_pages)
         parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
-        args = parser.parse_args()
+        if not args:
+            args = parser.parse_args()
         url = args.url
 
         scribd = ScribdDL(args)
@@ -277,7 +279,10 @@ if __name__ == '__main__':
     main()
 
 
-# TODO : add github badges
+# TODO : use pytest-cov
+# TODO : user coverage only in 3.6
+# TODO : Test main / Put main in another file
+# TODO : do I need setup.cfg
 # TODO : change install_requires to minimum versions possible
 # TODO : add --version argument
 # TODO : Restructure for API use

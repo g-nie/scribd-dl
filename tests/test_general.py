@@ -53,10 +53,10 @@ def test_16p_last_page(scribd):
         assert False
 
 
-def test_22p_whole(scribd):
+def test_22p_half(scribd):
     URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
 
-    scribd.args.pages = None
+    scribd.args.pages = '12-22'
     doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
     scribd.extra = {'doc_id': doc_id}
     scribd.args.url = URL
@@ -81,6 +81,24 @@ def test_78p_long_title_first_page(scribd):
     scribd.args.pages = PAGES
     assert valid_url(URL)
     assert valid_pages(PAGES)
+    scribd.visit_page(URL)
+
+    saved_file = '{}-{}.pdf'.format(scribd.doc_title_edited, doc_id)
+    if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
+        assert True
+    else:
+        assert False
+
+
+def test_22p_edited_title(scribd):
+    URL = 'https://www.scribd.com/document/90403141/Social-Media-Strategy'
+
+    scribd.args.pages = '1-2'
+    doc_id = re.search(r'(?P<id>\d+)', URL).group('id')
+    scribd.extra = {'doc_id': doc_id}
+    scribd.args.url = URL
+    assert valid_url(URL)
+    scribd.doc_title_edited = 'Edited title'
     scribd.visit_page(URL)
 
     saved_file = '{}-{}.pdf'.format(scribd.doc_title_edited, doc_id)
