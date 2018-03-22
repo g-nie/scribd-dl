@@ -218,9 +218,7 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                self.doc_title_edited = self._edit_title()  # -------------------
-                # if not self.doc_title_edited:  # calculate filename if not previously set
-                #     self.doc_title_edited = self._edit_title()
+                self.doc_title_edited = self._edit_title()
                 filename = '{}-{}.pdf'.format(self.doc_title_edited, self.extra['label'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
