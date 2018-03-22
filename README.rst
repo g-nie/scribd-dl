@@ -46,6 +46,18 @@ Examples ::
     $ scribd-dl https://www.scribd.com/document/352366744 -p 10-16
     $ scribd-dl https://www.scribd.com/document/351688288 -p 20 --verbose
 
+you can embed scribd-dl like this: ::
+
+    import scribd_dl
+
+    options = {
+        'pages': '4-8',
+        'verbose': True
+    }
+    with scribd_dl.ScribdDL(options) as session:
+        session.download(['https://www.scribd.com/document/351688288/'])
+
+
 Installation
 ------------
 Clone it ::
