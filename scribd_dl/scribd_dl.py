@@ -11,6 +11,9 @@ from io import BytesIO
 from PIL import Image
 import img2pdf
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException,
     NoSuchElementException,
@@ -111,7 +114,7 @@ class ScribdDL(object):
             try:
                 self._driver = webdriver.Chrome(options=options)
             except ConnectionResetError as e:
-                self.logger.error('Failed to start webdriver: ' + str(e))
+                self.logger.error('Failed to start webdriver: %s', str(e))
                 sys.exit(1)
             except WebDriverException:
                 self.logger.error('Chromedriver needs to be in assets directory or in PATH')
@@ -202,7 +205,11 @@ class ScribdDL(object):
             processed += 1
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
-            time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
+            # Wait until page content is loaded
+            time.sleep(0.3)
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(
+                (By.XPATH, "//div[@id='outer_page_{}']//div[@class='image_layer']".format(counter))))
+
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Load screenshot in memory
             # Crop the image to the speified size
             img = img.crop((
@@ -236,6 +243,5 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : add usage in readme
 # TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."
