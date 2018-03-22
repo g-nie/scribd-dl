@@ -23,7 +23,9 @@ install:
 
 script:
   - flake8 scribd_dl --ignore=E402,E501,E731,E741
-  - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+  # - coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/
+  - if [ ${TRAVIS_PYTHON_VERSION} = "3.6" ]; then 
+      coverage run --source=scribd_dl --omit=scribd_dl/version.py -m pytest tests/; fi
 
 after_success:
   - coverage report -m
