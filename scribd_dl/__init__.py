@@ -7,7 +7,12 @@ from datetime import datetime
 from selenium.common.exceptions import WebDriverException
 from .scribd_dl import ScribdDL  # noqa: F401
 from .version import AUTHOR, EMAIL, STATUS, VERSION, DATE
-from .utils import valid_url, valid_pages
+from .utils import (
+    valid_url,
+    valid_pages,
+    GreaterThanLastPageError,
+    RestrictedDocumentError
+)
 
 __author__ = AUTHOR
 __email__ = EMAIL
@@ -36,6 +41,20 @@ def main(args=None):
         scribd.close_browser()
         logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
+    except GreaterThanLastPageError:
+        logger.error("Error: given page cannot be greater than document\'s last page", extra=scribd.extra)
+        driver.quit()
+        sys.exit(1)
+
+    except RestrictedDocumentError:
+        logger.error("Error: this document is only a preview and not fully availabe for reading", extra=scribd.extra)
+        driver.quit()
+        sys.exit(1)
+
+    except WebDriverException:
+        logger.error('Error: cannot establish a connection.', extra=scribd.extra)
+        sys.exit(1)
+
     except KeyboardInterrupt:
         logger.warning('Interrupted.', extra=scribd.extra)
         try:
@@ -43,6 +62,3 @@ def main(args=None):
         except NameError:
             pass
         sys.exit()
-
-    except WebDriverException:
-        logger.error('Cannot establish a connection.', extra=scribd.extra)

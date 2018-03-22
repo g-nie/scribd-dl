@@ -11,6 +11,9 @@ from io import BytesIO
 from PIL import Image
 import img2pdf
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException,
     NoSuchElementException,
@@ -111,7 +114,7 @@ class ScribdDL(object):
             try:
                 self._driver = webdriver.Chrome(options=options)
             except ConnectionResetError as e:
-                self.logger.error('Failed to start webdriver: ' + str(e))
+                self.logger.error('Failed to start webdriver: %s', str(e))
                 sys.exit(1)
             except WebDriverException:
                 self.logger.error('Chromedriver needs to be in assets directory or in PATH')
@@ -179,12 +182,13 @@ class ScribdDL(object):
         else:  # Use the whole document
             first_page = 1
             last_page = total_pages
-        time.sleep(0.15)
         self._scroll_pages(first_page, last_page, total_pages)
 
     def _scroll_pages(self, first_page, last_page, total_pages):
         # Enter full screen mode
-        self.driver.find_element_by_xpath("//button[@aria-label='Fullscreen']").click()
+        fullscreen_xpath = "//button[@aria-label='Fullscreen']"
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, fullscreen_xpath)))
+        self.driver.find_element_by_xpath(fullscreen_xpath).click()
         Pages = []  # Holds the actual image bytes of each page
         to_process = last_page - first_page + 1  # Total pages to process
         processed = 0
@@ -202,7 +206,8 @@ class ScribdDL(object):
             processed += 1
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
-            time.sleep(0.2)  # Sleep 0.2s in each scroll to fully load the page content
+            time.sleep(0.3)  # Sleep 0.3s in each scroll to fully load the page content
+
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Load screenshot in memory
             # Crop the image to the speified size
             img = img.crop((
@@ -216,8 +221,7 @@ class ScribdDL(object):
             img.save(imgByteArr, format='PNG')
             Pages.append(imgByteArr.getvalue())
 
-            # Use this every <chunk> pages or in the last page
-            if processed == to_process:
+            if processed == to_process:  # if it processed all pages
                 # Merge the images into a temporary pdf file
                 logging.disable(logging.CRITICAL)  # Disable img2pdf logging messages
                 pdf_bytes = img2pdf.convert(Pages)
@@ -236,6 +240,5 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : add usage in readme
 # TODO : Restructure for API use
 # TODO : Mute "DEVTOOLS Listening..."
