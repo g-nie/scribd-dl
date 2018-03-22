@@ -48,7 +48,7 @@ Examples ::
 
 you can embed scribd-dl like this:
 
-.. code-block:: pycon
+.. code-block:: python
 
     import scribd_dl
 
