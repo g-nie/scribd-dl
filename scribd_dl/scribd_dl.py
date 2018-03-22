@@ -6,7 +6,6 @@ import os
 import time
 import logging
 from datetime import datetime
-from argparse import ArgumentTypeError
 from ast import literal_eval
 from io import BytesIO
 from PIL import Image
@@ -42,7 +41,7 @@ class ScribdDL(object):
         self.options = options
         self.url = None
         if options.get('pages'):
-            self.pages = self._check_pages(options.get('pages'))
+            self.pages = valid_pages(options['pages'])
         else:
             self.pages = None
         self.verbose = options.get('verbose')
@@ -52,34 +51,16 @@ class ScribdDL(object):
         self.doc_title = None
         self.doc_title_edited = None
 
-    def _check_url(self, url):
-        try:
-            return valid_url(url)
-        except ArgumentTypeError:  # invalid url format
-            try:
-                self.logger.error('Not a valid document url : %s', url, extra={'label': 'error'})
-            except AttributeError:  # logger not set yet
-                logging.error('Not a valid document url : %s', url)
-
     def set_url(self, url):
-        self.url = self._check_url(url)
+        self.url = valid_url(url)
         doc_id = re.search(r'(?P<id>\d+)', url).group('id') if self.url else None
         self.extra = {'label': doc_id}  # Use the document id for logging
-
-    def _check_pages(self, pages):
-        try:
-            return valid_pages(pages)
-        except ArgumentTypeError:
-            try:
-                self.logger.error('Not a valid page range : %s', pages, extra={'label': 'error'})
-            except AttributeError:  # logger not set yet
-                logging.error('Not a valid page range : %s', pages)
 
     def set_pages(self, pages=None):
         if not pages:  # Select the whole document
             self.pages = None
         else:
-            self.pages = self._check_pages(pages)
+            self.pages = valid_pages(pages)
 
     def _get_logger(self):
         # Initialize and configure the logging system
@@ -141,16 +122,15 @@ class ScribdDL(object):
         self.close()
 
     def download(self, url_list):
-        if isinstance(url_list, str):
-            # self.logger.error('url has to be of type list, not string', extra={'label': 'error'})
-            raise ValueError('url has to be of type list, not string')
+        if not isinstance(url_list, list):
+            raise ValueError('url has to be of type list, not %s', type(url_list))
         if not self.driver:
             self.start_browser()
         for url in url_list:
             self._process_url(url)
 
     def _process_url(self, url):
-        self.url = self._check_url(url)
+        self.url = valid_url(url)
         doc_id = re.search(r'(?P<id>\d+)', url).group('id') if self.url else None
         self.extra = {'label': doc_id}
 
