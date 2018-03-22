@@ -51,11 +51,6 @@ class ScribdDL(object):
         self.doc_title = None
         self.doc_title_edited = None
 
-    def set_url(self, url):
-        self.url = valid_url(url)
-        doc_id = re.search(r'(?P<id>\d+)', url).group('id') if self.url else None
-        self.extra = {'label': doc_id}  # Use the document id for logging
-
     def set_pages(self, pages=None):
         if not pages:  # Select the whole document
             self.pages = None
