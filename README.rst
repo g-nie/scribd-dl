@@ -46,7 +46,9 @@ Examples ::
     $ scribd-dl https://www.scribd.com/document/352366744 -p 10-16
     $ scribd-dl https://www.scribd.com/document/351688288 -p 20 --verbose
 
-you can embed scribd-dl like this: ::
+you can embed scribd-dl like this:
+
+.. code-block:: pycon
 
     import scribd_dl
 
