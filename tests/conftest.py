@@ -4,7 +4,6 @@
 
 import sys
 import os
-import argparse
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pytest
 from scribd_dl import ScribdDL
@@ -16,11 +15,14 @@ from scribd_dl import ScribdDL
 
 @pytest.fixture(scope='session')  # Can be module, session, function, class
 def scribd(request):
-    args = argparse.Namespace(url='0000', pages=None, verbose=True, testing=True)
-    sc = ScribdDL(args)
+    options = {
+        'verbose': True,
+        'testing': True
+    }
+    sc = ScribdDL(options)
     sc.start_browser()
 
     def fin():
-        sc.close_browser()
+        sc.close()
     request.addfinalizer(fin)
     return sc  # provide the fixture value

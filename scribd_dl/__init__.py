@@ -31,24 +31,25 @@ def main(args=None):
             parser.add_argument('--version', action='version', version='%(prog)s {}'.format(__version__))
             args = parser.parse_args()
 
-        scribd = ScribdDL(args)
+        options = {
+            'pages': args.pages,
+            'verbose': args.verbose
+        }
+
+        scribd = ScribdDL(options)
         logger = scribd.logger
-
-        scribd.start_browser()
-        driver = scribd.driver
-
-        scribd.visit_page(args.url)
-        scribd.close_browser()
+        scribd.download([args.url])
+        scribd.close()
         logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
     except GreaterThanLastPageError:
         logger.error("Error: given page cannot be greater than document\'s last page", extra=scribd.extra)
-        driver.quit()
+        scribd.close()
         sys.exit(1)
 
     except RestrictedDocumentError:
         logger.error("Error: this document is only a preview and not fully availabe for reading", extra=scribd.extra)
-        driver.quit()
+        scribd.close()
         sys.exit(1)
 
     except WebDriverException:
@@ -58,7 +59,7 @@ def main(args=None):
     except KeyboardInterrupt:
         logger.warning('Interrupted.', extra=scribd.extra)
         try:
-            driver.quit()
+            scribd.close()
         except NameError:
             pass
         sys.exit()
