@@ -72,10 +72,6 @@ class ScribdDL(object):
     def logger(self, logger):
         self._logger = logger
 
-    # @args.setter
-    # def args(self, args):
-    #     self._args = args
-
     @extra.setter
     def extra(self, extra):
         self._extra = extra
@@ -182,7 +178,6 @@ class ScribdDL(object):
         else:  # Use the whole document
             first_page = 1
             last_page = total_pages
-        time.sleep(0.15)
         self._scroll_pages(first_page, last_page, total_pages)
 
     def _scroll_pages(self, first_page, last_page, total_pages):
@@ -206,9 +201,9 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             # Wait until page content is loaded
-            time.sleep(0.3)
-            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(
-                (By.XPATH, "//div[@id='outer_page_{}']//div[@class='image_layer']".format(counter))))
+            time.sleep(1.2)  # TODO : Tweak it
+            # WebDriverWait(self.driver, 10).until(EC.presence_of_element_located(
+            #     (By.XPATH, "//div[@id='outer_page_{}']//div[@class='image_layer']".format(counter))))
 
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Load screenshot in memory
             # Crop the image to the speified size
