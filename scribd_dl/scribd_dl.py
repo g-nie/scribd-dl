@@ -210,7 +210,7 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(sleep_time)
-            # print(sleep_time)
+            print(sleep_time)
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
 
             # Crop the image to the speified size
