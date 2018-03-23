@@ -38,7 +38,7 @@ Usage
 
 .. code-block:: shell
 
-    $ scribd-dl (https://)www.scribd.com/(doc|document|presentation)/(document_id)/* [-p PAGES]
+    $ scribd-dl (https://www.)scribd.com/(doc|document|presentation)/(document_id)/* [-p PAGES] [-v]
 
 Examples ::
 
