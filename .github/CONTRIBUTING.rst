@@ -80,10 +80,7 @@ Ready to contribute? Here's how to set up `scribd-dl` for local development.
    tests, including testing other Python versions with tox::
 
     $ flake8 scribd-dl tests
-    $ python setup.py test or py.test
-    $ tox
-
-   To get flake8 and tox, just pip install them into your virtualenv.
+    $ pytest tests
 
 6. Commit your changes and push your branch to GitHub::
 
