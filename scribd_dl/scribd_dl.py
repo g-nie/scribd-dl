@@ -196,7 +196,7 @@ class ScribdDL(object):
         self.logger.info('Processing pages : %s-%s...', first_page, last_page, extra=self.extra)
         if first_page > 80:  # Inform the user that scrolling may take a while
             self.logger.info('Scrolling to page %s...', first_page, extra=self.extra)
-        sleep_time = 1.2
+        sleep_time = 1.0
         current_mean = 0
         for counter in range(1, total_pages + 1):
             if counter > last_page:
@@ -241,6 +241,7 @@ class ScribdDL(object):
                 Sizes.append(img_size)
                 current_mean = sum(Sizes) / len(Sizes)
                 sleep_time = round(0.2 + (current_mean / 2000000), 5)  # --- Tweak it?
+                sleep_time = 1.2 if sleep_time > 1.2 else sleep_time
 
 
 if __name__ == '__main__':

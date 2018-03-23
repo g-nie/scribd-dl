@@ -3,6 +3,7 @@ logs/
 *.png
 *.pdf
 test.py
+test_api.py
 test_1.py
 test_2.py
 chromedriver*
