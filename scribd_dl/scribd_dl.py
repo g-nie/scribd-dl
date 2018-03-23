@@ -249,5 +249,5 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : accept multiple urls in command line
+# TODO : return list of all titles in session.doc_title
 # TODO : Mute "DEVTOOLS Listening..."

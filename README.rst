@@ -43,8 +43,9 @@ Usage
 Examples ::
 
     $ scribd-dl https://www.scribd.com/document/90403141/Social-Media-Strategy
-    $ scribd-dl https://www.scribd.com/document/352366744 -p 10-16
-    $ scribd-dl https://www.scribd.com/document/351688288 -p 20 --verbose
+    $ scribd-dl https://www.scribd.com/document/352366744 --pages 10-16
+    $ scribd-dl scribd.com/document/351688288 -p 20 --verbose
+    $ scribd-dl scribd.com/document/351688288 scribd.com/document/90403141 -p 1-3
 
 you can embed scribd-dl, using a context manager like this:
 
@@ -58,7 +59,6 @@ you can embed scribd-dl, using a context manager like this:
     }
     with scribd_dl.ScribdDL(options) as session:
         session.download(['https://www.scribd.com/document/351688288/'])
-        print(session.doc_title)
 
 
 Installation
