@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# pylint: disable=C0413
+
 import re
 import sys
 import os
@@ -17,7 +19,7 @@ from selenium.common.exceptions import (
     WebDriverException
 )
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scribd_dl.utils import (  # pylint: disable=C0413
+from scribd_dl.utils import (
     valid_url,
     valid_pages,
     GreaterThanLastPageError,
@@ -44,12 +46,10 @@ class ScribdDL(object):
             self.pages = valid_pages(options['pages'])
         else:
             self.pages = None
-        self.verbose = options.get('verbose')
         self.extra = None
         self.logger = self._get_logger()
         self.driver = None
         self.doc_title = None
-        self.doc_title_edited = None
 
     def set_pages(self, pages=None):
         if not pages:  # Select the whole document
@@ -59,7 +59,20 @@ class ScribdDL(object):
 
     def _get_logger(self):
         # Initialize and configure the logging system
-        console_level = logging.DEBUG if self.verbose else logging.INFO
+        if self.options.get('log-level'):
+            if self.options['log-level'] == '1':
+                console_level = logging.DEBUG
+            elif self.options['log-level'] == '2':
+                console_level = logging.INFO
+            elif self.options['log-level'] == '3':
+                console_level = logging.WARNING
+            elif self.options['log-level'] == '4':
+                console_level = logging.ERROR
+            elif self.options['log-level'] == '5':
+                console_level = logging.CRITICAL
+        else:
+            console_level = logging.INFO
+
         logging.basicConfig(
             level=console_level,
             format='[%(label)s]  %(message)s',
@@ -198,6 +211,7 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(sleep_time)
+            print(sleep_time)
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
 
             # Crop the image to the speified size
@@ -218,8 +232,8 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                self.doc_title_edited = self._edit_title()
-                filename = '{}-{}.pdf'.format(self.doc_title_edited, self.extra['label'])
+                doc_title_edited = self._edit_title()
+                filename = '{}-{}.pdf'.format(doc_title_edited, self.extra['label'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
                 self.logger.info('Destination: %s', filename, extra=self.extra)

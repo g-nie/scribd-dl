@@ -54,10 +54,11 @@ you can embed scribd-dl, using a context manager like this:
 
     options = {
         'pages': '4-8',
-        'verbose': True
+        'log-level': '2'  # info
     }
     with scribd_dl.ScribdDL(options) as session:
         session.download(['https://www.scribd.com/document/351688288/'])
+        print(session.doc_title)
 
 
 Installation
