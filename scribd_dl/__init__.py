@@ -25,7 +25,7 @@ def main(args=None):
     try:
         if not args:
             parser = argparse.ArgumentParser(description='Scribd document downloader', prog='scribd-dl')
-            parser.add_argument('url', help='Url of the document', type=valid_url)  # Required positional argument
+            parser.add_argument('urls', help='Url of the document', type=valid_url, nargs='+')  # Required positional argument
             parser.add_argument('-p', '--pages', help='Range of pages to be selected (e.g. 10-20)', type=valid_pages)
             parser.add_argument('-v', '--verbose', help='Show verbose output in terminal', action='store_true')
             parser.add_argument('--version', action='version', version='%(prog)s {}'.format(__version__))
@@ -35,10 +35,10 @@ def main(args=None):
             'pages': args.pages,
             'verbose': args.verbose
         }
-
+        URLS = args.urls
         scribd = ScribdDL(options)
         logger = scribd.logger
-        scribd.download([args.url])
+        scribd.download(URLS)
         scribd.close()
         logger.debug('Execution time : %s seconds', (datetime.now() - scribd.START).seconds, extra=scribd.extra)
 
