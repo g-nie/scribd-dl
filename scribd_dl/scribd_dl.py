@@ -70,8 +70,8 @@ class ScribdDL(object):
             console_level = logging.CRITICAL
         else:
             console_level = logging.INFO
-
         logging.basicConfig(
+            stream=sys.stdout,
             level=console_level,
             format='[%(label)s]  %(message)s',
             datefmt='%d-%m-%Y %H:%M:%S'
@@ -210,7 +210,6 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(sleep_time)
-            # print(sleep_time)
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
 
             # Crop the image to the speified size
@@ -241,7 +240,7 @@ class ScribdDL(object):
                 img_size = imgByteArr.tell()  # The size of the image in bytes (an integer)
                 Sizes.append(img_size)
                 current_mean = sum(Sizes) / len(Sizes)
-                sleep_time = round(0.2 + (current_mean / 1000000), 5)
+                sleep_time = round(0.2 + (current_mean / 2000000), 5)  # --- Tweak it?
 
 
 if __name__ == '__main__':
