@@ -76,7 +76,7 @@ class ScribdDL(object):
             format='[%(label)s]  %(message)s',
             datefmt='%d-%m-%Y %H:%M:%S'
         )
-        logger = logging.getLogger()
+        logger = logging.getLogger(__name__)
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
         logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
@@ -210,7 +210,6 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(sleep_time)
-            print('sleep time: {}'.format(sleep_time))  # -----------
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
 
             # Crop the image to the speified size
@@ -241,7 +240,7 @@ class ScribdDL(object):
                 img_size = imgByteArr.tell()  # The size of the image in bytes (an integer)
                 Sizes.append(img_size)
                 current_mean = sum(Sizes) / len(Sizes)
-                sleep_time = round(0.2 + (current_mean / 2000000), 5)
+                sleep_time = round(0.2 + (current_mean / 2000000), 5)  # --- Tweak it?
 
 
 if __name__ == '__main__':
