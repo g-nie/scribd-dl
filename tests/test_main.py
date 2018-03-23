@@ -5,7 +5,8 @@ import argparse
 import scribd_dl
 
 
-def test_main(scribd):  # pylint: disable=W0613
-    URL = 'https://www.scribd.com/doc/18587980/ARXAIA-G-Gymnasioy'
+def test_main():
+    # GreaterThanLastPageError
+    URL = 'https://www.scribd.com/document/294632720/'
     args = argparse.Namespace(url=URL, pages='3', verbose=True, testing=True)
     scribd_dl.main(args)

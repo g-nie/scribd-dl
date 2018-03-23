@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 # pylint: disable=C0413
 
 import re
@@ -59,17 +58,16 @@ class ScribdDL(object):
 
     def _get_logger(self):
         # Initialize and configure the logging system
-        if self.options.get('log-level'):
-            if self.options['log-level'] == '1':
-                console_level = logging.DEBUG
-            elif self.options['log-level'] == '2':
-                console_level = logging.INFO
-            elif self.options['log-level'] == '3':
-                console_level = logging.WARNING
-            elif self.options['log-level'] == '4':
-                console_level = logging.ERROR
-            elif self.options['log-level'] == '5':
-                console_level = logging.CRITICAL
+        if self.options.get('verbose') or self.options.get('log-level') == '1':
+            console_level = logging.DEBUG
+        elif self.options.get('log-level') == '2':
+            console_level = logging.INFO
+        elif self.options.get('log-level') == '3':
+            console_level = logging.WARNING
+        elif self.options.get('log-level') == '4':
+            console_level = logging.ERROR
+        elif self.options.get('log-level') == '5':
+            console_level = logging.CRITICAL
         else:
             console_level = logging.INFO
 
@@ -114,9 +112,10 @@ class ScribdDL(object):
     def close(self):  # Exit chromedriver without checking
         self.driver.quit()
 
-    def _edit_title(self):
+    @staticmethod
+    def _edit_title(title):
         # Make document title safe for saving in the file system
-        edited = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', self.doc_title)
+        edited = re.sub('[^\w\-_\.\,\!\(\)\[\]\{\}\;\'\΄ ]', '_', title)
         if ' ' in edited.strip() and len(edited.split(' ')) >= 4:
             edited = ' '.join(edited.split(' ')[:4])
         else:
@@ -211,7 +210,7 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(sleep_time)
-            print(sleep_time)
+            # print(sleep_time)
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
 
             # Crop the image to the speified size
@@ -232,7 +231,7 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                doc_title_edited = self._edit_title()
+                doc_title_edited = self._edit_title(self.doc_title)
                 filename = '{}-{}.pdf'.format(doc_title_edited, self.extra['label'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)

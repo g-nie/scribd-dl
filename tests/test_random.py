@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# pylint: disable=W0212
 
 import os
 import re
@@ -20,7 +21,7 @@ def test_1p_random_document(scribd):
         assert True
     else:
         doc_id = re.search(r'(?P<id>\d+)', URL[0]).group('id')
-        saved_file = '{}-{}.pdf'.format(scribd.doc_title_edited, doc_id)
+        saved_file = '{}-{}.pdf'.format(scribd._edit_title(scribd.doc_title), doc_id)
         if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
             assert True
         else:
