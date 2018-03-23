@@ -38,7 +38,7 @@ def test_invalid_args():
     URL = 'https://www.scribd.com/docLLL/90403141/Social-Media-Strategy'
     with pytest.raises(ArgumentTypeError):
         valid_url(URL)
-    URL = 'scribd.com/document/90403141/'
+    URL = 'scribd--.com/document/90403141/'
     with pytest.raises(ArgumentTypeError):
         valid_url(URL)
     URL = 'https://www.scribd.com/doc/90403141-aaa/'
