@@ -76,7 +76,7 @@ class ScribdDL(object):
             format='[%(label)s]  %(message)s',
             datefmt='%d-%m-%Y %H:%M:%S'
         )
-        logger = logging.getLogger(__name__)
+        logger = logging.getLogger()
         # Silence unnecessary third party debug messages
         logging.getLogger('selenium.webdriver.remote.remote_connection').setLevel(logging.INFO)
         logging.getLogger('PIL.PngImagePlugin').setLevel(logging.INFO)
