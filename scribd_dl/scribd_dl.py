@@ -248,5 +248,4 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : Lower sleep times
 # TODO : Mute "DEVTOOLS Listening..."
