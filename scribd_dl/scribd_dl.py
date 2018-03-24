@@ -131,8 +131,8 @@ class ScribdDL(object):
 
     def download(self, url_list, pages=None):
         """
-        Downlad the given document or documents in a list.
-        If pages is not None, then use this particular range.
+        Downlad the given document(str) or multiple documents(list).
+        If pages is set, then use this particular range.
         """
         if pages:
             self.pages = pages
