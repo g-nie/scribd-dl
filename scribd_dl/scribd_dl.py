@@ -37,19 +37,20 @@ class ScribdDL(object):
     LOAD_TIME = 20  # Stop loading the page after 20 seconds
     START = datetime.now()
 
-    def __init__(self, options):
-        self.options = options
+    def __init__(self, options=None):
+        """Create a ScribdDL object with the given options."""
+        self.options = options if options is not None else {}
         self.url = None
-        if options.get('pages'):
-            self.pages = valid_pages(options['pages'])
+        if self.options.get('pages'):
+            self.pages = valid_pages(self.options['pages'])
         else:
             self.pages = None
         self.extra = None
         self.logger = self._get_logger()
         self.driver = None
-        self.doc_title = None
+        self.doc_titles = []
 
-    def set_pages(self, pages=None):
+    def _set_pages(self, pages=None):
         if not pages:  # Select the whole document
             self.pages = None
         else:
@@ -83,19 +84,19 @@ class ScribdDL(object):
         return logger
 
     def start_browser(self):
-        # Initialize chromedriver and configure its options
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--log-level=3')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--disable-infobars')
-        options.add_argument("--window-size=1600,2020")
+        """Initialize chromedriver and configure its options."""
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--log-level=3')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--disable-infobars')
+        chrome_options.add_argument("--window-size=1600,2020")
 
         if self.DRIVER_PATH:  # search for chromedriver in assets
-            self.driver = webdriver.Chrome(executable_path=self.DRIVER_PATH, options=options)
+            self.driver = webdriver.Chrome(executable_path=self.DRIVER_PATH, options=chrome_options)
         else:  # search for chromedriver in PATH
             try:
-                self.driver = webdriver.Chrome(options=options)
+                self.driver = webdriver.Chrome(options=chrome_options)
             except ConnectionResetError as e:
                 self.logger.error('Failed to start webdriver: %s', str(e), extra={'label': 'error'})
                 # sys.exit(1)
@@ -104,11 +105,12 @@ class ScribdDL(object):
                 # sys.exit(1)
         self.driver.set_page_load_timeout(self.LOAD_TIME)
 
-    def _cclose_browser(self):  # Exit chromedriver
+    def _cclose_browser(self):
         if not self.options.get('testing'):  # Don't close the driver if called by tests
             self.driver.quit()
 
     def close(self):  # Exit chromedriver without checking
+        """Close chromedriver."""
         self.driver.quit()
 
     @staticmethod
@@ -127,13 +129,20 @@ class ScribdDL(object):
     def __exit__(self, *args):
         self.close()
 
-    def download(self, url_list):
-        if not isinstance(url_list, list):
-            raise ValueError('url has to be of type list, not %s', type(url_list))
+    def download(self, url_list, pages=None):
+        """
+        Downlad the given document(str) or multiple documents(list).
+        If pages is set, then use this particular range.
+        """
+        if pages:
+            self.pages = pages
         if not self.driver:
             self.start_browser()
-        for url in url_list:
-            self._process_url(url)
+        if not isinstance(url_list, list):
+            self._process_url(url_list)
+        else:
+            for url in url_list:
+                self._process_url(url)
 
     def _process_url(self, url):
         self.url = valid_url(url)
@@ -148,15 +157,6 @@ class ScribdDL(object):
                 self.driver.get(self.url)  # Visit the requested url without waiting more than LOAD_TIME seconds
             except TimeoutException:
                 pass
-            # Figure out whether the document can be fully accessed
-            is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self.driver.page_source)
-            try:
-                is_restricted = literal_eval(is_restricted.group('bool').title())
-            except AttributeError:
-                is_restricted = False
-            if is_restricted:
-                self._cclose_browser()
-                raise RestrictedDocumentError
             try:  # Refresh the page in case it could not retrieve the total_pages element
                 total_pages = self.driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
                 total_pages = total_pages.text.split()[1]
@@ -169,7 +169,17 @@ class ScribdDL(object):
             raise NoSuchElementException
         total_pages = int(total_pages.replace(',', '').replace('.', ''))
 
-        self.doc_title = self.driver.title
+        # Figure out whether the document can be fully accessed
+        is_restricted = re.search(r"\"view_restricted\"\s*:\s*(?P<bool>true|false),", self.driver.page_source)
+        try:
+            is_restricted = literal_eval(is_restricted.group('bool').title())
+        except AttributeError:
+            is_restricted = False
+        if is_restricted:
+            self._cclose_browser()
+            raise RestrictedDocumentError
+
+        self.doc_titles.append(self.driver.title)
         if self.pages:  # If user inserted page range
             try:
                 first_page = int(self.pages.split('-')[0])
@@ -229,7 +239,7 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                doc_title_edited = self._edit_title(self.doc_title)
+                doc_title_edited = self._edit_title(self.doc_titles[-1])
                 filename = '{}-{}.pdf'.format(doc_title_edited, self.extra['label'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
@@ -239,7 +249,8 @@ class ScribdDL(object):
                 img_size = imgByteArr.tell()  # The size of the image in bytes (an integer)
                 Sizes.append(img_size)
                 current_mean = sum(Sizes) / len(Sizes)
-                sleep_time = round(0.2 + (current_mean / 2000000), 5)
+                # sleep_time = round(0.2 + (current_mean / 2000000), 5)
+                sleep_time = round(0.2 + (current_mean / 2500000), 5)
                 sleep_time = 1.2 if sleep_time > 1.2 else sleep_time
 
 
@@ -248,6 +259,5 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : return list of all titles in session.doc_title
-# TODO : create docstrings
+# TODO : Add support for changing the filename / path
 # TODO : Mute "DEVTOOLS Listening..."
