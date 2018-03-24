@@ -252,6 +252,6 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : return list of all titles in session.doc_title
+# TODO : change filename
 # TODO : create docstrings
 # TODO : Mute "DEVTOOLS Listening..."
