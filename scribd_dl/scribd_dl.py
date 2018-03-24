@@ -38,6 +38,7 @@ class ScribdDL(object):
     START = datetime.now()
 
     def __init__(self, options=None):
+        """Create a ScribdDL object with the given options."""
         self.options = options if options is not None else {}
         self.url = None
         if self.options.get('pages'):
@@ -49,7 +50,7 @@ class ScribdDL(object):
         self.driver = None
         self.doc_titles = []
 
-    def set_pages(self, pages=None):
+    def _set_pages(self, pages=None):
         if not pages:  # Select the whole document
             self.pages = None
         else:
@@ -83,7 +84,7 @@ class ScribdDL(object):
         return logger
 
     def start_browser(self):
-        # Initialize chromedriver and configure its options
+        """Initialize chromedriver and configure its options."""
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--log-level=3')
@@ -104,11 +105,12 @@ class ScribdDL(object):
                 # sys.exit(1)
         self.driver.set_page_load_timeout(self.LOAD_TIME)
 
-    def _cclose_browser(self):  # Exit chromedriver
+    def _cclose_browser(self):
         if not self.options.get('testing'):  # Don't close the driver if called by tests
             self.driver.quit()
 
     def close(self):  # Exit chromedriver without checking
+        """Close chromedriver."""
         self.driver.quit()
 
     @staticmethod
@@ -128,6 +130,10 @@ class ScribdDL(object):
         self.close()
 
     def download(self, url_list, pages=None):
+        """
+        Downlad the given document or documents in a list.
+        If pages is not None, then use this particular range.
+        """
         if pages:
             self.pages = pages
         if not self.driver:
@@ -253,6 +259,5 @@ if __name__ == '__main__':
     scribd_dl.main()
 
 
-# TODO : change filename
-# TODO : create docstrings
+# TODO : support for changing the filename / path
 # TODO : Mute "DEVTOOLS Listening..."

@@ -6,9 +6,8 @@ from scribd_dl.utils import RestrictedDocumentError
 
 
 def test_16p_restricted_document(scribd):
-    URL = ['https://www.scribd.com/doc/240863282']
+    URL = 'https://www.scribd.com/doc/240863282'
     PAGES = '1-3'
 
-    scribd.set_pages(PAGES)
     with pytest.raises(RestrictedDocumentError):
-        scribd.download(URL)
+        scribd.download(URL, PAGES)

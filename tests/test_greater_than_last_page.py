@@ -9,6 +9,5 @@ def test_16p_greater_than_last_page(scribd):
     URL = ['https://www.scribd.com/document/106884805/Nebraska-Wing-Sep-2012']
     PAGES = '15-22'
 
-    scribd.set_pages(PAGES)
     with pytest.raises(GreaterThanLastPageError):
-        scribd.download(URL)
+        scribd.download(URL, PAGES)
