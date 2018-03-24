@@ -54,7 +54,7 @@ you can embed scribd-dl, using a context manager like this:
     import scribd_dl
 
     options = {
-        'pages': '1-3,
+        'pages': '1-3',
         'log-level': '2'  # info
     }
     with scribd_dl.ScribdDL(options) as session:
