@@ -63,7 +63,7 @@ you can embed scribd-dl, using a context manager like this:
             'https://www.scribd.com/document/351688288/'
         ])
 
-different page ranges in each document:
+use different page ranges in each document:
 
 .. code-block:: python
 

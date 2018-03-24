@@ -3,7 +3,6 @@
 
 from argparse import ArgumentTypeError
 import pytest
-from scribd_dl import ScribdDL
 from scribd_dl.utils import (
     valid_url,
     valid_pages,
@@ -31,9 +30,6 @@ def test_valid_args():
 
 
 def test_invalid_args():
-    s = ScribdDL(options={})
-    with pytest.raises(ValueError):  # Has to be of list type
-        s.download('https://www.scribd.com/doc/90403141')
 
     URL = 'https://www.scribd.com/docLLL/90403141/Social-Media-Strategy'
     with pytest.raises(ArgumentTypeError):

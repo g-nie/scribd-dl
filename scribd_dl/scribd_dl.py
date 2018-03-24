@@ -128,14 +128,15 @@ class ScribdDL(object):
         self.close()
 
     def download(self, url_list, pages=None):
-        if not isinstance(url_list, list):
-            raise ValueError('url has to be of type list, not %s', type(url_list))
         if pages:
             self.pages = pages
         if not self.driver:
             self.start_browser()
-        for url in url_list:
-            self._process_url(url)
+        if not isinstance(url_list, list):
+            self._process_url(url_list)
+        else:
+            for url in url_list:
+                self._process_url(url)
 
     def _process_url(self, url):
         self.url = valid_url(url)
