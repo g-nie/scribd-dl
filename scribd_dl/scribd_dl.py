@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=C0413
 
 import re
 import sys
@@ -240,7 +239,7 @@ class ScribdDL(object):
                 img_size = imgByteArr.tell()  # The size of the image in bytes (an integer)
                 Sizes.append(img_size)
                 current_mean = sum(Sizes) / len(Sizes)
-                sleep_time = round(0.2 + (current_mean / 2000000), 5)  # --- Tweak it?
+                sleep_time = round(0.2 + (current_mean / 2000000), 5)
                 sleep_time = 1.2 if sleep_time > 1.2 else sleep_time
 
 
@@ -250,4 +249,5 @@ if __name__ == '__main__':
 
 
 # TODO : return list of all titles in session.doc_title
+# TODO : create docstrings
 # TODO : Mute "DEVTOOLS Listening..."

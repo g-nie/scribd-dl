@@ -5,7 +5,7 @@ import argparse
 import sys
 from datetime import datetime
 from selenium.common.exceptions import WebDriverException
-from .scribd_dl import ScribdDL  # noqa: F401
+from .scribd_dl import ScribdDL
 from .version import AUTHOR, EMAIL, STATUS, VERSION, DATE
 from .utils import (
     valid_url,
