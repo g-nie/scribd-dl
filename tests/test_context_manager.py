@@ -20,7 +20,7 @@ def test_context_manager():
         print(session.logger)
         session.download(URL)
         doc_id = re.search(r'(?P<id>\d+)', URL[0]).group('id')
-        saved_file = '{}-{}.pdf'.format(session._edit_title(session.doc_title), doc_id)
+        saved_file = '{}-{}.pdf'.format(session._edit_title(session.doc_titles[-1]), doc_id)
 
     if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
         assert True

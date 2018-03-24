@@ -54,11 +54,26 @@ you can embed scribd-dl, using a context manager like this:
     import scribd_dl
 
     options = {
-        'pages': '4-8',
+        'pages': '1-3,
         'log-level': '2'  # info
     }
     with scribd_dl.ScribdDL(options) as session:
-        session.download(['https://www.scribd.com/document/351688288/'])
+        session.download([
+            'https://www.scribd.com/document/352366744/',
+            'https://www.scribd.com/document/351688288/'
+        ])
+
+different page ranges in each document:
+
+.. code-block:: python
+
+    import scribd_dl
+
+    with scribd_dl.ScribdDL() as session:
+        session.download(['https://www.scribd.com/document/352366744/'], pages='1-3')
+        session.download(['https://www.scribd.com/document/351688288/'], pages='3-5')
+        for title in session.doc_titles:
+            print(title)
 
 
 Installation

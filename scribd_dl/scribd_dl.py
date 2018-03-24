@@ -37,17 +37,17 @@ class ScribdDL(object):
     LOAD_TIME = 20  # Stop loading the page after 20 seconds
     START = datetime.now()
 
-    def __init__(self, options):
-        self.options = options
+    def __init__(self, options=None):
+        self.options = options if options is not None else {}
         self.url = None
-        if options.get('pages'):
-            self.pages = valid_pages(options['pages'])
+        if self.options.get('pages'):
+            self.pages = valid_pages(self.options['pages'])
         else:
             self.pages = None
         self.extra = None
         self.logger = self._get_logger()
         self.driver = None
-        self.doc_title = None
+        self.doc_titles = []
 
     def set_pages(self, pages=None):
         if not pages:  # Select the whole document
@@ -84,18 +84,18 @@ class ScribdDL(object):
 
     def start_browser(self):
         # Initialize chromedriver and configure its options
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--log-level=3')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--disable-infobars')
-        options.add_argument("--window-size=1600,2020")
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--log-level=3')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--disable-infobars')
+        chrome_options.add_argument("--window-size=1600,2020")
 
         if self.DRIVER_PATH:  # search for chromedriver in assets
-            self.driver = webdriver.Chrome(executable_path=self.DRIVER_PATH, options=options)
+            self.driver = webdriver.Chrome(executable_path=self.DRIVER_PATH, options=chrome_options)
         else:  # search for chromedriver in PATH
             try:
-                self.driver = webdriver.Chrome(options=options)
+                self.driver = webdriver.Chrome(options=chrome_options)
             except ConnectionResetError as e:
                 self.logger.error('Failed to start webdriver: %s', str(e), extra={'label': 'error'})
                 # sys.exit(1)
@@ -127,9 +127,11 @@ class ScribdDL(object):
     def __exit__(self, *args):
         self.close()
 
-    def download(self, url_list):
+    def download(self, url_list, pages=None):
         if not isinstance(url_list, list):
             raise ValueError('url has to be of type list, not %s', type(url_list))
+        if pages:
+            self.pages = pages
         if not self.driver:
             self.start_browser()
         for url in url_list:
@@ -169,7 +171,7 @@ class ScribdDL(object):
             raise NoSuchElementException
         total_pages = int(total_pages.replace(',', '').replace('.', ''))
 
-        self.doc_title = self.driver.title
+        self.doc_titles.append(self.driver.title)
         if self.pages:  # If user inserted page range
             try:
                 first_page = int(self.pages.split('-')[0])
@@ -208,6 +210,7 @@ class ScribdDL(object):
             processed += 1
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
+            # print('sleep time: {}'.format(sleep_time))  # ---------
             time.sleep(sleep_time)
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
 
@@ -229,7 +232,7 @@ class ScribdDL(object):
                 pdf_bytes = img2pdf.convert(Pages)
                 logging.disable(logging.NOTSET)
 
-                doc_title_edited = self._edit_title(self.doc_title)
+                doc_title_edited = self._edit_title(self.doc_titles[-1])
                 filename = '{}-{}.pdf'.format(doc_title_edited, self.extra['label'])
                 with open(filename, 'wb') as file:
                     file.write(pdf_bytes)
@@ -239,7 +242,8 @@ class ScribdDL(object):
                 img_size = imgByteArr.tell()  # The size of the image in bytes (an integer)
                 Sizes.append(img_size)
                 current_mean = sum(Sizes) / len(Sizes)
-                sleep_time = round(0.2 + (current_mean / 2000000), 5)
+                # sleep_time = round(0.2 + (current_mean / 2000000), 5)
+                sleep_time = round(0.2 + (current_mean / 2500000), 5)
                 sleep_time = 1.2 if sleep_time > 1.2 else sleep_time
 
 

@@ -14,7 +14,7 @@ def test_16p_last_page(scribd):
     scribd.set_pages(PAGES)
     scribd.download(URL)
     doc_id = re.search(r'(?P<id>\d+)', URL[0]).group('id')
-    saved_file = '{}-{}.pdf'.format(scribd._edit_title(scribd.doc_title), doc_id)
+    saved_file = '{}-{}.pdf'.format(session._edit_title(session.doc_titles[-1]), doc_id)
     if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
         assert True
     else:
@@ -27,7 +27,7 @@ def test_6p_whole(scribd):
     scribd.set_pages(None)
     scribd.download(URL)
     doc_id = re.search(r'(?P<id>\d+)', URL[0]).group('id')
-    saved_file = '{}-{}.pdf'.format(scribd._edit_title(scribd.doc_title), doc_id)
+    saved_file = '{}-{}.pdf'.format(session._edit_title(session.doc_titles[-1]), doc_id)
     if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
         assert True
     else:
@@ -42,7 +42,7 @@ def test_78p_long_title_first_page(scribd):
     scribd.set_pages(PAGES)
     scribd.download(URL)
     doc_id = re.search(r'(?P<id>\d+)', URL[0]).group('id')
-    saved_file = '{}-{}.pdf'.format(scribd._edit_title(scribd.doc_title), doc_id)
+    saved_file = '{}-{}.pdf'.format(session._edit_title(session.doc_titles[-1]), doc_id)
     if saved_file in os.listdir() and get_modified_time_diff(saved_file) < 10:
         assert True
     else:
