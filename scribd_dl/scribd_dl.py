@@ -23,6 +23,7 @@ from scribd_dl.utils import (
     GreaterThanLastPageError,
     RestrictedDocumentError
 )
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class ScribdDL(object):
@@ -91,7 +92,7 @@ class ScribdDL(object):
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('--disable-infobars')
         chrome_options.add_argument("--window-size=1600,2020")
-
+        
         if self.DRIVER_PATH:  # search for chromedriver in assets
             self.driver = webdriver.Chrome(executable_path=self.DRIVER_PATH, options=chrome_options)
         else:  # search for chromedriver in PATH
@@ -158,8 +159,9 @@ class ScribdDL(object):
             except TimeoutException:
                 pass
             try:  # Refresh the page in case it could not retrieve the total_pages element
-                total_pages = self.driver.find_element_by_xpath("//span[@class='total_pages']/span[2]")
-                total_pages = total_pages.text.split()[1]
+                # changed the xpath of the total_pages element
+                total_pages = self.driver.find_element_by_xpath("/html[1]/body[1]/div[1]/div[1]/div[3]/div[1]/div[2]/section[1]/div[1]/div[1]/div[1]/main[1]/div[1]/div[1]/div[2]/div[1]/span[1]/span[2]")
+                total_pages = total_pages.text.split(' ')[1]
                 break
             except NoSuchElementException:  # total_pages element not available, try again
                 retries += 1
@@ -219,10 +221,31 @@ class ScribdDL(object):
             self.logger.debug('Processing page : %s of %s', counter, last_page, extra=self.extra)
 
             time.sleep(sleep_time)
+
+            # 
+            # Converting from RGBA mode to RGB
+            #
             img = Image.open(BytesIO(self.driver.get_screenshot_as_png()))  # Save screenshot in memory
+            newImg = img
+
+            bg_colour = (255, 255, 255)
+
+            #
+            # THIS SHOULD BE A FUNCTION 
+            #
+            if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+                # Need to convert to RGBA if LA format due to a bug in PIL (http://stackoverflow.com/a/1963146)
+                alpha = img.convert('RGBA').split()[-1]
+
+                # Create a new background image of our matt color.
+                bg = Image.new("RGB", img.size, bg_colour + (255,))
+                bg.paste(img, mask=alpha)
+                newImg = bg
+            else:
+                newImg = img
 
             # Crop the image to the speified size
-            img = img.crop((
+            newImg = newImg.crop((
                 page.location['x'],
                 page.location['y'],
                 page.location['x'] + page.size['width'],
@@ -230,7 +253,7 @@ class ScribdDL(object):
             ))
             # Append the byte array to List
             imgByteArr = BytesIO()
-            img.save(imgByteArr, format='PNG')
+            newImg.save(imgByteArr, format='PNG')
             Pages.append(imgByteArr.getvalue())
 
             if processed == to_process:  # If on the last page
