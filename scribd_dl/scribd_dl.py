@@ -197,9 +197,10 @@ class ScribdDL(object):
         self._scroll_pages(first_page, last_page, total_pages)
 
     def _scroll_pages(self, first_page, last_page, total_pages):
-        # Enter full screen mode
-        fullscreen_xpath = "//button[@aria-label='Fullscreen']"
-        self.driver.find_element_by_xpath(fullscreen_xpath).click()
+        # Fullscreen mode commented to obtain document without the pages bar
+        
+        # fullscreen_xpath = "//button[@aria-label='Fullscreen']"
+        # self.driver.find_element_by_xpath(fullscreen_xpath).click()
         Pages = []  # Holds the actual image bytes of each page
         Sizes = []  # Holds the size in bytes (an integer) of each page
         to_process = last_page - first_page + 1  # Total pages to process
